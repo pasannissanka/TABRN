@@ -9,5 +9,13 @@ export interface IUser extends Document {
     lastName: string;
   };
   email: string;
-  photos: string[];
+  photos: any[];
+}
+
+declare global {
+  namespace Express {
+    interface User {
+      id?: string;
+    }
+  }
 }

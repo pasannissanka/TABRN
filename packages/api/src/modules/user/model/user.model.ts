@@ -32,7 +32,16 @@ const userSchema = new Schema<IUser>({
     required: true,
   },
   photos: {
-    type: [String],
+    type: [
+      new Schema(
+        {
+          value: {
+            type: String,
+          },
+        },
+        { _id: false }
+      ),
+    ],
   },
 });
 
