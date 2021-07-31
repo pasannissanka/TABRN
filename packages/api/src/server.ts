@@ -54,6 +54,10 @@ const main = async () => {
     res.send('Hi');
   });
 
+  app.get('/login', function (_, res) {
+    res.redirect('/auth/google');
+  });
+
   // * Routes *
   app.use('/auth', authRoute);
   app.use('/user', userRoute);
