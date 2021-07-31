@@ -1,0 +1,11 @@
+{
+  "name": "tabrn",
+  "description": "Cloud based Browser Tab Manager ",
+  "version": "0.0.1",
+  "author": "pasan nissanka",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
