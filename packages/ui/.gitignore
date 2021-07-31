@@ -10,6 +10,8 @@
 
 # production
 /build
+/lib
+/lib-esm
 
 # misc
 .DS_Store
