@@ -1,6 +1,6 @@
 export interface AuthContextState {
-  user?: IUser;
-  setUser?: React.Dispatch<IUser>;
+  user: IUser | undefined;
+  setUser: React.Dispatch<React.SetStateAction<IUser | undefined>>;
   isLoading: boolean;
 }
 
