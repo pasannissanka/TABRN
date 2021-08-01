@@ -21,7 +21,6 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "argon2": "^0.28.2",
     "connect-ensure-login": "^0.1.1",
     "cookie-session": "^1.4.0",
     "cors": "^2.8.5",

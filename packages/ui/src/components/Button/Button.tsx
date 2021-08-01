@@ -32,11 +32,24 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       type="button"
-      className={`shadow rounded-lg inline-flex items-center  focus:outline-none focus:shadow-outline font-semibold py-2 px-2 md:px-5 text-sm
+      className={`border
+      border-transparent
+      rounded-md
+      inline-flex
+      items-center
+      focus:outline-none
+      focus:shadow-outline 
+      font-semibold 
+      py-2
+      px-2
+      md:px-5
+      text-sm
+      transition-colors
+      duration-300
       ${
         primary
-          ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
-          : 'bg-white text-gray-500 hover:text-yellow-500'
+          ? 'bg-indigo-500 hover:bg-indigo-700 text-white focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+          : 'bg-white text-black hover:text-indigo-500 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
       }
       `}
       {...props}
@@ -46,7 +59,7 @@ export const Button: React.FC<ButtonProps> = ({
       >
         {label}
       </span>
-      {children}
+      {children ? <span className="w-5 h-5">{children}</span> : <></>}
     </button>
   );
 };

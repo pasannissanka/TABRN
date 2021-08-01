@@ -16,6 +16,7 @@ const main = async () => {
   app.use(
     cors({
       origin: ['*', `http://localhost:${process.env.APP_PORT}`],
+      credentials: true,
     })
   );
   // parse application/x-www-form-urlencoded
@@ -27,6 +28,8 @@ const main = async () => {
     cookieSession({
       maxAge: 24 * 60 * 60 * 1000,
       keys: [process.env['COOKIE_KEY'] as string],
+      secure: false,
+      httpOnly: false,
     })
   );
 
@@ -55,7 +58,7 @@ const main = async () => {
   });
 
   app.get('/login', function (_, res) {
-    res.redirect('/auth/google');
+    res.redirect(`http://localhost:${process.env.APP_PORT}/login`);
   });
 
   // * Routes *
