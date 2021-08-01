@@ -1,0 +1,35 @@
+{
+  "name": "TL;RL",
+  "version": "0.0.0",
+  "description": "An awesome new browser extension",
+  "homepage_url": "https://github.com/awesome-templates/browser-extension-template",
+  "manifest_version": 2,
+  "minimum_chrome_version": "74",
+  "icons": {
+    "128": "icons/icon.png"
+  },
+  "permissions": [
+    "storage",
+    "http://localhost:4000/",
+    "tabs",
+    "activeTab",
+    "identity"
+  ],
+  "options_ui": {
+    "chrome_style": true,
+    "page": "options.html"
+  },
+  "background": {
+    "persistent": false,
+    "scripts": ["background.ts"]
+  },
+  "browser_action": {
+    "default_title": "Read Later...",
+    "default_popup": "popups/loading_popup.html"
+  },
+  "web_accessible_resources": ["popups/*.html"],
+  "oauth2": {
+    "client_id": "353887742883-r0cko3ulicl422k21p77jdot0att1rvd.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/userinfo.email"]
+  }
+}
