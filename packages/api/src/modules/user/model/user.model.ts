@@ -30,6 +30,7 @@ const userSchema = new Schema<IUser>({
   email: {
     type: String,
     required: true,
+    index: { unique: true, dropDups: true },
   },
   photos: {
     type: [

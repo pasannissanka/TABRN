@@ -1,8 +1,10 @@
 require('dotenv').config();
-import cookieSession from 'cookie-session';
+import mongoStore from 'connect-mongo';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
-import { connect } from 'mongoose';
+import session from 'express-session';
+import mongoose from 'mongoose';
 import passport from 'passport';
 import PassportGoogleStrategy from './config/googleStrategy';
 import { AppError } from './helpers/errors/app_error';
@@ -13,23 +15,49 @@ import userRoute from './routes/user.routes';
 const main = async () => {
   const app = express();
 
+  // Check DB connection
+  const mongooseClient = mongoose
+    .connect(`${process.env.DB_URL}/${process.env.DB_NAME}`, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: true,
+    })
+    .then((m) => {
+      console.log('DB: MongoDB connected');
+      return m.connection.getClient();
+    });
+
   app.use(
     cors({
       origin: ['*', `http://localhost:${process.env.APP_PORT}`],
       credentials: true,
     })
   );
-  // parse application/x-www-form-urlencoded
-  app.use(express.urlencoded({ extended: false }));
+
   // parse application/json
   app.use(express.json());
+  // parse application/x-www-form-urlencoded
+  app.use(express.urlencoded({ extended: true }));
+
+  app.use(cookieParser([process.env['COOKIE_KEY'] as string]));
 
   app.use(
-    cookieSession({
-      maxAge: 24 * 60 * 60 * 1000,
-      keys: [process.env['COOKIE_KEY'] as string],
-      secure: false,
-      httpOnly: false,
+    session({
+      resave: true,
+      saveUninitialized: true,
+      cookie: {
+        path: '/',
+        maxAge: 24 * 60 * 60 * 1000,
+        secure: false,
+        httpOnly: true,
+      },
+      secret: [process.env['COOKIE_KEY'] as string],
+      store: mongoStore.create({
+        clientPromise: mongooseClient,
+        stringify: false,
+        autoRemove: 'interval',
+        autoRemoveInterval: 1,
+      }),
     })
   );
 
@@ -38,30 +66,18 @@ const main = async () => {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  // Check DB connection
-  try {
-    await connect(`${process.env.DB_URL}/${process.env.DB_NAME}`, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: true,
-    });
-    console.log('DB: MongoDB connected');
-  } catch (error) {
-    console.error(
-      'DB:MongoDb : ERROR: Unable to connect to the database:',
-      error
-    );
-  }
-
   app.get('/', (_, res) => {
-    res.send('Hi');
+    res.json({
+      message: 'Hi',
+    });
   });
 
+  // * Routes *
+  // Reroute to login url
   app.get('/login', function (_, res) {
     res.redirect(`http://localhost:${process.env.APP_PORT}/login`);
   });
 
-  // * Routes *
   app.use('/auth', authRoute);
   app.use('/user', userRoute);
 
