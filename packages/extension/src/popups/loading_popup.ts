@@ -1,6 +1,6 @@
 import { browser } from 'webextension-polyfill-ts';
 
-browser.runtime.sendMessage({ message: 'userInfo' }).then((val) => {
+browser.runtime.sendMessage({ message: 'SiteInfo-loggedIn' }).then((val) => {
   if (!val.status) {
     console.log(window.location.pathname);
     window.location.replace('/popups/login_popup.html');

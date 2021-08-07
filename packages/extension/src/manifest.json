@@ -10,10 +10,11 @@
   },
   "permissions": [
     "storage",
-    "http://localhost:4000/",
     "tabs",
     "activeTab",
-    "identity"
+    "identity",
+    "cookies",
+    "http://localhost:3000/"
   ],
   "options_ui": {
     "chrome_style": true,
