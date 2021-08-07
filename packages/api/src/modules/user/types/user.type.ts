@@ -14,8 +14,6 @@ export interface IUser extends Document {
 
 declare global {
   namespace Express {
-    interface User {
-      _id?: string;
-    }
+    interface User extends IUser {}
   }
 }

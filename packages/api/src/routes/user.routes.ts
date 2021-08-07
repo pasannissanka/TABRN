@@ -1,15 +1,11 @@
 import { Router } from 'express';
-import { AppError } from '../helpers/errors/app_error';
+import { isLoggedIn } from '../helpers/auth/authenticate';
 import { successResponse } from '../helpers/responses/success_response';
 
 const router = Router();
 
-router.get('/', (req, res) => {
-  if (req.user) {
-    successResponse(res, req.user);
-  } else {
-    throw new AppError('Not Authenticated', 404);
-  }
+router.get('/', isLoggedIn, (req, res) => {
+  successResponse(res, req.user);
 });
 
 export default router;

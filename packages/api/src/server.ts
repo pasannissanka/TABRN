@@ -11,6 +11,7 @@ import { AppError } from './helpers/errors/app_error';
 import { errorHandler } from './helpers/errors/error_handler';
 import authRoute from './routes/auth.route';
 import userRoute from './routes/user.routes';
+import workspaceRoute from './routes/workspace.route';
 
 const main = async () => {
   const app = express();
@@ -80,6 +81,7 @@ const main = async () => {
 
   app.use('/auth', authRoute);
   app.use('/user', userRoute);
+  app.use('/workspace', workspaceRoute);
 
   // Catch All Unhandled routes
   app.all('*', (req, _, next) => {
