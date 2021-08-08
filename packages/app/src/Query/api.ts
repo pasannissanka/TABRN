@@ -23,6 +23,14 @@ export const getWorkspacesList = async () => {
   return data.data;
 };
 
+export const getWorkspace = async (slug: string) => {
+  const { data } = await axios.get<IResponse<IWorkspace>>(
+    `http://localhost:4001/workspace/${slug}`,
+    { withCredentials: true }
+  );
+  return data.data;
+};
+
 export const createNewWorkspace = async (value: WorkspaceBase) => {
   const { data } = await axios.post<IResponse<IWorkspace>>(
     'http://localhost:4001/workspace/create',

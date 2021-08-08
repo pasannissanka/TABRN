@@ -12,7 +12,10 @@ interface DrawerProps {
 }
 
 export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
-  const { data } = useQuery('workspaces-all', getWorkspacesList);
+  const { data } = useQuery('workspaces-all', getWorkspacesList, {
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <React.Fragment>
@@ -74,7 +77,7 @@ export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
                     return (
                       <li key={index}>
                         <DrawerDisclosure
-                          to={`/workspace/${workspace.slug}`}
+                          to={`/w/${workspace.slug}`}
                           title={workspace.title}
                           icon={
                             <BriefcaseSVG className="w-6 h-6 text-gray-400" />

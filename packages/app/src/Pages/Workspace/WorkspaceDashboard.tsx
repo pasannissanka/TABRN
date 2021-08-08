@@ -1,27 +1,30 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
+import Button from '../../Components/Button/Button';
 import {
   MenuItemProp,
   NavigationCard,
 } from '../../Components/Cards/NavigationCard';
-import { BaseModal } from '../../Components/Modal/BaseModal';
-import { getWorkspacesList } from '../../Query/api';
-import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
-import { ReactComponent as BriefcaseSVG } from '../../svg/briefcase.svg';
-import Button from '../../Components/Button/Button';
 import { ConfirmationDialog, Modal } from '../../Components/Modal/Modal';
-import { NewWorkspace } from './NewWorkspace';
-import { WorkspaceBase } from '../../Types/types';
 import {
   useMutateWorkspace,
   useMutateWorkspaceDelete,
   useMutateWorkspaceUpdate,
 } from '../../Hooks/useMutation';
+import { getWorkspacesList } from '../../Query/api';
+import { ReactComponent as BriefcaseSVG } from '../../svg/briefcase.svg';
+import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
+import { WorkspaceBase } from '../../Types/types';
+import { NewWorkspace } from './NewWorkspace';
 
 interface WorkspaceProps {}
 
-export const Workspace = (props: WorkspaceProps) => {
-  const { data } = useQuery('workspaces-all', getWorkspacesList);
+export const WorkspaceDashboard = (props: WorkspaceProps) => {
+  const { data } = useQuery('workspaces-all', getWorkspacesList, {
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
+  });
   const addMutation = useMutateWorkspace();
   const editMutation = useMutateWorkspaceUpdate();
   const deleteMutation = useMutateWorkspaceDelete();
@@ -102,7 +105,7 @@ export const Workspace = (props: WorkspaceProps) => {
 
   const onWorkspaceSubmit = (value: WorkspaceBase, mode: 'edit' | 'new') => {
     closeModal();
-    if (value) {
+    if (value.title.length > 0 && value.description.length > 0) {
       if (mode === 'new') {
         setNewWorkspaceValue(value as any);
         addMutation.mutate(value);
@@ -164,7 +167,7 @@ export const Workspace = (props: WorkspaceProps) => {
                   content={workspace.description}
                   action="link"
                   icon={<BriefcaseSVG />}
-                  to={`/workspace/${workspace.slug}`}
+                  to={`/w/${workspace.slug}`}
                   secondaryAction="menu"
                   secondaryItems={menuItems}
                 />

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { AppBar } from '../../Components/AppBar/AppBar';
 import { Drawer } from '../../Components/Drawer/Drawer';
-import { Workspace } from '../../Pages/Workspace/Workspace';
+import { WorkspaceDashboard } from '../Workspace/WorkspaceDashboard';
+import { WorkspaceItem } from '../Workspace/WorkspaceItem';
 
 export const Home = () => {
   const [isDrawerOpen, setDrawerOpenState] = useState(false);
@@ -29,7 +30,10 @@ export const Home = () => {
                 <div>Read List</div>
               </Route>
               <Route exact path="/workspace">
-                <Workspace />
+                <WorkspaceDashboard />
+              </Route>
+              <Route exact path="/w/:work_slug">
+                <WorkspaceItem />
               </Route>
               <Route path="*">
                 <div>Not Found</div>
