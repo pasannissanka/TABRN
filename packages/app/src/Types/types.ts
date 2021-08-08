@@ -6,6 +6,8 @@ export interface AuthContextState {
 
 export interface IMongoDocument {
   _id: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IResponse<T> {
