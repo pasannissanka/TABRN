@@ -1,11 +1,15 @@
 import React from 'react';
 
-type Button = {
+type ButtonProps = {
   varient: string;
   children?: React.ReactNode;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function Button({ varient = '', children, ...props }: Button) {
+export default function Button({
+  varient = '',
+  children,
+  ...props
+}: ButtonProps) {
   return (
     <button
       {...props}

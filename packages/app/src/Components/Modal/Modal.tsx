@@ -2,8 +2,6 @@ import React from 'react';
 import Button from '../Button/Button';
 import { BaseModal, BaseModalProps, ModalProps } from './BaseModal';
 
-interface Modal {}
-
 const DefaultCloseButton = (props: { onClose: () => void }) => {
   return (
     <Button onClick={props.onClose} varient="outline">

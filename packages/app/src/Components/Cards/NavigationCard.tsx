@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Menu } from '@headlessui/react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { ReactComponent as BriefcaseSVG } from '../../svg/briefcase.svg';
 import { ReactComponent as ChevronRightSVG } from '../../svg/chevron-right.svg';
 import { ReactComponent as DotsVerticalSVG } from '../../svg/dots-vertical.svg';
@@ -46,13 +46,6 @@ export const NavigationCard = ({
   secondaryOnClick,
   secondaryItems,
 }: NavigationCardProps) => {
-  useEffect(() => {
-    if (loading) {
-      title = '';
-      content = '';
-    }
-  }, [loading]);
-
   const Secondry = () => {
     if (secondaryAction === 'button' && secondaryOnClick && !loading) {
       return (

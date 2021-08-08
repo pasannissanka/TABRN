@@ -1,6 +1,5 @@
-import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import Button from '../Button/Button';
+import React, { Fragment } from 'react';
 
 export interface BaseModalProps {
   show: boolean;

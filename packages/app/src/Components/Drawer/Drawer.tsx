@@ -2,10 +2,9 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { Link as RouterLink } from 'react-router-dom';
 import { getWorkspacesList } from '../../Query/api';
+import { ReactComponent as BriefcaseSVG } from '../../svg/briefcase.svg';
 import { IWorkspace } from '../../Types/types';
 import { DrawerDisclosure } from './DrawerDisclosure';
-import { DrawerTree } from './DrawerTree';
-import { ReactComponent as BriefcaseSVG } from '../../svg/briefcase.svg';
 
 interface DrawerProps {
   isDrawerOpen: boolean;
