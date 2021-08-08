@@ -4,13 +4,16 @@ export interface AuthContextState {
   isLoading: boolean;
 }
 
+export interface IMongoDocument {
+  _id: string;
+}
+
 export interface IResponse<T> {
   message: string;
   data: T;
 }
 
-export interface IUser {
-  _id: string;
+export interface IUser extends IMongoDocument {
   provider: string;
   googleId: string;
   displayName: string;
@@ -20,4 +23,13 @@ export interface IUser {
   };
   email: string;
   photos: any[];
+}
+
+export interface IWorkspace extends IMongoDocument {
+  userId: string;
+  title: string;
+  description: string;
+  slug: string;
+  colorCode?: string;
+  isDeleted: boolean;
 }

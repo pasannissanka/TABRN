@@ -1,8 +1,8 @@
 import React from 'react';
 import './Login.css';
-import { ReactComponent as GithubSVG } from './svg/github.svg';
-import { ReactComponent as GoogleSVG } from './svg/google.svg';
-import { ReactComponent as TwitterSVG } from './svg/twitter.svg';
+import { ReactComponent as GithubSVG } from '../../svg/github.svg';
+import { ReactComponent as GoogleSVG } from '../../svg/google.svg';
+import { ReactComponent as TwitterSVG } from '../../svg/twitter.svg';
 
 interface LoginProps {}
 

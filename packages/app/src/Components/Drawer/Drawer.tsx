@@ -1,28 +1,32 @@
 import React from 'react';
+import { useQuery } from 'react-query';
 import { Link as RouterLink } from 'react-router-dom';
+import { getWorkspacesList } from '../../Query/api';
+import { IWorkspace } from '../../Types/types';
 import { DrawerDisclosure } from './DrawerDisclosure';
 import { DrawerTree } from './DrawerTree';
+import { ReactComponent as BriefcaseSVG } from '../../svg/briefcase.svg';
 
 interface DrawerProps {
   isDrawerOpen: boolean;
 }
 
 export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
+  const { data } = useQuery('workspaces-all', getWorkspacesList);
+
   return (
     <React.Fragment>
       <aside
-        className={`fixed inset-y-0 z-10 flex flex-col flex-shrink-0 w-64 max-h-screen overflow-hidden transition-all transform shadow-lg lg:z-auto lg:static lg:shadow-none
+        className={`fixed inset-y-0 z-10 flex flex-col flex-shrink-0 w-64 max-h-screen overflow-hidden transition-all transform md:z-auto md:static shadow-none
 				${isDrawerOpen ? '-translate-x-full lg:translate-x-0 lg:w-0' : ''}`}
       >
         {/* Header */}
-        <div className="flex flex-shrink-0 items-center justify-between p-2">
-          {/* <span className="p-2 text-xl font-semibold leading-8 tracking-wider uppercase whitespace-nowrap">
-            TL;RL
-          </span> */}
-        </div>
+        <div className="flex flex-shrink-0 items-center justify-between p-2"></div>
         <nav className="flex-1 overflow-hidden hover:overflow-y-auto">
           <ul
-            className={`p-2 overflow-hidden ${isDrawerOpen ? 'lg:hidden' : ''}`}
+            className={`p-2 overflow-hidden hidden lg:block ${
+              isDrawerOpen ? 'block lg:hidden' : ''
+            }`}
           >
             <li>
               <RouterLink
@@ -54,126 +58,31 @@ export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
                 className="flex items-center p-2 hover:bg-gray-100 rounded-md space-x-2"
               >
                 <span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                    />
-                  </svg>{' '}
+                  <BriefcaseSVG className="w-6 h-6 text-gray-400" />
                 </span>
                 <span>Discover</span>
               </RouterLink>
             </li>
             <li>
               <DrawerDisclosure
-                to="/bookmarks"
-                title="Bookmarks"
-                icon={
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                    />
-                  </svg>
-                }
+                to="/workspace"
+                title="Workspaces"
+                icon={<BriefcaseSVG className="w-6 h-6 text-gray-400" />}
               >
                 <ul>
-                  <li>
-                    <DrawerDisclosure
-                      to="/bookmarks/categories"
-                      title="Categories"
-                      icon={
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-6 h-6 text-gray-400"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                          />
-                        </svg>
-                      }
-                    >
-                      <ul>
-                        {/* <DrawerTree<Category>
-                          items={categories.data!}
-                          urlPrefix="/bookmarks/categories"
-                        /> */}
-                      </ul>
-                    </DrawerDisclosure>
-                  </li>
-                  <li>
-                    <DrawerDisclosure
-                      to="/bookmarks/tags"
-                      title="Tags"
-                      icon={
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-6 h-6 text-gray-400"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
-                          />
-                        </svg>
-                      }
-                    >
-                      <ul>
-                        {/* {tags.data?.map((tag: string, index) => {
-                          return (
-                            <li key={index}>
-                              <DrawerDisclosure
-                                to={`/tag/${tag}`}
-                                title={tag}
-                                icon={
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="w-6 h-6 text-gray-400"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
-                                    />
-                                  </svg>
-                                }
-                              />
-                            </li>
-                          );
-                        })} */}
-                      </ul>
-                    </DrawerDisclosure>
-                  </li>
+                  {data?.map((workspace: IWorkspace, index) => {
+                    return (
+                      <li key={index}>
+                        <DrawerDisclosure
+                          to={`/workspace/${workspace.slug}`}
+                          title={workspace.title}
+                          icon={
+                            <BriefcaseSVG className="w-6 h-6 text-gray-400" />
+                          }
+                        />
+                      </li>
+                    );
+                  })}
                 </ul>
               </DrawerDisclosure>
             </li>

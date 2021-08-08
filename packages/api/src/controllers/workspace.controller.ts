@@ -20,9 +20,7 @@ class WorkspaceController {
 
     await workspace.save();
 
-    successResponse(res, {
-      workspace,
-    });
+    successResponse(res, workspace);
   }
 
   public async getWorkspace(req: Request, res: Response) {
@@ -36,14 +34,10 @@ class WorkspaceController {
     });
 
     if (!workspace) {
-      successResponse(res, {
-        message: 'Not found',
-      });
+      successResponse(res, {});
     }
 
-    successResponse(res, {
-      workspace,
-    });
+    successResponse(res, workspace);
   }
 
   public async getAllWorkspaces(req: Request, res: Response) {
@@ -54,9 +48,7 @@ class WorkspaceController {
       isDeleted: false,
     });
 
-    successResponse(res, {
-      workspaces,
-    });
+    successResponse(res, workspaces);
   }
 
   public async updateWorkspace(req: Request, res: Response) {
@@ -86,9 +78,7 @@ class WorkspaceController {
       });
     }
 
-    successResponse(res, {
-      workspace,
-    });
+    successResponse(res, workspace);
   }
 
   public async deleteWorkspace(req: Request, res: Response) {
@@ -110,14 +100,10 @@ class WorkspaceController {
     );
 
     if (!workspace) {
-      successResponse(res, {
-        message: 'Not found',
-      });
+      successResponse(res, {});
     }
 
-    successResponse(res, {
-      workspace,
-    });
+    successResponse(res, workspace);
   }
 
   public async restoreWorkspace(req: Request, res: Response) {
@@ -139,14 +125,10 @@ class WorkspaceController {
     );
 
     if (!workspace) {
-      successResponse(res, {
-        message: 'Not found',
-      });
+      successResponse(res, {});
     }
 
-    successResponse(res, {
-      workspace,
-    });
+    successResponse(res, workspace);
   }
 }
 

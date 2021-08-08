@@ -27,7 +27,7 @@ export const AppBar = ({ handleDrawerOpen }: AppBarProps) => {
 
   return (
     <React.Fragment>
-      <header className="flex-shrink-0 bg-gray-100 border-b">
+      <header className="flex-shrink-0 max-h-14 bg-gray-100 border-b">
         <div className="flex items-center justify-between p-2">
           <div className="flex items-center space-x-3">
             <span className="p-2 text-xl font-semibold tracking-wider uppercase lg:hidden">
