@@ -6,27 +6,31 @@ import Button from '../../Components/Button/Button';
 
 type NewWorkspaceProps = {
   newWorkspaceValue: WorkspaceBase;
-  onSubmit: (value: WorkspaceBase) => void;
+  onSubmit: (value: WorkspaceBase, mode: 'edit' | 'new') => void;
+  onClose: () => void;
+  mode: 'edit' | 'new';
 };
 
-export const NewWorkspace = ({ onSubmit }: NewWorkspaceProps) => {
-  const initialValue: WorkspaceBase = {
-    title: '',
-    description: '',
-    colorCode: '',
-  };
-
+export const NewWorkspace = ({
+  onSubmit,
+  onClose,
+  newWorkspaceValue,
+  mode,
+}: NewWorkspaceProps) => {
   return (
     <>
       <div>
         <Formik
-          initialValues={initialValue}
+          initialValues={newWorkspaceValue}
           onSubmit={({ title, description, colorCode }) => {
-            onSubmit({
-              title,
-              description,
-              colorCode,
-            });
+            onSubmit(
+              {
+                title,
+                description,
+                colorCode,
+              },
+              mode
+            );
           }}
         >
           {(props: FormikProps<WorkspaceBase>) => (
@@ -43,9 +47,12 @@ export const NewWorkspace = ({ onSubmit }: NewWorkspaceProps) => {
                 name="description"
                 placeholder="Describe Workspace..."
               />
-              <div className="mt-4">
+              <div className="mt-4 space-x-2">
+                <Button onClick={onClose} varient="outline">
+                  Close
+                </Button>
                 <Button type="submit" varient="primary">
-                  Create
+                  {mode === 'new' ? <p>Create</p> : <p>Save</p>}
                 </Button>
               </div>
             </Form>

@@ -34,3 +34,34 @@ export const DialogModal = ({
     </>
   );
 };
+
+const DefaultConfirmationButtons = (props: {
+  onClose: () => void;
+  onSubmit: () => void;
+}) => {
+  return (
+    <div className="mt-4 space-x-2">
+      <Button onClick={props.onClose} varient="outline">
+        No
+      </Button>
+      <Button onClick={props.onSubmit} varient="warn">
+        Yes
+      </Button>
+    </div>
+  );
+};
+
+export const ConfirmationDialog = ({
+  onClose,
+  children,
+  onSubmit,
+  ...props
+}: BaseModalProps) => {
+  return (
+    <>
+      <BaseModal size="md" onClose={onClose} {...props}>
+        <DefaultConfirmationButtons onClose={onClose} onSubmit={onSubmit!} />
+      </BaseModal>
+    </>
+  );
+};

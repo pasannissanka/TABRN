@@ -20,19 +20,19 @@ router.get(
 router.get('/:slug', isLoggedIn, catchAsync(workspaceController.getWorkspace));
 
 router.put(
-  '/:slug',
+  '/:workspaceId',
   isLoggedIn,
   catchAsync(workspaceController.updateWorkspace)
 );
 
 router.delete(
-  '/:slug',
+  '/:workspaceId',
   isLoggedIn,
   catchAsync(workspaceController.deleteWorkspace)
 );
 
 router.patch(
-  '/:slug',
+  '/:workspaceId',
   isLoggedIn,
   catchAsync(workspaceController.restoreWorkspace)
 );

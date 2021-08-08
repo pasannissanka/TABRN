@@ -6,8 +6,8 @@ export interface AuthContextState {
 
 export interface IMongoDocument {
   _id: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IResponse<T> {
@@ -32,6 +32,8 @@ export interface WorkspaceBase {
   description: string;
   colorCode?: string;
 }
+
+export interface WorkspaceData extends WorkspaceBase, IMongoDocument {}
 
 export interface IWorkspace extends IMongoDocument, WorkspaceBase {
   userId: string;

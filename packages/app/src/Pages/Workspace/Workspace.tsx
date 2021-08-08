@@ -9,19 +9,45 @@ import { getWorkspacesList } from '../../Query/api';
 import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
 import { ReactComponent as BriefcaseSVG } from '../../svg/briefcase.svg';
 import Button from '../../Components/Button/Button';
-import { Modal } from '../../Components/Modal/Modal';
+import { ConfirmationDialog, Modal } from '../../Components/Modal/Modal';
 import { NewWorkspace } from './NewWorkspace';
 import { WorkspaceBase } from '../../Types/types';
-import { useMutateWorkspace } from '../../Hooks/useMutation';
+import {
+  useMutateWorkspace,
+  useMutateWorkspaceDelete,
+  useMutateWorkspaceUpdate,
+} from '../../Hooks/useMutation';
 
 interface WorkspaceProps {}
 
 export const Workspace = (props: WorkspaceProps) => {
   const { data } = useQuery('workspaces-all', getWorkspacesList);
-  const mutation = useMutateWorkspace();
+  const addMutation = useMutateWorkspace();
+  const editMutation = useMutateWorkspaceUpdate();
+  const deleteMutation = useMutateWorkspaceDelete();
 
-  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
-  const [newWorkspaceValue, setNewWorkspaceValue] = useState<WorkspaceBase>({
+  const [deleteConfModal, setdeleteConfModal] = useState<{
+    _id: string;
+    open: boolean;
+  }>({
+    _id: '',
+    open: false,
+  });
+
+  const [isNewModalOpen, setIsNewModalOpen] = useState<{
+    type: 'edit' | 'new';
+    open: boolean;
+  }>({
+    type: 'new',
+    open: false,
+  });
+
+  const [newWorkspaceValue, setNewWorkspaceValue] = useState<{
+    _id?: string;
+    description: string;
+    title: string;
+    colorCode: string;
+  }>({
     description: '',
     title: '',
     colorCode: '',
@@ -30,41 +56,78 @@ export const Workspace = (props: WorkspaceProps) => {
   const menuItems: MenuItemProp[] = [
     {
       title: 'Edit',
+      type: 'edit',
       icon: <PlusSMSVG />,
-      onClick: (e, i) => {
-        console.log(i);
+      onClick: (e, key) => {
+        console.log(e, key);
+        const ele = data?.find((v) => v._id === key);
+        console.log(ele);
+        if (ele) {
+          setNewWorkspaceValue(ele! as any);
+          openModal('edit');
+        }
       },
     },
     {
-      title: 'Edit',
+      title: 'Delete',
+      type: 'delete',
       icon: <PlusSMSVG />,
-      onClick: (e, i) => {
-        console.log(i);
-      },
-    },
-    {
-      title: 'Edit',
-      icon: <PlusSMSVG />,
-      onClick: (e, i) => {
-        console.log(i);
+      onClick: (e, key) => {
+        console.log(e, key);
+        const ele = data?.find((v) => v._id === key);
+        console.log(ele);
+        if (ele) {
+          setdeleteConfModal({
+            _id: ele._id,
+            open: true,
+          });
+        }
       },
     },
   ];
 
-  const openModal = () => {
-    setIsNewModalOpen(true);
+  const openModal = (type: 'edit' | 'new') => {
+    setIsNewModalOpen({
+      type,
+      open: true,
+    });
   };
 
   const closeModal = () => {
-    setIsNewModalOpen(false);
+    setIsNewModalOpen({
+      type: isNewModalOpen.type,
+      open: false,
+    });
   };
 
-  const onNewWorkspaceSubmit = (value: WorkspaceBase) => {
-    if (value) {
-      setNewWorkspaceValue(value);
-      mutation.mutate(value);
-    }
+  const onWorkspaceSubmit = (value: WorkspaceBase, mode: 'edit' | 'new') => {
     closeModal();
+    if (value) {
+      if (mode === 'new') {
+        setNewWorkspaceValue(value as any);
+        addMutation.mutate(value);
+      } else if (mode === 'edit') {
+        editMutation.mutate({
+          _id: newWorkspaceValue._id!,
+          ...value,
+        });
+      }
+    }
+    setNewWorkspaceValue({
+      description: '',
+      title: '',
+      colorCode: '',
+    });
+  };
+
+  const onWorkspaceDelete = () => {
+    if (deleteConfModal._id) {
+      deleteMutation.mutate(deleteConfModal._id);
+    }
+    setdeleteConfModal({
+      _id: '',
+      open: false,
+    });
   };
 
   console.log(newWorkspaceValue);
@@ -80,7 +143,7 @@ export const Workspace = (props: WorkspaceProps) => {
                 <div>
                   <Button
                     className="flex w-full"
-                    onClick={openModal}
+                    onClick={() => openModal('new')}
                     varient="outline"
                   >
                     <span>
@@ -96,6 +159,7 @@ export const Workspace = (props: WorkspaceProps) => {
               return (
                 <NavigationCard
                   key={workspace._id}
+                  id={workspace._id}
                   title={workspace.title}
                   content={workspace.description}
                   action="link"
@@ -111,18 +175,52 @@ export const Workspace = (props: WorkspaceProps) => {
         </div>
       </div>
 
-      <Modal
-        show={isNewModalOpen}
-        onClose={closeModal}
-        title="New Workspace"
-        description="Use Workspaces to Organize your bookmarks"
-        size="lg"
-      >
-        <NewWorkspace
-          newWorkspaceValue={newWorkspaceValue}
-          onSubmit={onNewWorkspaceSubmit}
-        />
-      </Modal>
+      {isNewModalOpen.type === 'new' ? (
+        <Modal
+          show={isNewModalOpen.open}
+          onClose={() => closeModal()}
+          title="New Workspace"
+          description="Use Workspaces to Organize your bookmarks"
+          size="lg"
+        >
+          <NewWorkspace
+            mode={isNewModalOpen.type}
+            newWorkspaceValue={newWorkspaceValue}
+            onSubmit={onWorkspaceSubmit}
+            onClose={() => closeModal()}
+          />
+        </Modal>
+      ) : isNewModalOpen.type === 'edit' ? (
+        <Modal
+          show={isNewModalOpen.open}
+          onClose={() => closeModal()}
+          title="Edit Workspace"
+          description="Use Workspaces to Organize your bookmarks"
+          size="lg"
+        >
+          <NewWorkspace
+            mode={isNewModalOpen.type}
+            newWorkspaceValue={newWorkspaceValue}
+            onSubmit={onWorkspaceSubmit}
+            onClose={() => closeModal()}
+          />
+        </Modal>
+      ) : (
+        <></>
+      )}
+
+      <ConfirmationDialog
+        show={deleteConfModal.open}
+        onClose={() =>
+          setdeleteConfModal({
+            _id: '',
+            open: false,
+          })
+        }
+        onSubmit={onWorkspaceDelete}
+        title="Are you sure?"
+        description="You will not be able to undo this action."
+      />
     </>
   );
 };

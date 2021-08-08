@@ -6,12 +6,15 @@ import { ReactComponent as ChevronRightSVG } from '../../svg/chevron-right.svg';
 import { ReactComponent as DotsVerticalSVG } from '../../svg/dots-vertical.svg';
 
 interface NavigationCardProps {
+  id?: string;
   title?: string;
   content?: string | React.ReactElement;
   icon?: React.ReactElement;
+
   action: 'link' | 'button';
   to?: string;
   onClick?: () => {};
+
   secondaryAction?: 'button' | 'menu' | 'none';
   secondaryOnClick?: () => {};
   secondaryItems?: MenuItemProp[];
@@ -20,16 +23,19 @@ interface NavigationCardProps {
 
 export interface MenuItemProp {
   icon: React.ReactElement;
+  id?: string;
+  type: string;
   title: string;
   index?: number;
   onClick: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    key: number
+    key: string
   ) => void;
 }
 
 export const NavigationCard = ({
   title,
+  id,
   content,
   action,
   to = '/',
@@ -64,15 +70,7 @@ export const NavigationCard = ({
           </Menu.Button>
           <Menu.Items className="absolute z-50 right-0 mt-2 w-48 bg-white rounded-md focus:outline-none shadow-lg divide-gray-100 divide-y origin-top-right ring-1 ring-black ring-opacity-5">
             {secondaryItems.map((item, index) => {
-              return (
-                <MenuItem
-                  key={index}
-                  icon={item.icon}
-                  title={item.title}
-                  onClick={item.onClick}
-                  index={index}
-                />
-              );
+              return <MenuItem key={index} id={id!} {...item} index={index} />;
             })}
           </Menu.Items>
         </Menu>
@@ -146,13 +144,13 @@ export const NavigationCard = ({
   );
 };
 
-export const MenuItem = ({ icon, title, onClick, index }: MenuItemProp) => {
+export const MenuItem = ({ icon, title, onClick, id }: MenuItemProp) => {
   return (
     <Menu.Item>
       <div>
         <button
           className="flex px-4 py-1 w-full text-black text-base font-medium hover:bg-gray-200 bg-gray-50 focus:outline-none transition-colors duration-300 focus:ring-4 focus:ring-blue-200"
-          onClick={(event) => onClick(event, index!)}
+          onClick={(event) => onClick(event, id!)}
         >
           <span>{icon}</span>
           <span>{title}</span>

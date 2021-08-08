@@ -54,13 +54,13 @@ class WorkspaceController {
   public async updateWorkspace(req: Request, res: Response) {
     const user = req.user;
     const data: IWorkspace = req.body;
-    const slug = req.params.slug;
+    const id = req.params.workspaceId;
 
     const workspace = await WorkspaceModel.findOneAndUpdate(
       {
         userId: user?.id,
         isDeleted: false,
-        slug: slug,
+        _id: id,
       },
       {
         title: data.title,
@@ -73,7 +73,7 @@ class WorkspaceController {
     );
 
     if (!workspace) {
-      successResponse(res, {
+      return successResponse(res, {
         message: 'Not found',
       });
     }
@@ -83,13 +83,13 @@ class WorkspaceController {
 
   public async deleteWorkspace(req: Request, res: Response) {
     const user = req.user;
-    const slug = req.params.slug;
+    const id = req.params.workspaceId;
 
     const workspace = await WorkspaceModel.findOneAndUpdate(
       {
         userId: user?.id,
         isDeleted: false,
-        slug: slug,
+        _id: id,
       },
       {
         isDeleted: true,
@@ -100,7 +100,7 @@ class WorkspaceController {
     );
 
     if (!workspace) {
-      successResponse(res, {});
+      return successResponse(res, {});
     }
 
     successResponse(res, workspace);
@@ -108,13 +108,13 @@ class WorkspaceController {
 
   public async restoreWorkspace(req: Request, res: Response) {
     const user = req.user;
-    const slug = req.params.slug;
+    const id = req.params.workspaceId;
 
     const workspace = await WorkspaceModel.findOneAndUpdate(
       {
         userId: user?.id,
         isDeleted: false,
-        slug: slug,
+        _id: id,
       },
       {
         isDeleted: true,
@@ -125,7 +125,7 @@ class WorkspaceController {
     );
 
     if (!workspace) {
-      successResponse(res, {});
+      return successResponse(res, {});
     }
 
     successResponse(res, workspace);

@@ -5,9 +5,10 @@ import Button from '../Button/Button';
 export interface BaseModalProps {
   show: boolean;
   onClose: () => void;
+  onSubmit?: () => void;
   title: string;
   description: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   action?: React.ReactNode;
 }
 
