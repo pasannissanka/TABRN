@@ -25,11 +25,14 @@ export interface IUser extends IMongoDocument {
   photos: any[];
 }
 
-export interface IWorkspace extends IMongoDocument {
-  userId: string;
+export interface WorkspaceBase {
   title: string;
   description: string;
-  slug: string;
   colorCode?: string;
+}
+
+export interface IWorkspace extends IMongoDocument, WorkspaceBase {
+  userId: string;
+  slug: string;
   isDeleted: boolean;
 }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IResponse, IUser, IWorkspace } from '../Types/types';
+import { IResponse, IUser, IWorkspace, WorkspaceBase } from '../Types/types';
 
 export const getUser = async () => {
   const { data } = await axios.get<IResponse<IUser>>(
@@ -15,4 +15,15 @@ export const getWorkspacesList = async () => {
     { withCredentials: true }
   );
   return data.data;
+};
+
+export const createNewWorkspace = async (value: WorkspaceBase) => {
+  const { data } = await axios.post<IResponse<IWorkspace>>(
+    'http://localhost:4001/workspace/create',
+    value,
+    {
+      withCredentials: true,
+    }
+  );
+  return data;
 };

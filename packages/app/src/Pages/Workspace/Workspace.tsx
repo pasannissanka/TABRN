@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import {
   MenuItemProp,
   NavigationCard,
@@ -8,12 +8,24 @@ import { BaseModal } from '../../Components/Modal/BaseModal';
 import { getWorkspacesList } from '../../Query/api';
 import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
 import { ReactComponent as BriefcaseSVG } from '../../svg/briefcase.svg';
+import Button from '../../Components/Button/Button';
+import { Modal } from '../../Components/Modal/Modal';
+import { NewWorkspace } from './NewWorkspace';
+import { WorkspaceBase } from '../../Types/types';
+import { useMutateWorkspace } from '../../Hooks/useMutation';
 
 interface WorkspaceProps {}
 
 export const Workspace = (props: WorkspaceProps) => {
   const { data } = useQuery('workspaces-all', getWorkspacesList);
+  const mutation = useMutateWorkspace();
+
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+  const [newWorkspaceValue, setNewWorkspaceValue] = useState<WorkspaceBase>({
+    description: '',
+    title: '',
+    colorCode: '',
+  });
 
   const menuItems: MenuItemProp[] = [
     {
@@ -42,9 +54,20 @@ export const Workspace = (props: WorkspaceProps) => {
   const openModal = () => {
     setIsNewModalOpen(true);
   };
+
   const closeModal = () => {
     setIsNewModalOpen(false);
   };
+
+  const onNewWorkspaceSubmit = (value: WorkspaceBase) => {
+    if (value) {
+      setNewWorkspaceValue(value);
+      mutation.mutate(value);
+    }
+    closeModal();
+  };
+
+  console.log(newWorkspaceValue);
 
   return (
     <>
@@ -55,15 +78,16 @@ export const Workspace = (props: WorkspaceProps) => {
               <div className="flex justify-between">
                 <h2 className="text-2xl font-semibold">Workspaces</h2>
                 <div>
-                  <button
-                    className="flex px-4 py-1 w-full text-black text-base font-medium hover:bg-gray-200 bg-gray-50 rounded-md focus:outline-none shadow transition-colors duration-300 focus:ring-4 focus:ring-blue-200"
+                  <Button
+                    className="flex w-full"
                     onClick={openModal}
+                    varient="outline"
                   >
                     <span>
-                      <PlusSMSVG />
+                      <PlusSMSVG className="flex-1 mr-1 w-5 h-5" />
                     </span>
                     <span>New</span>
-                  </button>
+                  </Button>
                 </div>
               </div>
               <div className="mt-3 border"></div>
@@ -77,8 +101,8 @@ export const Workspace = (props: WorkspaceProps) => {
                   action="link"
                   icon={<BriefcaseSVG />}
                   to={`/workspace/${workspace.slug}`}
-                  secondryAction="menu"
-                  secondryItems={menuItems}
+                  secondaryAction="menu"
+                  secondaryItems={menuItems}
                 />
               );
             })}
@@ -87,11 +111,18 @@ export const Workspace = (props: WorkspaceProps) => {
         </div>
       </div>
 
-      <BaseModal
+      <Modal
         show={isNewModalOpen}
         onClose={closeModal}
         title="New Workspace"
-      />
+        description="Use Workspaces to Organize your bookmarks"
+        size="lg"
+      >
+        <NewWorkspace
+          newWorkspaceValue={newWorkspaceValue}
+          onSubmit={onNewWorkspaceSubmit}
+        />
+      </Modal>
     </>
   );
 };

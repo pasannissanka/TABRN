@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu } from '@headlessui/react';
 import { ReactComponent as BriefcaseSVG } from '../../svg/briefcase.svg';
@@ -6,15 +6,16 @@ import { ReactComponent as ChevronRightSVG } from '../../svg/chevron-right.svg';
 import { ReactComponent as DotsVerticalSVG } from '../../svg/dots-vertical.svg';
 
 interface NavigationCardProps {
-  title: string;
-  content: string | React.ReactElement;
+  title?: string;
+  content?: string | React.ReactElement;
   icon?: React.ReactElement;
   action: 'link' | 'button';
   to?: string;
   onClick?: () => {};
-  secondryAction?: 'button' | 'menu' | 'none';
-  secondryOnClick?: () => {};
-  secondryItems?: MenuItemProp[];
+  secondaryAction?: 'button' | 'menu' | 'none';
+  secondaryOnClick?: () => {};
+  secondaryItems?: MenuItemProp[];
+  loading?: boolean;
 }
 
 export interface MenuItemProp {
@@ -33,13 +34,21 @@ export const NavigationCard = ({
   action,
   to = '/',
   onClick,
-  icon = <BriefcaseSVG />,
-  secondryAction = 'none',
-  secondryOnClick,
-  secondryItems,
+  loading = false,
+  icon = loading ? undefined : <BriefcaseSVG />,
+  secondaryAction = 'none',
+  secondaryOnClick,
+  secondaryItems,
 }: NavigationCardProps) => {
+  useEffect(() => {
+    if (loading) {
+      title = '';
+      content = '';
+    }
+  }, [loading]);
+
   const Secondry = () => {
-    if (secondryAction === 'button' && secondryOnClick) {
+    if (secondaryAction === 'button' && secondaryOnClick && !loading) {
       return (
         <div>
           <span className="flex">
@@ -47,14 +56,14 @@ export const NavigationCard = ({
           </span>
         </div>
       );
-    } else if (secondryAction === 'menu' && secondryItems) {
+    } else if (secondaryAction === 'menu' && secondaryItems && !loading) {
       return (
         <Menu as="div" className="relative inline-block">
           <Menu.Button>
             <DotsVerticalSVG />
           </Menu.Button>
           <Menu.Items className="absolute z-50 right-0 mt-2 w-48 bg-white rounded-md focus:outline-none shadow-lg divide-gray-100 divide-y origin-top-right ring-1 ring-black ring-opacity-5">
-            {secondryItems.map((item, index) => {
+            {secondaryItems.map((item, index) => {
               return (
                 <MenuItem
                   key={index}
@@ -68,6 +77,12 @@ export const NavigationCard = ({
           </Menu.Items>
         </Menu>
       );
+    } else if (loading) {
+      return (
+        <div>
+          <span className="flex w-6 h-6 bg-gray-300 rounded"></span>
+        </div>
+      );
     } else {
       return <></>;
     }
@@ -76,23 +91,50 @@ export const NavigationCard = ({
   return (
     <>
       <div className="my-3 max-w-4xl">
-        <div className="px-5 py-3 w-full bg-gray-50 border rounded-md shadow-sm">
+        <div
+          className={`px-5 py-3 w-full bg-gray-50 border rounded-md shadow-sm 
+          ${loading ? 'animate-pulse' : ''}
+        `}
+        >
           <div className="flex justify-between">
             {action === 'link' ? (
               <Link to={to} className="flex w-full space-x-3">
-                <span>{icon}</span>
-                <span className="flex flex-row w-full">{title}</span>
+                <span
+                  className={`${loading ? 'h-6 w-6 bg-gray-300 rounded' : ''}`}
+                >
+                  {icon}
+                </span>
+                <span
+                  className={`flex flex-row ${
+                    loading ? 'h-6 bg-gray-300 rounded w-[50px]' : 'w-full '
+                  }`}
+                >
+                  {title}
+                </span>
               </Link>
             ) : (
               <div className="flex w-full space-x-3" onClick={onClick}>
-                <span>{icon}</span>
-                <span className="flex flex-row w-full">{title}</span>
+                <span
+                  className={`${loading ? 'h-6 w-6 bg-gray-300 rounded' : ''}`}
+                >
+                  {icon}
+                </span>
+                <span
+                  className={`flex flex-row ${
+                    loading ? 'h-6 bg-gray-300 rounded w-72' : 'w-full '
+                  }`}
+                >
+                  {title}
+                </span>
               </div>
             )}
             <Secondry />
           </div>
-          {typeof content === 'string' ? (
-            <div className="mt-2 w-full text-gray-700 text-sm font-normal truncate">
+          {typeof content === 'string' || loading ? (
+            <div
+              className={`mt-2  text-gray-700 text-sm font-normal truncate
+              ${loading ? 'h-6 bg-gray-300 rounded w-full' : 'w-full '}`}
+            >
               {content}
             </div>
           ) : (

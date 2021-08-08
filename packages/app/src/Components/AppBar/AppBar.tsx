@@ -74,7 +74,7 @@ export const AppBar = ({ handleDrawerOpen }: AppBarProps) => {
             <input
               type="text"
               placeholder="Search"
-              className="md:focus:bg-white md:focus:shadow md:focus:border px-4 py-3 hover:bg-white rounded-md focus:outline-none md:flex-1 md:py-2 lg:max-w-sm"
+              className="md:focus:bg-white bg-gray-100 hover:bg-white md:flex-1 md:py-2 lg:max-w-sm"
             />
           </div>
 
