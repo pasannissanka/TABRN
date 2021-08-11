@@ -61,7 +61,7 @@ export const NavigationCard = ({
           <Menu.Button>
             <DotsVerticalSVG />
           </Menu.Button>
-          <Menu.Items className="absolute z-50 right-0 mt-2 w-48 bg-white rounded-md focus:outline-none shadow-lg divide-gray-100 divide-y origin-top-right ring-1 ring-black ring-opacity-5">
+          <Menu.Items className="ring-primary-700 absolute z-10 right-0 mt-2 w-48 bg-white rounded-md focus:outline-none shadow-lg divide-gray-100 divide-y origin-top-right ring-1 ring-opacity-5">
             {secondaryItems.map((item, index) => {
               return <MenuItem key={index} id={id!} {...item} index={index} />;
             })}
@@ -81,7 +81,7 @@ export const NavigationCard = ({
 
   return (
     <>
-      <div className="my-3 max-w-4xl">
+      <div className="mx-3 my-3 max-w-full">
         <div
           className={`px-5 py-3 w-full bg-gray-50 border rounded-md shadow-sm 
           ${loading ? 'animate-pulse' : ''}
