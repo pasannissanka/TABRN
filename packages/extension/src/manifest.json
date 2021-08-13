@@ -12,25 +12,19 @@
     "storage",
     "tabs",
     "activeTab",
-    "identity",
     "cookies",
-    "http://localhost:3000/"
+    "http://localhost:4001/"
   ],
   "options_ui": {
     "chrome_style": true,
     "page": "options.html"
   },
   "background": {
-    "persistent": false,
     "scripts": ["background.ts"]
   },
   "browser_action": {
     "default_title": "Read Later...",
-    "default_popup": "popups/loading_popup.html"
+    "default_popup": "popups/cookie_consent.html"
   },
-  "web_accessible_resources": ["popups/*.html"],
-  "oauth2": {
-    "client_id": "353887742883-r0cko3ulicl422k21p77jdot0att1rvd.apps.googleusercontent.com",
-    "scopes": ["https://www.googleapis.com/auth/userinfo.email"]
-  }
+  "web_accessible_resources": ["popups/*.html"]
 }
