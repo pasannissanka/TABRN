@@ -64,7 +64,7 @@ export const BaseModal = ({
               leaveTo="opacity-0 scale-95"
             >
               <div
-                className={`inline-block align-middle my-8 p-6 w-full text-left bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all
+                className={`inline-block align-middle my-8 p-6 w-full text-left bg-white rounded-2xl shadow-xl transform transition-all
                 ${width}
               `}
               >

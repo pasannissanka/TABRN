@@ -30,7 +30,7 @@ export interface IUser extends IMongoDocument {
 export interface WorkspaceBase {
   title: string;
   description: string;
-  colorCode?: string;
+  emoji?: any;
 }
 
 export interface WorkspaceData extends WorkspaceBase, IMongoDocument {}

@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { makeRandomColor } from '../helpers/random-color';
 import { successResponse } from '../helpers/responses/success_response';
 import { WorkspaceModel } from '../modules/workspace/model/workspace.model';
 import { IWorkspace } from '../modules/workspace/types/workspace.type';
@@ -9,13 +8,13 @@ class WorkspaceController {
     const user = req.user;
     const data: IWorkspace = req.body;
 
-    const colorCode = data.colorCode ? data.colorCode : makeRandomColor();
+    const emoji = data.emoji;
 
     const workspace = new WorkspaceModel({
       userId: user?.id,
       title: data.title,
       description: data.description,
-      colorCode: colorCode,
+      emoji: emoji,
     });
 
     await workspace.save();
@@ -65,7 +64,7 @@ class WorkspaceController {
       {
         title: data.title,
         description: data.description,
-        colorCode: data.colorCode,
+        emoji: data.emoji,
       },
       {
         new: true,

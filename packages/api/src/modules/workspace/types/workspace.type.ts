@@ -5,6 +5,14 @@ export interface IWorkspace extends Document {
   title: string;
   description: string;
   slug?: string;
-  colorCode?: string;
+  emoji?: IEmojiData;
   isDeleted: boolean;
+}
+
+export interface IEmojiData {
+  activeSkinTone: string;
+  emoji: string;
+  names: string[];
+  originalUnified: string;
+  unified: string;
 }

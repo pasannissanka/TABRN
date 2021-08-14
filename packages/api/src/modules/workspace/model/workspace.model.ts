@@ -24,9 +24,16 @@ const WorkspaceSchema = new Schema<IWorkspace>(
       slug: 'title',
       index: true,
     },
-    colorCode: {
-      type: String,
-    },
+    emoji: new Schema(
+      {
+        activeSkinTone: String,
+        emoji: String,
+        names: [String],
+        originalUnified: String,
+        unified: String,
+      },
+      { _id: false }
+    ),
     isDeleted: {
       type: Boolean,
       required: true,

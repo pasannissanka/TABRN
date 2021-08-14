@@ -166,7 +166,7 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
                   title={workspace.title}
                   content={workspace.description}
                   action="link"
-                  icon={<BriefcaseSVG />}
+                  icon={workspace?.emoji?.emoji}
                   to={`/w/${workspace.slug}`}
                   secondaryAction="menu"
                   secondaryItems={menuItems}
