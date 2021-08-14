@@ -12,7 +12,7 @@ import {
 interface NavigationCardProps {
   id?: string;
   title?: string;
-  content?: string | React.ReactElement;
+  children?: React.ReactNode;
   icon?: React.ReactElement;
   action: 'link' | 'button';
   to?: string;
@@ -26,7 +26,7 @@ interface NavigationCardProps {
 export const NavigationCard = ({
   title,
   id,
-  content,
+  children,
   action,
   to = '/',
   onClick,
@@ -111,16 +111,7 @@ export const NavigationCard = ({
             )}
             <Secondry />
           </div>
-          {typeof content === 'string' || loading ? (
-            <div
-              className={`mt-1  text-gray-700 text-base font-normal truncate
-              ${loading ? 'h-6 bg-gray-300 rounded w-full' : 'w-full '}`}
-            >
-              {content}
-            </div>
-          ) : (
-            content
-          )}
+          {children}
         </div>
       </div>
     </>

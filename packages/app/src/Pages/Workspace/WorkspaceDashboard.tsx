@@ -162,13 +162,16 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
                   key={workspace._id}
                   id={workspace._id}
                   title={workspace.title}
-                  content={workspace.description}
                   action="link"
                   icon={workspace?.emoji?.emoji}
                   to={`/w/${workspace.slug}`}
                   secondaryAction="menu"
                   secondaryItems={menuItems}
-                />
+                >
+                  <div className="mt-1 text-gray-700 text-base font-normal truncate">
+                    {workspace.description}
+                  </div>
+                </NavigationCard>
               );
             })}
           </div>

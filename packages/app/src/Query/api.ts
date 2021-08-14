@@ -1,5 +1,7 @@
 import axios from 'axios';
 import {
+  Bookmark,
+  IPaginateData,
   IResponse,
   IUser,
   IWorkspace,
@@ -61,4 +63,12 @@ export const deleteWorkspace = async (id: string) => {
     }
   );
   return data;
+};
+
+export const getPaginateBookmarks = async (workspaceId: string) => {
+  const { data } = await axios.get<IResponse<IPaginateData<Bookmark[]>>>(
+    `http://localhost:4001/bookmark/w/${workspaceId}/paginate`,
+    { withCredentials: true }
+  );
+  return data.data;
 };

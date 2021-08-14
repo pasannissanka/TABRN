@@ -105,7 +105,7 @@ class BookmarkController {
       count,
       page,
       limit,
-      bookmarks,
+      data: bookmarks,
     });
   }
 

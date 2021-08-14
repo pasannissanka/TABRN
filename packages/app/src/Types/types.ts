@@ -15,6 +15,13 @@ export interface IResponse<T> {
   data: T;
 }
 
+export interface IPaginateData<T> {
+  data: T;
+  count: number;
+  page: number;
+  limit: number;
+}
+
 export interface IUser extends IMongoDocument {
   provider: string;
   googleId: string;
@@ -40,3 +47,29 @@ export interface IWorkspace extends IMongoDocument, WorkspaceBase {
   slug: string;
   isDeleted: boolean;
 }
+
+export interface TagBase {
+  title: string;
+  userId: string;
+  slug?: string;
+}
+
+export interface Tag extends TagBase, IMongoDocument {}
+export interface ILinkData {
+  title: string;
+  faviconUrl: string;
+  hostname: string;
+}
+export interface BookmarkBase {
+  userId: string;
+  workspaceId: string;
+  title: string;
+  description: string;
+  slug?: string;
+  url: string;
+  linkData: ILinkData;
+  tags: string[] | Tag[];
+  isDeleted?: boolean;
+}
+
+export interface Bookmark extends BookmarkBase, IMongoDocument {}

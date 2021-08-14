@@ -2,17 +2,25 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import Button from '../../Components/Button/Button';
-import { getWorkspace } from '../../Query/api';
+import { NavigationCard } from '../../Components/Cards/NavigationCard';
+import { getPaginateBookmarks, getWorkspace } from '../../Query/api';
 import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
 
 export const WorkspaceItem = () => {
   const { work_slug } = useParams<{ work_slug: string }>();
 
-  const { data } = useQuery(['workspaces-all', work_slug], () =>
+  const workspaceQ = useQuery(['workspaces-all', work_slug], () =>
     getWorkspace(work_slug)
   );
+  const dataWorkspace = workspaceQ.data;
 
-  console.log(data);
+  const bookmarksQ = useQuery(
+    [`bookmarks-${work_slug}`, dataWorkspace?._id],
+    () => getPaginateBookmarks(dataWorkspace!._id)
+  );
+  const dataBookmarks = bookmarksQ.data;
+
+  console.log(dataBookmarks);
 
   return (
     <>
@@ -22,11 +30,11 @@ export const WorkspaceItem = () => {
             <div>
               <div className="flex justify-between">
                 <h2 className="text-2xl font-semibold">
-                  {data?.emoji?.emoji} {data?.title}
+                  {dataWorkspace?.emoji?.emoji} {dataWorkspace?.title}
                 </h2>
               </div>
               <h4 className="line-clamp-2 my-4 text-base">
-                {data?.description}
+                {dataWorkspace?.description}
               </h4>
               <div className="flex gap-1 justify-end">
                 <Button varient="flat" size="sm">
@@ -37,6 +45,18 @@ export const WorkspaceItem = () => {
                 </Button>
               </div>
               <div className="mt-1 border"></div>
+            </div>
+            <div>
+              {dataBookmarks?.data.map((bookmark, idx) => {
+                return (
+                  <NavigationCard
+                    key={bookmark._id}
+                    id={bookmark._id}
+                    title={bookmark.title}
+                    action="link"
+                  ></NavigationCard>
+                );
+              })}
             </div>
           </div>
           <div className="hidden col-span-1 lg:block">Side Summary</div>
