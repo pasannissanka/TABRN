@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useContext } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContextProvider';
+import { Dropdown } from '../Dropdown/Dropdown';
 
 interface AppBarProps {
   isDrawerOpen: boolean;
@@ -81,8 +82,8 @@ export const AppBar = ({ handleDrawerOpen }: AppBarProps) => {
           {/* <!-- Mobile search   --> */}
           <div className="relative flex items-center space-x-3">
             {/* <!-- avatar button --> */}
-            <div className="relative">
-              <Menu>
+            <div>
+              <Menu as="div" className="relative inline-block">
                 <Menu.Button className="p-1 bg-gray-200 rounded-full focus:outline-none focus:ring">
                   <img
                     className="w-8 h-8 rounded-full object-cover"

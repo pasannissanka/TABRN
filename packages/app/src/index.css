@@ -8,30 +8,32 @@
 
 /* @apply text-primary-900 bg-primary-100 hover:bg-primary-200; */
 .btn {
-  @apply bg-primary-500 hover:bg-primary-600 text-white;
+  @apply bg-primary-500 hover:bg-primary-600 text-white border;
 }
 .btn-primary {
-  @apply bg-primary-500 hover:bg-primary-600 text-white;
+  @apply bg-primary-500 hover:bg-primary-600 text-white border;
 }
 .btn-secondary {
-  @apply bg-secondary-500 hover:bg-secondary-600 text-black;
+  @apply bg-secondary-500 hover:bg-secondary-600 text-black border;
 }
 .btn-warn {
-  @apply bg-warn-500 hover:bg-warn-600 text-white;
+  @apply bg-warn-500 hover:bg-warn-600 text-white border;
 }
 .btn-outline {
-  @apply text-black hover:bg-gray-200 bg-gray-50 border-gray-300;
+  @apply text-black hover:bg-gray-200 bg-gray-50 border border-gray-300;
 }
 .btn-outline-primary {
-  @apply text-primary-700 hover:bg-primary-200 bg-gray-50 border-gray-300;
+  @apply text-primary-700 hover:bg-primary-200 bg-gray-50 border border-gray-300;
 }
 .btn-outline-secondary {
-  @apply text-secondary-700 hover:bg-secondary-200 bg-gray-50 border-gray-300;
+  @apply text-secondary-700 hover:bg-secondary-200 bg-gray-50 border border-gray-300;
 }
 .btn-outline-warn {
-  @apply text-warn-700 hover:bg-warn-300 bg-gray-50 border-gray-300;
+  @apply text-warn-700 hover:bg-warn-300 bg-gray-50 border border-gray-300;
 }
-
+.btn-flat {
+  @apply text-black hover:bg-gray-200 bg-gray-50;
+}
 @layer base {
   input[type='text'],
   input[type='password'],

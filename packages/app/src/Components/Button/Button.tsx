@@ -1,23 +1,26 @@
 import React from 'react';
 
-type ButtonProps = {
+export type ButtonProps = {
   varient: string;
+  size?: 'sm' | 'md';
   children?: React.ReactNode;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function Button({
-  varient = '',
-  children,
-  ...props
-}: ButtonProps) {
-  return (
-    <button
-      {...props}
-      className={`py-2 inline-flex h-full justify-center px-4 text-sm font-medium border border-transparent rounded-md focus:ring-1 focus:ring-primary-200 transition-colors duration-300
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ varient = '', size = 'md', children, ...props }: ButtonProps, ref) => {
+    const sizeStyle = size === 'sm' ? 'py-1 px-2 ' : 'py-2 px-4';
+    return (
+      <button
+        ref={ref}
+        {...props}
+        className={`${sizeStyle} inline-flex h-full justify-center text-sm font-medium rounded-md focus:ring-1 focus:ring-primary-200 transition-colors duration-300
           btn-${varient}
         `}
-    >
-      {children}
-    </button>
-  );
-}
+      >
+        {children}
+      </button>
+    );
+  }
+);
+
+export default Button;

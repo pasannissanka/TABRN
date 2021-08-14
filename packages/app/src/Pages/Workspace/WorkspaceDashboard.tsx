@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import Button from '../../Components/Button/Button';
+import { NavigationCard } from '../../Components/Cards/NavigationCard';
 import {
-  MenuItemProp,
-  NavigationCard,
-} from '../../Components/Cards/NavigationCard';
+  DropdownButonElement,
+  DropdownLinkElement,
+} from '../../Components/Dropdown/Dropdown';
 import { ConfirmationDialog, Modal } from '../../Components/Modal/Modal';
 import {
   useMutateWorkspace,
@@ -12,7 +13,6 @@ import {
   useMutateWorkspaceUpdate,
 } from '../../Hooks/useMutation';
 import { getWorkspacesList } from '../../Query/api';
-import { ReactComponent as BriefcaseSVG } from '../../svg/briefcase.svg';
 import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
 import { WorkspaceBase } from '../../Types/types';
 import { NewWorkspace } from './NewWorkspace';
@@ -56,10 +56,9 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
     colorCode: '',
   });
 
-  const menuItems: MenuItemProp[] = [
+  const menuItems: (DropdownButonElement | DropdownLinkElement)[] = [
     {
       title: 'Edit',
-      type: 'edit',
       icon: <PlusSMSVG />,
       onClick: (e, key) => {
         console.log(e, key);
@@ -73,7 +72,6 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
     },
     {
       title: 'Delete',
-      type: 'delete',
       icon: <PlusSMSVG />,
       onClick: (e, key) => {
         console.log(e, key);
