@@ -22,7 +22,7 @@ interface NavigationCardProps {
 }
 
 export interface MenuItemProp {
-  icon: React.ReactElement;
+  icon: React.ReactElement | string;
   id?: string;
   type: string;
   title: string;
