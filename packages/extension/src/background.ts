@@ -27,6 +27,38 @@ async function getUserDetails() {
   }
 }
 
+async function getBookmarkData() {
+  const cookieOk = await getCookieConsent();
+  const userId = await getUserId();
+  if (cookieOk && userId.id !== undefined) {
+    const request = await fetch('http://localhost:4001/extension/data', {
+      method: 'GET',
+      credentials: 'include',
+    });
+    return request.json();
+  } else {
+    return Promise.reject(new Error('Unauthorized'));
+  }
+}
+
+async function createNewBookmark(payload: any) {
+  const cookieOk = await getCookieConsent();
+  const userId = await getUserId();
+  if (cookieOk && userId.id !== undefined) {
+    const request = await fetch('http://localhost:4001/bookmark/create', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return request.json();
+  } else {
+    return Promise.reject(new Error('Unauthorized'));
+  }
+}
+
 async function setCookieConsent() {
   return browser.storage.local.set({ cookie_accept: true });
 }
@@ -65,7 +97,8 @@ browser.runtime.onMessage.addListener(
     if (data.message === 'cookie_consent_ok') {
       await setCookieConsent();
       return Promise.resolve(true);
-    } else if (data.message === 'get_workspaces') {
+    } else if (data.message === 'get_create_bookmark_data') {
+      return getBookmarkData();
     } else if (data.message === 'get_user') {
       const userData = await getUserDetails();
       console.log(userData);
@@ -74,7 +107,8 @@ browser.runtime.onMessage.addListener(
         return Promise.resolve(userData);
       }
       return Promise.reject();
-    } else if (data.message === 'create_bookmark') {
+    } else if (data.message === 'create_new_bookmark') {
+      return createNewBookmark(data.payload);
     } else if (data.message === 'get_cookie_consent') {
       return getCookieConsent();
     }

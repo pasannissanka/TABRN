@@ -13,6 +13,7 @@ import authRoute from './routes/auth.route';
 import userRoute from './routes/user.routes';
 import workspaceRoute from './routes/workspace.route';
 import bookmarkRoute from './routes/bookmark.route';
+import extensionRoute from './routes/extension.routes';
 
 const main = async () => {
   const app = express();
@@ -84,6 +85,7 @@ const main = async () => {
   app.use('/user', userRoute);
   app.use('/workspace', workspaceRoute);
   app.use('/bookmark', bookmarkRoute);
+  app.use('/extension', extensionRoute);
 
   // Catch All Unhandled routes
   app.all('*', (req, _, next) => {

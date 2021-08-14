@@ -33,7 +33,11 @@
       <div class="w-100 flex justify-center mx-5 my-4 bg-gray-400 border"></div>
       <form>
         <div class="w-100 flex justify-center">
-          <textarea class="mx-5 w-full h-48 max-h-72" name="" id=""></textarea>
+          <textarea
+            class="mx-5 w-full h-48 max-h-72"
+            name="bookmark_data"
+            id="bookmark_data"
+          ></textarea>
         </div>
         <div class="w-100 grid gap-2 grid-cols-5 mb-2 mt-4 mx-5">
           <div
@@ -48,11 +52,16 @@
             Save to
           </div>
           <div class="col-span-4">
-            <select name="" id="" class="mr-5 w-full"></select>
+            <select
+              placeholder="Select Workspace"
+              id="workspace_select"
+              class="mr-5 w-full"
+            ></select>
           </div>
         </div>
         <div class="w-100 flex justify-end">
           <button
+            type="submit"
             class="
               focus:ring-primary-200
               btn-primary
@@ -78,6 +87,6 @@
         </div>
       </form>
     </div>
-    <script type="module" src="loading_popup.ts"></script>
+    <script type="module" src="bookmark_popup.ts"></script>
   </body>
 </html>
