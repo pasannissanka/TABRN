@@ -1,16 +1,9 @@
 import { Document } from 'mongoose';
-import { Tag } from '../../tags/types/tag.type';
+import { BaseEntry } from './entry.types';
 
-export interface IBookmark {
-  userId: string;
-  workspaceId: string;
-  title: string;
-  description: string;
-  slug?: string;
+export interface IBookmark extends BaseEntry {
   url: string;
   linkData: ILinkData;
-  tags: string[] | Tag[];
-  isDeleted?: boolean;
 }
 
 export interface Bookmark extends Document, IBookmark {}
