@@ -9,11 +9,13 @@ import passport from 'passport';
 import PassportGoogleStrategy from './config/googleStrategy';
 import { AppError } from './helpers/errors/app_error';
 import { errorHandler } from './helpers/errors/error_handler';
+
 import authRoute from './routes/auth.route';
 import userRoute from './routes/user.routes';
 import workspaceRoute from './routes/workspace.route';
 import bookmarkRoute from './routes/bookmark.route';
 import extensionRoute from './routes/extension.routes';
+import viewRoute from './routes/view.route';
 
 const main = async () => {
   const app = express();
@@ -86,6 +88,7 @@ const main = async () => {
   app.use('/workspace', workspaceRoute);
   app.use('/bookmark', bookmarkRoute);
   app.use('/extension', extensionRoute);
+  app.use('/view', viewRoute);
 
   // Catch All Unhandled routes
   app.all('*', (req, _, next) => {

@@ -25,6 +25,9 @@ const BaseView = new Schema(
     description: {
       type: String,
     },
+    entryKind: {
+      type: String,
+    },
     slug: {
       type: String,
       uniqueGroupSlug: ['userId', 'workspaceId'],
@@ -35,9 +38,6 @@ const BaseView = new Schema(
       type: Boolean,
       required: true,
       default: false,
-    },
-    entryKind: {
-      type: String,
     },
   },
   {

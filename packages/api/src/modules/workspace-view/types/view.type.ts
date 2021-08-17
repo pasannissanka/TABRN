@@ -8,9 +8,16 @@ export interface BaseView {
   type: ViewType;
   title: string;
   description: string;
+  entryKind?: EntryType;
   slug?: string;
   isDeleted?: boolean;
-  entryKind?: EntryType;
 }
 
 export interface View extends BaseView, Document {}
+
+export interface ViewReqData {
+  type: ViewType;
+  title: string;
+  description: string;
+  entryKind?: EntryType;
+}
