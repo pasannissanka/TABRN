@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-unassigned-import
-import { browser, Runtime } from 'webextension-polyfill-ts';
+import browser, { Runtime } from 'webextension-polyfill';
 
 // const handleTabOnActivated = async (activeInfo) => {
 //   console.log(await browser.tabs.get(activeInfo));

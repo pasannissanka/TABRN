@@ -1,4 +1,4 @@
-import { browser } from 'webextension-polyfill-ts';
+import browser from 'webextension-polyfill';
 
 // browser.runtime.sendMessage({ message: 'SiteInfo-loggedIn' }).then((val) => {
 //   if (!val.status) {
