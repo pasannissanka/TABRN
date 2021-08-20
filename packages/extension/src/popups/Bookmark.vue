@@ -24,12 +24,14 @@
     <div class="w-100 flex justify-center mx-5 my-4 bg-gray-400 border"></div>
     <form>
       <div class="w-100 flex justify-center">
-        <textarea
-          v-model="text_content"
-          class="mx-5 w-full h-48 max-h-72"
-          name="bookmark_data"
-          id="bookmark_data"
-        ></textarea>
+        <vue-tribute :options="options">
+          <textarea
+            v-model="text_content"
+            class="mx-5 w-full h-48 max-h-72"
+            name="bookmark_data"
+            id="bookmark_data"
+          ></textarea>
+        </vue-tribute>
       </div>
       <div class="w-100 grid gap-2 grid-cols-5 mb-2 mt-4 mx-5">
         <div
@@ -91,12 +93,12 @@
 </template>
 <script>
 import browser from 'webextension-polyfill';
-// import { Mentionable } from 'vue-mention';
+import VueTribute from 'vue-tribute';
 
 export default {
-  // components: {
-  //   Mentionable,
-  // },
+  components: {
+    VueTribute,
+  },
   data() {
     return {
       text_content: '',
@@ -113,6 +115,17 @@ export default {
           label: 'Mr Dog',
         },
       ],
+      options: {
+        trigger: '@',
+        values: [
+          { key: 'Collin Henderson', value: 'syropian' },
+          { key: 'Sarah Drasner', value: 'sarah_edo' },
+          { key: 'Evan You', value: 'youyuxi' },
+          { key: 'Adam Wathan', value: 'adamwathan' },
+        ],
+        positionMenu: true,
+        menuContainer: document.querySelector('.menu-container'),
+      },
     };
   },
   mounted() {
