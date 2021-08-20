@@ -1,5 +1,6 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/utilities';
+@import '@yaireo/tagify/dist/tagify.css';
 
 @layer base {
   input[type='text'],
