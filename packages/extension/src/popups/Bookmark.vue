@@ -25,6 +25,7 @@
     <form>
       <div class="w-100 flex justify-center">
         <textarea
+          v-model="text_content"
           class="mx-5 w-full h-48 max-h-72"
           name="bookmark_data"
           id="bookmark_data"
@@ -44,10 +45,19 @@
         </div>
         <div class="col-span-4">
           <select
+            v-model="selectedWorkspace"
             placeholder="Select Workspace"
             id="workspace_select"
             class="mr-5 w-full"
-          ></select>
+          >
+            <option
+              v-for="workspace in workspaces"
+              :value="workspace.key"
+              :key="workspace.key"
+            >
+              {{ workspace.value }}
+            </option>
+          </select>
         </div>
       </div>
       <div class="w-100 flex justify-end">
@@ -80,13 +90,57 @@
   </div>
 </template>
 <script>
+import browser from 'webextension-polyfill';
+// import { Mentionable } from 'vue-mention';
+
 export default {
-  computed: {
-    hue() {
-      return Math.floor(Math.random() * 360);
+  // components: {
+  //   Mentionable,
+  // },
+  data() {
+    return {
+      text_content: '',
+      workspaces: [],
+      tags: [],
+      selectedWorkspace: 'Select a Workspace',
+      items: [
+        {
+          value: 'cat',
+          label: 'Mr Cat',
+        },
+        {
+          value: 'dog',
+          label: 'Mr Dog',
+        },
+      ],
+    };
+  },
+  mounted() {
+    browser.tabs.query({ currentWindow: true, active: true }).then((tab) => {
+      this.text_content = `# ${tab[0].title}\n\n`;
+    });
+
+    browser.runtime
+      .sendMessage({ message: 'get_create_bookmark_data' })
+      .then((data) => {
+        console.log(data);
+        if (data) {
+          this.workspaces = data.data.workspaces;
+          this.tags = data.data.tags;
+
+          console.log(this.tags, this.workspaces);
+        }
+      })
+      .catch((err) => console.log(err));
+  },
+  methods: {
+    submit(event) {
+      event.preventDefault();
+      console.log(event);
+      console.log(this.text_content, this.selectedWorkspace);
     },
-    backgroundColor() {
-      return `hsl(${this.hue}, 100%, 50%)`;
+    onOpen(key) {
+      this.items = key === '@' ? this.workspaces : this.tags;
     },
   },
 };

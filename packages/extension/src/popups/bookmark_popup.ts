@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
-import App from './Bookmark';
+// import Vue from 'vue/dist/vue.js';
+import Bookmark from './Bookmark.vue';
 
-const app = createApp(App);
+const app = createApp(Bookmark);
 app.mount('#app');
