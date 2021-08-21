@@ -51,6 +51,7 @@
             id="workspace_select"
             class="mr-5 w-full"
           >
+            <option value="" disabled hidden>Select a workspace</option>
             <option
               v-for="workspace in workspaces"
               :value="workspace.key"
@@ -100,7 +101,7 @@ export default {
       text_content: '',
       workspaces: [],
       tags: [],
-      selectedWorkspace: 'Select a Workspace',
+      selectedWorkspace: '',
       items: [
         {
           value: 'cat',
@@ -119,8 +120,7 @@ export default {
       this.text_content = `# ${tab[0].title}\n\n`;
     });
 
-    browser.runtime
-      .sendMessage({ message: 'get_create_bookmark_data' })
+    this.getBookmarkData()
       .then((data) => {
         console.log(data);
         if (data) {
@@ -166,22 +166,16 @@ export default {
 
           // The function that gets call on select that retuns the content to insert
           selectTemplate: function (item) {
-            return '#' + item.original.name;
+            return '#' + item.original.value;
           },
           // function retrieving an array of objects
-          values: function (_, cb) {
-            setTimeout(
-              () =>
-                cb([
-                  { name: 'Bob Bill', email: 'bobbill@example.com' },
-                  { name: 'Steve Stevenston', email: 'steve@example.com' },
-                ]),
-              1000
-            );
+          values: (_, cb) => {
+            console.log(this.workspaces);
+            cb(this.workspaces);
           },
-          lookup: 'name',
+          lookup: 'value',
 
-          fillAttr: 'name',
+          fillAttr: 'value',
         },
       ],
     });
@@ -203,6 +197,12 @@ export default {
       event.preventDefault();
       console.log(event);
       console.log(this.text_content, this.selectedWorkspace);
+    },
+    async getBookmarkData() {
+      const data = await browser.runtime.sendMessage({
+        message: 'get_create_bookmark_data',
+      });
+      return data;
     },
   },
 };
