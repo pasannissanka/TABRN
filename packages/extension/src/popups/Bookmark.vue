@@ -24,14 +24,13 @@
     <div class="w-100 flex justify-center mx-5 my-4 bg-gray-400 border"></div>
     <form>
       <div class="w-100 flex justify-center">
-        <vue-tribute :options="options">
-          <textarea
-            v-model="text_content"
-            class="mx-5 w-full h-48 max-h-72"
-            name="bookmark_data"
-            id="bookmark_data"
-          ></textarea>
-        </vue-tribute>
+        <p
+          v-text="text_content"
+          class="tribute-input mx-5 w-full h-48 max-h-72 overflow-y-scroll"
+          name="bookmark_data"
+          id="bookmark_data"
+        ></p>
+        <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
       </div>
       <div class="w-100 grid gap-2 grid-cols-5 mb-2 mt-4 mx-5">
         <div
@@ -64,7 +63,7 @@
       </div>
       <div class="w-100 flex justify-end">
         <button
-          type="submit"
+          @click="submit"
           class="
             focus:ring-primary-200
             btn-primary
@@ -93,12 +92,9 @@
 </template>
 <script>
 import browser from 'webextension-polyfill';
-import VueTribute from 'vue-tribute';
+import Tribute from 'tributejs';
 
 export default {
-  components: {
-    VueTribute,
-  },
   data() {
     return {
       text_content: '',
@@ -115,17 +111,7 @@ export default {
           label: 'Mr Dog',
         },
       ],
-      options: {
-        trigger: '@',
-        values: [
-          { key: 'Collin Henderson', value: 'syropian' },
-          { key: 'Sarah Drasner', value: 'sarah_edo' },
-          { key: 'Evan You', value: 'youyuxi' },
-          { key: 'Adam Wathan', value: 'adamwathan' },
-        ],
-        positionMenu: true,
-        menuContainer: document.querySelector('.menu-container'),
-      },
+      isEditable: true,
     };
   },
   mounted() {
@@ -145,6 +131,72 @@ export default {
         }
       })
       .catch((err) => console.log(err));
+
+    const tribute = new Tribute({
+      collection: [
+        {
+          // The function that gets call on select that retuns the content to insert
+          selectTemplate: function (item) {
+            // if (this.range.isContentEditable(this.current.element)) {
+            const value = `<span contenteditable="false"><a href="http://zurb.com" target="_blank" title="'
+              ${item.original.email}"> ${item.original.value}</a></span>`;
+            this.text_content += value;
+            return value;
+            // }
+            // return '@' + item.original.value;
+          },
+
+          // the array of objects
+          values: [
+            {
+              key: 'Jordan Humphreys',
+              value: 'Jordan Humphreys',
+              email: 'jordan@zurb.com',
+            },
+            {
+              key: 'Sir Walter Riley',
+              value: 'Sir Walter Riley',
+              email: 'jordan+riley@zurb.com',
+            },
+          ],
+        },
+        {
+          // The symbol that starts the lookup
+          trigger: '#',
+
+          // The function that gets call on select that retuns the content to insert
+          selectTemplate: function (item) {
+            return '#' + item.original.name;
+          },
+          // function retrieving an array of objects
+          values: function (_, cb) {
+            setTimeout(
+              () =>
+                cb([
+                  { name: 'Bob Bill', email: 'bobbill@example.com' },
+                  { name: 'Steve Stevenston', email: 'steve@example.com' },
+                ]),
+              1000
+            );
+          },
+          lookup: 'name',
+
+          fillAttr: 'name',
+        },
+      ],
+    });
+
+    tribute.attach(document.getElementById('bookmark_data'));
+
+    document
+      .getElementById('bookmark_data')
+      .addEventListener('tribute-replaced', function (e) {
+        console.log(
+          'Original event that triggered text replacement:',
+          e.detail.event
+        );
+        console.log('Matched item:', e.detail.item);
+      });
   },
   methods: {
     submit(event) {
@@ -152,15 +204,60 @@ export default {
       console.log(event);
       console.log(this.text_content, this.selectedWorkspace);
     },
-    onOpen(key) {
-      this.items = key === '@' ? this.workspaces : this.tags;
-    },
   },
 };
 </script>
 <style>
-.color-of-the-day {
-  width: 200px;
-  height: 200px;
+.tribute-input {
+  outline: none;
+  border: 1px solid #eee;
+  padding: 3px 5px;
+  border-radius: 2px;
+  font-size: 15px;
+  min-height: 32px;
+  cursor: text;
+}
+.tribute-input:focus {
+  border-color: #d1d1d1;
+  background-color: #fbfbfb;
+}
+[contenteditable='true']:empty:before {
+  content: attr(placeholder);
+  display: block;
+  color: #ccc;
+}
+.tribute-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: auto;
+  max-height: 300px;
+  max-width: 500px;
+  overflow: auto;
+  display: block;
+  z-index: 999999;
+}
+.tribute-container ul {
+  margin: 0;
+  margin-top: 2px;
+  padding: 0;
+  list-style: none;
+  background: #efefef;
+}
+.tribute-container li {
+  padding: 5px 5px;
+  cursor: pointer;
+}
+.tribute-container li.highlight {
+  background: #ddd;
+}
+.tribute-container li span {
+  font-weight: bold;
+}
+.tribute-container li.no-match {
+  cursor: default;
+}
+.tribute-container .menu-highlighted {
+  font-weight: bold;
 }
 </style>
