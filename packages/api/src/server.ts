@@ -1,4 +1,9 @@
 require('dotenv').config();
+import {
+  ApolloServerPluginLandingPageDisabled,
+  ApolloServerPluginLandingPageGraphQLPlayground,
+} from 'apollo-server-core';
+import { ApolloServer } from 'apollo-server-express';
 import mongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -9,13 +14,13 @@ import passport from 'passport';
 import PassportGoogleStrategy from './config/googleStrategy';
 import { AppError } from './helpers/errors/app_error';
 import { errorHandler } from './helpers/errors/error_handler';
-
+import schema from './resolvers/resolver';
 import authRoute from './routes/auth.route';
-import userRoute from './routes/user.routes';
-import workspaceRoute from './routes/workspace.route';
 import bookmarkRoute from './routes/bookmark.route';
 import extensionRoute from './routes/extension.routes';
+import userRoute from './routes/user.routes';
 import viewRoute from './routes/view.route';
+import workspaceRoute from './routes/workspace.route';
 
 const main = async () => {
   const app = express();
@@ -71,6 +76,25 @@ const main = async () => {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  const apolloServer = new ApolloServer({
+    schema,
+    context: ({ req, res }) => {
+      const context: any = {
+        req,
+        res,
+        user: (req as any).user,
+      };
+      return context;
+    },
+    plugins: [
+      process.env.NODE_ENV === 'production'
+        ? ApolloServerPluginLandingPageDisabled()
+        : ApolloServerPluginLandingPageGraphQLPlayground(),
+    ],
+  });
+  await apolloServer.start();
+  apolloServer.applyMiddleware({ app, cors: false });
+
   app.get('/', (_, res) => {
     res.json({
       message: 'Hi',
@@ -99,7 +123,8 @@ const main = async () => {
 
   app.listen(process.env.API_PORT, () => {
     console.log(
-      `TABRN Server started at http://localhost:${process.env.API_PORT}`
+      `TABRN Server started at http://localhost:${process.env.API_PORT}
+      graphql @ http://localhost:${process.env.API_PORT}${apolloServer.graphqlPath} `
     );
   });
 };
