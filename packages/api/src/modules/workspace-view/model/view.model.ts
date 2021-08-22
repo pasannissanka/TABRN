@@ -14,18 +14,11 @@ const BaseView = new Schema(
       ref: 'Workspace',
       required: true,
     },
-    type: {
-      type: String,
-      required: true,
-    },
     title: {
       type: String,
       required: true,
     },
     description: {
-      type: String,
-    },
-    entryKind: {
       type: String,
     },
     slug: {

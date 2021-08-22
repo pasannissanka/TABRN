@@ -1,4 +1,4 @@
-import { Schema, Types } from 'mongoose';
+import { Schema } from 'mongoose';
 import { EntryType } from '../constants/entry.constants';
 import { Bookmark, ILinkData } from '../types/bookmark.type';
 import { EntryModel } from './entry.model';

@@ -6,13 +6,19 @@ import { catchAsync } from '../helpers/errors/catch_async';
 const router = Router();
 
 router.post(
-  '/w/:workspaceId/create',
+  '/w/:workspaceId/create/listview',
   isLoggedIn,
-  catchAsync(viewController.createView)
+  catchAsync(viewController.createViewListView)
+);
+
+router.post(
+  '/w/:workspaceId/create/calender',
+  isLoggedIn,
+  catchAsync(viewController.createViewCalender)
 );
 
 router.get(
-  '/w/:workspaceId/all',
+  '/w/:workspaceId/paginate',
   isLoggedIn,
   catchAsync(viewController.getViews)
 );
