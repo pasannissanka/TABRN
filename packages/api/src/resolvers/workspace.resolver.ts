@@ -3,7 +3,7 @@ import { composeMongoose } from 'graphql-compose-mongoose';
 import { authMiddlewareGql } from '../helpers/auth/authenticate';
 import { WorkspaceModel } from '../modules/workspace/model/workspace.model';
 
-const workspaceTC = composeMongoose(WorkspaceModel, {});
+export const workspaceTC = composeMongoose(WorkspaceModel, {});
 
 schemaComposer.Query.addFields({
   workspacePagination: workspaceTC.mongooseResolvers
