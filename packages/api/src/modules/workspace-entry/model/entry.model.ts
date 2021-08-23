@@ -14,6 +14,11 @@ const BaseEntrySchema = new Schema<Entry>(
       ref: 'Workspace',
       required: true,
     },
+    viewId: {
+      type: Types.ObjectId,
+      ref: 'View',
+      required: true,
+    },
     title: {
       type: String,
       required: true,
