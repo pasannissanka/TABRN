@@ -3,17 +3,11 @@ import { ViewType } from '../constants/viewTypes.enum';
 import { ListView } from '../types/listView.type';
 import { ViewModel } from './view.model';
 
-const ListViewSchema = new Schema<ListView>(
-  {
-    filterProperties: {
-      type: [String],
-    },
+const ListViewSchema = new Schema<ListView>({
+  filterProperties: {
+    type: [String],
   },
-  {
-    timestamps: true,
-    discriminatorKey: 'kind',
-  }
-);
+});
 
 export const ListViewModel = ViewModel.discriminator<ListView>(
   ViewType.LIST_VIEW,

@@ -14,7 +14,7 @@ import passport from 'passport';
 import PassportGoogleStrategy from './config/googleStrategy';
 import { AppError } from './helpers/errors/app_error';
 import { errorHandler } from './helpers/errors/error_handler';
-import schema from './resolvers/resolver';
+import schema from './resolvers';
 import authRoute from './routes/auth.route';
 import bookmarkRoute from './routes/bookmark.route';
 import extensionRoute from './routes/extension.routes';

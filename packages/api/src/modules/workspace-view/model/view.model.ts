@@ -41,4 +41,4 @@ const BaseView = new Schema(
 
 BaseView.plugin(mongooseSlug);
 
-export const ViewModel = model<View>('View', BaseView);
+export const ViewModel = model('View', BaseView);

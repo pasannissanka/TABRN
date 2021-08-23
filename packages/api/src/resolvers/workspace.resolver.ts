@@ -47,8 +47,39 @@ schemaComposer.Mutation.addFields({
       return next(rp);
     })
     .withMiddlewares([authMiddlewareGql]),
-  workspaceUpdateOne: workspaceTC.mongooseResolvers.updateOne(),
+  workspaceUpdateOne: workspaceTC.mongooseResolvers
+    .updateOne({
+      record: {
+        removeFields: [
+          'userId',
+          'isDeleted',
+          '_id',
+          'updatedAt',
+          'createdAt',
+          'slug',
+        ],
+      },
+      filter: {
+        removeFields: [
+          'userId',
+          'updatedAt',
+          'createdAt',
+          'emoji',
+          'description',
+          'isDeleted',
+        ],
+      },
+    })
+    .wrapResolve((next) => (rp) => {
+      // forcibly set this arg to logged user id
+      rp.args.record = {
+        ...rp.args.record,
+        userId: rp.context.user.id,
+        isDeleted: false,
+      };
+      return next(rp);
+    })
+    .withMiddlewares([authMiddlewareGql]),
 });
 
-const schema = schemaComposer.buildSchema();
-export default schema;
+export default schemaComposer.buildSchema();
