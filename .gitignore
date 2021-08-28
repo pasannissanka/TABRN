@@ -32,3 +32,4 @@ yarn-error.log*
 packages/web-react/.eslintcache
 
 .eslintcache
+.parcel-cache

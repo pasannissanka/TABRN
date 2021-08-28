@@ -1,0 +1,797 @@
+type Bookmark implements EntryInterface {
+  _id: MongoID!
+  kind: EnumDKeyEntryKind
+  userId: MongoID!
+  workspaceId: MongoID!
+  viewId: MongoID!
+  title: String!
+  description: String
+  slug: String
+  tags: [MongoID]
+  isDeleted: Boolean!
+  updatedAt: Date
+  createdAt: Date
+  url: String!
+  linkData: BookmarkLinkData
+  workspace: Workspace
+}
+
+type BookmarkLinkData {
+  title: String
+  hostname: String
+  faviconUrl: String
+  _id: MongoID
+}
+
+input BookmarkLinkDataInput {
+  title: String
+  hostname: String
+  faviconUrl: String
+  _id: MongoID
+}
+
+type Calender implements ViewInterface {
+  _id: MongoID!
+  kind: EnumDKeyViewKind
+  userId: MongoID!
+  workspaceId: MongoID!
+  title: String!
+  description: String
+  slug: String
+  isDeleted: Boolean!
+  updatedAt: Date
+  createdAt: Date
+  dateFormat: String
+  timeFormat: String
+  primaryTZ: String
+  secondaryTZ: String
+  weekStart: String
+  workspace: Workspace
+}
+
+input CreateOneBookmarkInput {
+  workspaceId: MongoID!
+  viewId: MongoID!
+  title: String!
+  description: String
+  tags: [MongoID]
+  url: String!
+  linkData: BookmarkLinkDataInput
+}
+
+type CreateOneBookmarkPayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Created document"""
+  record: Bookmark
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+input CreateOneCalenderInput {
+  workspaceId: MongoID!
+  title: String!
+  description: String
+  dateFormat: String
+  timeFormat: String
+  primaryTZ: String
+  secondaryTZ: String
+  weekStart: String
+}
+
+type CreateOneCalenderPayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Created document"""
+  record: Calender
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+input CreateOneListViewInput {
+  workspaceId: MongoID!
+  title: String!
+  description: String
+  filterProperties: [String]
+}
+
+type CreateOneListViewPayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Created document"""
+  record: ListView
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+input CreateOneNoteInput {
+  workspaceId: MongoID!
+  viewId: MongoID!
+  title: String!
+  description: String
+  tags: [MongoID]
+  content: String
+}
+
+type CreateOneNotePayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Created document"""
+  record: Note
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+input CreateOneWorkspaceInput {
+  title: String!
+  description: String
+  slug: String
+  emoji: WorkspaceEmojiInput
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
+type CreateOneWorkspacePayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Created document"""
+  record: Workspace
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+scalar Date
+
+type Entry implements EntryInterface {
+  _id: MongoID!
+  kind: EnumDKeyEntryKind
+  userId: MongoID!
+  workspaceId: MongoID!
+  viewId: MongoID!
+  title: String!
+  description: String
+  slug: String
+  tags: [MongoID]
+  isDeleted: Boolean!
+  updatedAt: Date
+  createdAt: Date
+  workspace: Workspace
+}
+
+interface EntryInterface {
+  _id: MongoID!
+  kind: EnumDKeyEntryKind
+  userId: MongoID!
+  workspaceId: MongoID!
+  viewId: MongoID!
+  title: String!
+  description: String
+  slug: String
+  tags: [MongoID]
+  isDeleted: Boolean!
+  updatedAt: Date
+  createdAt: Date
+  workspace: Workspace
+}
+
+"""List of items with pagination."""
+type EntryPagination {
+  """Total object count."""
+  count: Int
+
+  """Array of objects."""
+  items: [EntryInterface]
+
+  """Information to aid in pagination."""
+  pageInfo: PaginationInfo!
+}
+
+enum EnumDKeyEntryKind {
+  Bookmark
+  Note
+}
+
+enum EnumDKeyViewKind {
+  Calender
+  ListView
+}
+
+interface ErrorInterface {
+  """Generic error message"""
+  message: String
+}
+
+input FilterFindManyBookmarkInput {
+  workspaceId: MongoID
+  viewId: MongoID
+  title: String
+  slug: String
+  tags: [MongoID]
+  updatedAt: Date
+  createdAt: Date
+  url: String
+  linkData: FilterFindManyBookmarkLinkDataInput
+  OR: [FilterFindManyEntryInput!]
+  AND: [FilterFindManyEntryInput!]
+}
+
+input FilterFindManyBookmarkLinkDataInput {
+  title: String
+  hostname: String
+  faviconUrl: String
+  _id: MongoID
+}
+
+input FilterFindManyCalenderInput {
+  workspaceId: MongoID
+  title: String
+  slug: String
+  updatedAt: Date
+  createdAt: Date
+  dateFormat: String
+  timeFormat: String
+  primaryTZ: String
+  secondaryTZ: String
+  weekStart: String
+  OR: [FilterFindManyViewInput!]
+  AND: [FilterFindManyViewInput!]
+}
+
+input FilterFindManyEntryInput {
+  userId: MongoID
+  workspaceId: MongoID
+  viewId: MongoID
+  title: String
+  description: String
+  slug: String
+  tags: [MongoID]
+  isDeleted: Boolean
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+  kind: EnumDKeyEntryKind
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindManyEntryOperatorsInput
+  OR: [FilterFindManyEntryInput!]
+  AND: [FilterFindManyEntryInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindManyEntryOperatorsInput {
+  _id: FilterFindManyEntry_idOperatorsInput
+}
+
+input FilterFindManyEntry_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+input FilterFindManyListViewInput {
+  workspaceId: MongoID
+  title: String
+  slug: String
+  updatedAt: Date
+  createdAt: Date
+  OR: [FilterFindManyViewInput!]
+  AND: [FilterFindManyViewInput!]
+}
+
+input FilterFindManyNoteInput {
+  workspaceId: MongoID
+  viewId: MongoID
+  title: String
+  slug: String
+  tags: [MongoID]
+  updatedAt: Date
+  createdAt: Date
+  content: String
+  OR: [FilterFindManyEntryInput!]
+  AND: [FilterFindManyEntryInput!]
+}
+
+input FilterFindManyViewInput {
+  userId: MongoID
+  workspaceId: MongoID
+  title: String
+  description: String
+  slug: String
+  isDeleted: Boolean
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+  kind: EnumDKeyViewKind
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindManyViewOperatorsInput
+  OR: [FilterFindManyViewInput!]
+  AND: [FilterFindManyViewInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindManyViewOperatorsInput {
+  _id: FilterFindManyView_idOperatorsInput
+}
+
+input FilterFindManyView_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+input FilterFindManyWorkspaceEmojiInput {
+  activeSkinTone: String
+  emoji: String
+  names: [String]
+  originalUnified: String
+  unified: String
+}
+
+input FilterFindManyWorkspaceInput {
+  userId: MongoID
+  title: String
+  description: String
+  slug: String
+  emoji: FilterFindManyWorkspaceEmojiInput
+  isDeleted: Boolean
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindManyWorkspaceOperatorsInput
+  OR: [FilterFindManyWorkspaceInput!]
+  AND: [FilterFindManyWorkspaceInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindManyWorkspaceOperatorsInput {
+  slug: FilterFindManyWorkspaceSlugOperatorsInput
+  _id: FilterFindManyWorkspace_idOperatorsInput
+}
+
+input FilterFindManyWorkspaceSlugOperatorsInput {
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ne: String
+  in: [String]
+  nin: [String]
+  regex: RegExpAsString
+  exists: Boolean
+}
+
+input FilterFindManyWorkspace_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+input FilterUpdateOneWorkspaceInput {
+  title: String
+  slug: String
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterUpdateOneWorkspaceOperatorsInput
+  OR: [FilterUpdateOneWorkspaceInput!]
+  AND: [FilterUpdateOneWorkspaceInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterUpdateOneWorkspaceOperatorsInput {
+  slug: FilterUpdateOneWorkspaceSlugOperatorsInput
+  _id: FilterUpdateOneWorkspace_idOperatorsInput
+}
+
+input FilterUpdateOneWorkspaceSlugOperatorsInput {
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ne: String
+  in: [String]
+  nin: [String]
+  regex: RegExpAsString
+  exists: Boolean
+}
+
+input FilterUpdateOneWorkspace_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type ListView implements ViewInterface {
+  _id: MongoID!
+  kind: EnumDKeyViewKind
+  userId: MongoID!
+  workspaceId: MongoID!
+  title: String!
+  description: String
+  slug: String
+  isDeleted: Boolean!
+  updatedAt: Date
+  createdAt: Date
+  filterProperties: [String]
+  workspace: Workspace
+}
+
+type MongoError implements ErrorInterface {
+  """MongoDB error message"""
+  message: String
+
+  """MongoDB error code"""
+  code: Int
+}
+
+"""
+The `ID` scalar type represents a unique MongoDB identifier in collection. MongoDB by default use 12-byte ObjectId value (https://docs.mongodb.com/manual/reference/bson-types/#objectid). But MongoDB also may accepts string or integer as correct values for _id field.
+"""
+scalar MongoID
+
+type Mutation {
+  """
+  Create one document with mongoose defaults, setters, hooks and validation
+  """
+  workspaceNew(record: CreateOneWorkspaceInput!): CreateOneWorkspacePayload
+
+  """
+  Update one document: 1) Retrieve one document via findOne. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it.
+  """
+  workspaceUpdateOne(
+    record: UpdateOneWorkspaceInput!
+
+    """Filter by fields"""
+    filter: FilterUpdateOneWorkspaceInput
+    sort: SortUpdateOneWorkspaceInput
+    skip: Int
+  ): UpdateOneWorkspacePayload
+
+  """Soft delete a record"""
+  workspaceDeleteOne(_id: MongoID!): Workspace
+
+  """
+  Create one document with mongoose defaults, setters, hooks and validation
+  """
+  createListView(record: CreateOneListViewInput!): CreateOneListViewPayload
+
+  """
+  Create one document with mongoose defaults, setters, hooks and validation
+  """
+  createCalenderView(record: CreateOneCalenderInput!): CreateOneCalenderPayload
+
+  """
+  Create one document with mongoose defaults, setters, hooks and validation
+  """
+  createNote(record: CreateOneNoteInput!): CreateOneNotePayload
+
+  """
+  Create one document with mongoose defaults, setters, hooks and validation
+  """
+  createBookmark(record: CreateOneBookmarkInput!): CreateOneBookmarkPayload
+}
+
+type Note implements EntryInterface {
+  _id: MongoID!
+  kind: EnumDKeyEntryKind
+  userId: MongoID!
+  workspaceId: MongoID!
+  viewId: MongoID!
+  title: String!
+  description: String
+  slug: String
+  tags: [MongoID]
+  isDeleted: Boolean!
+  updatedAt: Date
+  createdAt: Date
+  content: String
+  workspace: Workspace
+}
+
+type PaginationInfo {
+  currentPage: Int!
+  perPage: Int!
+  pageCount: Int
+  itemCount: Int
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+}
+
+type Query {
+  workspacePagination(
+    """Page number for displaying"""
+    page: Int
+    perPage: Int = 20
+
+    """Filter by fields"""
+    filter: FilterFindManyWorkspaceInput
+    sort: SortFindManyWorkspaceInput
+  ): WorkspacePagination
+  workspaceMany(
+    """Filter by fields"""
+    filter: FilterFindManyWorkspaceInput
+    skip: Int
+    limit: Int = 100
+    sort: SortFindManyWorkspaceInput
+  ): [Workspace!]!
+  viewsPagination(
+    """Page number for displaying"""
+    page: Int
+    perPage: Int = 20
+
+    """Filter by fields"""
+    filter: FilterFindManyViewInput
+    sort: SortFindManyViewInput
+  ): ViewPagination
+  viewListViews(
+    """Filter by fields"""
+    filter: FilterFindManyListViewInput
+    skip: Int
+    limit: Int = 100
+    sort: SortFindManyListViewInput
+  ): [ListView!]!
+  viewCalenderViews(
+    """Filter by fields"""
+    filter: FilterFindManyCalenderInput
+    skip: Int
+    limit: Int = 100
+    sort: SortFindManyCalenderInput
+  ): [Calender!]!
+  entriesPagination(
+    """Page number for displaying"""
+    page: Int
+    perPage: Int = 20
+
+    """Filter by fields"""
+    filter: FilterFindManyEntryInput
+    sort: SortFindManyEntryInput
+  ): EntryPagination
+  viewBookmarkEntries(
+    """Filter by fields"""
+    filter: FilterFindManyBookmarkInput
+    skip: Int
+    limit: Int = 100
+    sort: SortFindManyBookmarkInput
+  ): [Bookmark!]!
+  viewNoteEntries(
+    """Filter by fields"""
+    filter: FilterFindManyNoteInput
+    skip: Int
+    limit: Int = 100
+    sort: SortFindManyNoteInput
+  ): [Note!]!
+}
+
+"""
+The string representation of JavaScript regexp. You may provide it with flags "/^abc.*/i" or without flags like "^abc.*". More info about RegExp characters and flags: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+"""
+scalar RegExpAsString
+
+type RuntimeError implements ErrorInterface {
+  """Runtime error message"""
+  message: String
+}
+
+enum SortFindManyBookmarkInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+enum SortFindManyCalenderInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+enum SortFindManyEntryInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+enum SortFindManyListViewInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+enum SortFindManyNoteInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+enum SortFindManyViewInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+enum SortFindManyWorkspaceInput {
+  _ID_ASC
+  _ID_DESC
+  SLUG_ASC
+  SLUG_DESC
+}
+
+enum SortUpdateOneWorkspaceInput {
+  _ID_ASC
+  _ID_DESC
+  SLUG_ASC
+  SLUG_DESC
+}
+
+input UpdateOneWorkspaceEmojiInput {
+  activeSkinTone: String
+  emoji: String
+  names: [String]
+  originalUnified: String
+  unified: String
+}
+
+input UpdateOneWorkspaceInput {
+  title: String
+  description: String
+  emoji: UpdateOneWorkspaceEmojiInput
+}
+
+type UpdateOneWorkspacePayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Updated document"""
+  record: Workspace
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+type ValidationError implements ErrorInterface {
+  """Combined error message from all validators"""
+  message: String
+
+  """List of validator errors"""
+  errors: [ValidatorError!]
+}
+
+type ValidatorError {
+  """Validation error message"""
+  message: String
+
+  """Source of the validation error from the model path"""
+  path: String
+
+  """Field value which occurs the validation error"""
+  value: JSON
+
+  """
+  Input record idx in array which occurs the validation error. This `idx` is useful for createMany operation. For singular operations it always be 0. For *Many operations `idx` represents record index in array received from user.
+  """
+  idx: Int!
+}
+
+type View implements ViewInterface {
+  _id: MongoID!
+  kind: EnumDKeyViewKind
+  userId: MongoID!
+  workspaceId: MongoID!
+  title: String!
+  description: String
+  slug: String
+  isDeleted: Boolean!
+  updatedAt: Date
+  createdAt: Date
+  workspace: Workspace
+}
+
+interface ViewInterface {
+  _id: MongoID!
+  kind: EnumDKeyViewKind
+  userId: MongoID!
+  workspaceId: MongoID!
+  title: String!
+  description: String
+  slug: String
+  isDeleted: Boolean!
+  updatedAt: Date
+  createdAt: Date
+  workspace: Workspace
+}
+
+"""List of items with pagination."""
+type ViewPagination {
+  """Total object count."""
+  count: Int
+
+  """Array of objects."""
+  items: [ViewInterface]
+
+  """Information to aid in pagination."""
+  pageInfo: PaginationInfo!
+}
+
+type Workspace {
+  userId: MongoID!
+  title: String!
+  description: String
+  slug: String
+  emoji: WorkspaceEmoji
+  isDeleted: Boolean!
+  _id: MongoID!
+  updatedAt: Date
+  createdAt: Date
+}
+
+type WorkspaceEmoji {
+  activeSkinTone: String
+  emoji: String
+  names: [String]
+  originalUnified: String
+  unified: String
+}
+
+input WorkspaceEmojiInput {
+  activeSkinTone: String
+  emoji: String
+  names: [String]
+  originalUnified: String
+  unified: String
+}
+
+"""List of items with pagination."""
+type WorkspacePagination {
+  """Total object count."""
+  count: Int
+
+  """Array of objects."""
+  items: [Workspace!]
+
+  """Information to aid in pagination."""
+  pageInfo: PaginationInfo!
+}

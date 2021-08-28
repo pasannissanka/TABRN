@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useQuery } from 'react-query';
 import Button from '../../Components/Button/Button';
 import { NavigationCard } from '../../Components/Cards/NavigationCard';
 import {
@@ -7,27 +6,28 @@ import {
   DropdownLinkElement,
 } from '../../Components/Dropdown/Dropdown';
 import { ConfirmationDialog, Modal } from '../../Components/Modal/Modal';
-import {
-  useMutateWorkspace,
-  useMutateWorkspaceDelete,
-  useMutateWorkspaceUpdate,
-} from '../../Hooks/useMutation';
-import { getWorkspacesList } from '../../Query/api';
 import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
+import {
+  useDeleteWorkspaceMutation,
+  useNewWorkspaceMutation,
+  useUpdateWorkspaceMutation,
+  useWorkspacesPaginationQuery,
+} from '../../Types/generated-graphql-types';
 import { WorkspaceBase } from '../../Types/types';
 import { NewWorkspace } from './NewWorkspace';
 
 interface WorkspaceProps {}
 
 export const WorkspaceDashboard = (props: WorkspaceProps) => {
-  const { data } = useQuery('workspaces-all', getWorkspacesList, {
-    retry: false,
-    refetchOnWindowFocus: false,
-    refetchOnMount: true,
+  const [result, reexecuteQuery] = useWorkspacesPaginationQuery({
+    requestPolicy: 'cache-and-network',
   });
-  const addMutation = useMutateWorkspace();
-  const editMutation = useMutateWorkspaceUpdate();
-  const deleteMutation = useMutateWorkspaceDelete();
+
+  const { data, fetching } = result;
+
+  const [_, addNewWorkspace] = useNewWorkspaceMutation();
+  const [__, editWorkspace] = useUpdateWorkspaceMutation();
+  const [___, deleteWorkspace] = useDeleteWorkspaceMutation();
 
   const [deleteConfModal, setdeleteConfModal] = useState<{
     _id: string;
@@ -62,7 +62,9 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
       icon: <PlusSMSVG />,
       onClick: (e, key) => {
         console.log(e, key);
-        const ele = data?.find((v) => v._id === key);
+        const ele = data?.workspacePagination?.items?.find(
+          (v) => v._id === key
+        );
         console.log(ele);
         if (ele) {
           setNewWorkspaceValue(ele! as any);
@@ -75,7 +77,9 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
       icon: <PlusSMSVG />,
       onClick: (e, key) => {
         console.log(e, key);
-        const ele = data?.find((v) => v._id === key);
+        const ele = data?.workspacePagination?.items?.find(
+          (v) => v._id === key
+        );
         console.log(ele);
         if (ele) {
           setdeleteConfModal({
@@ -106,12 +110,38 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
     if (value.title.length > 0 && value.description.length > 0) {
       if (mode === 'new') {
         setNewWorkspaceValue(value as any);
-        addMutation.mutate(value);
+        addNewWorkspace({
+          record: {
+            title: value.title,
+            description: value.description,
+            emoji: value.emoji,
+          },
+        }).then((result) =>
+          reexecuteQuery({
+            // requestPolicy: 'network-only',
+          })
+        );
       } else if (mode === 'edit') {
-        editMutation.mutate({
-          _id: newWorkspaceValue._id!,
-          ...value,
-        });
+        editWorkspace({
+          filter: {
+            _id: newWorkspaceValue._id,
+          },
+          record: {
+            description: value.description,
+            title: value.title,
+            emoji: {
+              emoji: value.emoji.emoji,
+              activeSkinTone: value.emoji.activeSkinTone,
+              names: value.emoji.names,
+              originalUnified: value.emoji.originalUnified,
+              unified: value.emoji.unified,
+            },
+          },
+        }).then((result) =>
+          reexecuteQuery({
+            // requestPolicy: 'network-only',
+          })
+        );
       }
     }
     setNewWorkspaceValue({
@@ -123,7 +153,13 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
 
   const onWorkspaceDelete = () => {
     if (deleteConfModal._id) {
-      deleteMutation.mutate(deleteConfModal._id);
+      deleteWorkspace({
+        id: deleteConfModal._id,
+      }).then((result) =>
+        reexecuteQuery({
+          // requestPolicy: 'network-only',
+        })
+      );
     }
     setdeleteConfModal({
       _id: '',
@@ -156,24 +192,27 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
               </div>
               <div className="mt-3 border"></div>
             </div>
-            {data?.map((workspace, index) => {
-              return (
-                <NavigationCard
-                  key={workspace._id}
-                  id={workspace._id}
-                  title={workspace.title}
-                  action="link"
-                  icon={workspace?.emoji?.emoji}
-                  to={`/w/${workspace.slug}`}
-                  secondaryAction="menu"
-                  secondaryItems={menuItems}
-                >
-                  <div className="mt-1 text-gray-700 text-base font-normal truncate">
-                    {workspace.description}
-                  </div>
-                </NavigationCard>
-              );
-            })}
+            {data?.workspacePagination?.items
+              ?.filter((w) => w.isDeleted === false)
+              .map((workspace, index) => {
+                return (
+                  <NavigationCard
+                    key={workspace._id}
+                    id={workspace._id}
+                    title={workspace.title}
+                    action="link"
+                    icon={workspace?.emoji?.emoji as string}
+                    to={`/w/${workspace.slug}`}
+                    secondaryAction="menu"
+                    secondaryItems={menuItems}
+                    loading={fetching}
+                  >
+                    <div className="mt-1 text-gray-700 text-base font-normal truncate">
+                      {workspace.description}
+                    </div>
+                  </NavigationCard>
+                );
+              })}
           </div>
           <div className="hidden col-span-1 lg:block">Side Summary</div>
         </div>

@@ -1,0 +1,59 @@
+query WorkspacesPagination {
+  workspacePagination {
+    count
+    pageInfo {
+      currentPage
+      perPage
+      pageCount
+      itemCount
+      hasNextPage
+      hasPreviousPage
+    }
+    items {
+      ...WorkspaceData
+    }
+  }
+}
+
+mutation NewWorkspace($record: CreateOneWorkspaceInput!) {
+  workspaceNew(record: $record) {
+    recordId
+    record {
+      ...WorkspaceData
+    }
+  }
+}
+
+mutation DeleteWorkspace($id: MongoID!) {
+  workspaceDeleteOne(_id: $id) {
+    ...WorkspaceData
+  }
+}
+
+mutation UpdateWorkspace(
+  $filter: FilterUpdateOneWorkspaceInput!
+  $record: UpdateOneWorkspaceInput!
+) {
+  workspaceUpdateOne(record: $record, filter: $filter) {
+    recordId
+    record {
+      ...WorkspaceData
+    }
+  }
+}
+
+fragment WorkspaceData on Workspace {
+  userId
+  title
+  description
+  slug
+  emoji {
+    emoji
+    names
+    unified
+  }
+  isDeleted
+  _id
+  updatedAt
+  createdAt
+}

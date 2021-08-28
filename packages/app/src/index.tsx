@@ -1,16 +1,28 @@
+import { cacheExchange } from '@urql/exchange-graphcache';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { Client, dedupExchange, fetchExchange, Provider } from 'urql';
+import App from './App';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
 
 const queryClient = new QueryClient();
+
+const client = new Client({
+  url: 'http://localhost:4001/graphql',
+  exchanges: [dedupExchange, cacheExchange({}), fetchExchange],
+  fetchOptions: {
+    credentials: 'include',
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
+      <Provider value={client}>
+        <App />
+      </Provider>
     </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById('root')

@@ -13,7 +13,7 @@ interface NavigationCardProps {
   id?: string;
   title?: string;
   children?: React.ReactNode;
-  icon?: React.ReactElement;
+  icon?: React.ReactElement | string;
   action: 'link' | 'button';
   to?: string;
   onClick?: () => {};

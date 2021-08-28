@@ -1,9 +1,39 @@
 import { schemaComposer } from 'graphql-compose';
 import { composeMongoose } from 'graphql-compose-mongoose';
 import { authMiddlewareGql } from '../helpers/auth/authenticate';
+import { IUser } from '../modules/user/types/user.type';
 import { WorkspaceModel } from '../modules/workspace/model/workspace.model';
 
 export const workspaceTC = composeMongoose(WorkspaceModel, {});
+
+workspaceTC.addResolver({
+  name: 'softDeleteOne',
+  args: { _id: 'MongoID!' },
+  type: workspaceTC,
+  description: 'Soft delete a record',
+  resolve: async ({
+    args,
+    context,
+  }: {
+    args: { _id: string };
+    context: { user: IUser };
+  }) => {
+    const data = await WorkspaceModel.findOneAndUpdate(
+      {
+        _id: args._id,
+        userId: context.user.id,
+        isDeleted: false,
+      },
+      {
+        isDeleted: true,
+      },
+      {
+        new: true,
+      }
+    ).exec();
+    return data;
+  },
+});
 
 schemaComposer.Query.addFields({
   workspacePagination: workspaceTC.mongooseResolvers
@@ -80,6 +110,7 @@ schemaComposer.Mutation.addFields({
       return next(rp);
     })
     .withMiddlewares([authMiddlewareGql]),
+  workspaceDeleteOne: workspaceTC.getResolver('softDeleteOne'),
 });
 
 export default schemaComposer.buildSchema();
