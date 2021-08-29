@@ -1,20 +1,33 @@
-import React from 'react';
-import { useQuery } from 'react-query';
-import { Link as RouterLink } from 'react-router-dom';
-import { getWorkspacesList } from '../../Query/api';
-import { ReactComponent as BriefcaseSVG } from '../../svg/briefcase.svg';
-import { IWorkspace } from '../../Types/types';
-import { DrawerDisclosure } from './DrawerDisclosure';
+import React, { useContext } from 'react';
+import { AppContext } from '../../Context/AppContextProvider';
+import {
+  useViewsPaginationQuery,
+  useWorkspacesPaginationQuery,
+} from '../../Types/generated-graphql-types';
+import { DrawerDisclosure, DrawerLink } from './DrawerDisclosure';
 
 interface DrawerProps {
   isDrawerOpen: boolean;
 }
 
 export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
-  const { data } = useQuery('workspaces-all', getWorkspacesList, {
-    retry: false,
-    refetchOnWindowFocus: false,
+  const { workspaceData } = useContext(AppContext);
+  const [result] = useWorkspacesPaginationQuery({
+    requestPolicy: 'cache-and-network',
   });
+  const { data, fetching } = result;
+
+  const [resultViews] = useViewsPaginationQuery({
+    variables: {
+      workspaceId: workspaceData?.workspaceData?._id,
+    },
+    requestPolicy: 'cache-only',
+    pause: !workspaceData?.workspaceSlug && !workspaceData?.workspaceData?._id,
+  });
+
+  const dataViews = resultViews.data;
+
+  console.log(workspaceData, dataViews);
 
   return (
     <React.Fragment>
@@ -31,56 +44,21 @@ export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
             }`}
           >
             <li>
-              <RouterLink
-                to="/"
-                className="flex items-center p-2 hover:bg-gray-100 rounded-md space-x-2"
-              >
-                <span>
-                  <svg
-                    className="w-6 h-6 text-gray-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                    />
-                  </svg>
-                </span>
-                <span>Home</span>
-              </RouterLink>
+              <DrawerLink to="/" title="Home" icon="🏠" />
             </li>
             <li>
-              <RouterLink
-                to="/timeline"
-                className="flex items-center p-2 hover:bg-gray-100 rounded-md space-x-2"
-              >
-                <span>
-                  <BriefcaseSVG className="w-6 h-6 text-gray-400" />
-                </span>
-                <span>Discover</span>
-              </RouterLink>
+              <DrawerLink title="Discover" to="/discover" icon="🔭" />
             </li>
             <li>
-              <DrawerDisclosure
-                to="/workspace"
-                title="Workspaces"
-                icon={<BriefcaseSVG className="w-6 h-6 text-gray-400" />}
-              >
+              <DrawerDisclosure to="/workspace" title="Workspaces" icon="💼">
                 <ul>
-                  {data?.map((workspace: IWorkspace, index) => {
+                  {data?.workspacePagination?.items?.map((workspace, index) => {
                     return (
                       <li key={index}>
                         <DrawerDisclosure
                           to={`/w/${workspace.slug}`}
                           title={workspace.title}
-                          icon={
-                            <BriefcaseSVG className="w-6 h-6 text-gray-400" />
-                          }
+                          icon={workspace.emoji?.emoji!}
                         />
                       </li>
                     );
@@ -88,6 +66,34 @@ export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
                 </ul>
               </DrawerDisclosure>
             </li>
+            {workspaceData && dataViews ? (
+              <li>
+                <DrawerDisclosure
+                  to={`/w/${workspaceData?.workspaceSlug}`}
+                  title={workspaceData?.workspaceData?.title as string}
+                  icon={workspaceData.workspaceData?.emoji?.emoji!}
+                  open={true}
+                >
+                  <ul>
+                    {dataViews?.viewsPagination?.items?.map(
+                      (workspaceView, index) => {
+                        return (
+                          <li key={index}>
+                            <DrawerDisclosure
+                              to={`/w/${workspaceData?.workspaceSlug}/${workspaceView?.slug}`}
+                              title={workspaceView?.title as string}
+                              icon=""
+                            />
+                          </li>
+                        );
+                      }
+                    )}
+                  </ul>
+                </DrawerDisclosure>
+              </li>
+            ) : (
+              <></>
+            )}
           </ul>
         </nav>
       </aside>

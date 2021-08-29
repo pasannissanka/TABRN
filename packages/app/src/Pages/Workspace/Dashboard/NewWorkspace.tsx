@@ -2,8 +2,8 @@ import { Menu } from '@headlessui/react';
 import Picker, { IEmojiData } from 'emoji-picker-react';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import React, { useEffect, useState } from 'react';
-import Button from '../../Components/Button/Button';
-import { WorkspaceBase } from '../../Types/types';
+import Button from '../../../Components/Button/Button';
+import { WorkspaceBase } from '../../../Types/types';
 
 type NewWorkspaceProps = {
   newWorkspaceValue: WorkspaceBase;

@@ -6,7 +6,22 @@ import { ListViewModel } from '../modules/workspace-view/model/listView.model';
 import { ViewModel } from '../modules/workspace-view/model/view.model';
 import { workspaceTC } from './workspace.resolver';
 
-const ViewDTC = composeWithMongooseDiscriminators(ViewModel);
+const ViewDTC = composeWithMongooseDiscriminators(ViewModel, {
+  resolvers: {
+    pagination: {
+      findManyOpts: {
+        filter: {
+          removeFields: ['userId', 'isDeleted', 'createdAt', 'updatedAt'],
+        },
+      },
+    },
+    findOne: {
+      filter: {
+        removeFields: ['userId', 'isDeleted', 'createdAt', 'updatedAt'],
+      },
+    },
+  },
+});
 const ListViewTC = ViewDTC.discriminator(ListViewModel, {
   resolvers: {
     createOne: {
@@ -15,9 +30,9 @@ const ListViewTC = ViewDTC.discriminator(ListViewModel, {
           'userId',
           'isDeleted',
           'createdAt',
+          'updatedAt',
           'slug',
           '_id',
-          'updatedAt',
         ],
       },
     },
@@ -30,6 +45,11 @@ const ListViewTC = ViewDTC.discriminator(ListViewModel, {
           'description',
           'filterProperties',
         ],
+      },
+    },
+    findOne: {
+      filter: {
+        removeFields: ['userId', 'isDeleted', 'createdAt', 'updatedAt'],
       },
     },
   },
@@ -51,6 +71,11 @@ const CalenderViewTC = ViewDTC.discriminator(CalenderViewModel, {
     findMany: {
       filter: {
         removeFields: ['_id', 'userId', 'isDeleted', 'description'],
+      },
+    },
+    findOne: {
+      filter: {
+        removeFields: ['userId', 'isDeleted', 'createdAt', 'updatedAt'],
       },
     },
   },
@@ -88,6 +113,35 @@ schemaComposer.Query.addFields({
     }
   ),
   viewCalenderViews: CalenderViewTC.getResolver('findMany').wrapResolve(
+    (next) => (rp) => {
+      // forcibly set this arg to logged user id
+      rp.args.filter = {
+        ...rp.args.filter,
+        userId: rp.context.user.id,
+        isDeleted: false,
+      };
+      return next(rp);
+    }
+  ),
+  getView: ViewDTC.getResolver('findOne').wrapResolve((next) => (rp) => {
+    // forcibly set this arg to logged user id
+    rp.args.filter = {
+      ...rp.args.filter,
+      userId: rp.context.user.id,
+      isDeleted: false,
+    };
+    return next(rp);
+  }),
+  getListView: ListViewTC.getResolver('findOne').wrapResolve((next) => (rp) => {
+    // forcibly set this arg to logged user id
+    rp.args.filter = {
+      ...rp.args.filter,
+      userId: rp.context.user.id,
+      isDeleted: false,
+    };
+    return next(rp);
+  }),
+  getCalenderView: CalenderViewTC.getResolver('findOne').wrapResolve(
     (next) => (rp) => {
       // forcibly set this arg to logged user id
       rp.args.filter = {

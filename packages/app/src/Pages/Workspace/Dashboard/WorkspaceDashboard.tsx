@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
-import Button from '../../Components/Button/Button';
-import { NavigationCard } from '../../Components/Cards/NavigationCard';
+import Button from '../../../Components/Button/Button';
+import { NavigationCard } from '../../../Components/Cards/NavigationCard';
 import {
   DropdownButonElement,
   DropdownLinkElement,
-} from '../../Components/Dropdown/Dropdown';
-import { ConfirmationDialog, Modal } from '../../Components/Modal/Modal';
-import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
+} from '../../../Components/Dropdown/Dropdown';
+import { ConfirmationDialog, Modal } from '../../../Components/Modal/Modal';
 import {
   useDeleteWorkspaceMutation,
   useNewWorkspaceMutation,
   useUpdateWorkspaceMutation,
   useWorkspacesPaginationQuery,
-} from '../../Types/generated-graphql-types';
-import { WorkspaceBase } from '../../Types/types';
+  WorkspaceDataFragment,
+} from '../../../Types/generated-graphql-types';
+import { ReactComponent as PlusSMSVG } from '../../../svg/plus-sm.svg';
 import { NewWorkspace } from './NewWorkspace';
+import { WorkspaceBase } from '../../../Types/types';
 
 interface WorkspaceProps {}
 
 export const WorkspaceDashboard = (props: WorkspaceProps) => {
   const [result, reexecuteQuery] = useWorkspacesPaginationQuery({
-    requestPolicy: 'cache-and-network',
+    requestPolicy: 'network-only',
   });
 
   const { data, fetching } = result;
@@ -107,7 +108,7 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
 
   const onWorkspaceSubmit = (value: WorkspaceBase, mode: 'edit' | 'new') => {
     closeModal();
-    if (value.title.length > 0 && value.description.length > 0) {
+    if (value.title.length > 0 && value.description!.length > 0) {
       if (mode === 'new') {
         setNewWorkspaceValue(value as any);
         addNewWorkspace({
@@ -116,11 +117,7 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
             description: value.description,
             emoji: value.emoji,
           },
-        }).then((result) =>
-          reexecuteQuery({
-            // requestPolicy: 'network-only',
-          })
-        );
+        }).then((result) => reexecuteQuery());
       } else if (mode === 'edit') {
         editWorkspace({
           filter: {
@@ -130,18 +127,14 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
             description: value.description,
             title: value.title,
             emoji: {
-              emoji: value.emoji.emoji,
-              activeSkinTone: value.emoji.activeSkinTone,
-              names: value.emoji.names,
-              originalUnified: value.emoji.originalUnified,
-              unified: value.emoji.unified,
+              emoji: value.emoji?.emoji,
+              activeSkinTone: value.emoji?.activeSkinTone,
+              names: value.emoji?.names,
+              originalUnified: value.emoji?.originalUnified,
+              unified: value.emoji?.unified,
             },
           },
-        }).then((result) =>
-          reexecuteQuery({
-            // requestPolicy: 'network-only',
-          })
-        );
+        }).then((result) => reexecuteQuery());
       }
     }
     setNewWorkspaceValue({
@@ -155,11 +148,7 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
     if (deleteConfModal._id) {
       deleteWorkspace({
         id: deleteConfModal._id,
-      }).then((result) =>
-        reexecuteQuery({
-          // requestPolicy: 'network-only',
-        })
-      );
+      }).then((result) => reexecuteQuery());
     }
     setdeleteConfModal({
       _id: '',

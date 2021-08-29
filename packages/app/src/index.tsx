@@ -6,12 +6,24 @@ import { Client, dedupExchange, fetchExchange, Provider } from 'urql';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import schema from './Graphql/schema.json';
+import { IntrospectionData } from '@urql/exchange-graphcache/dist/types/ast';
 
 const queryClient = new QueryClient();
 
 const client = new Client({
   url: 'http://localhost:4001/graphql',
-  exchanges: [dedupExchange, cacheExchange({}), fetchExchange],
+  exchanges: [
+    dedupExchange,
+    cacheExchange({
+      schema: schema as IntrospectionData,
+      keys: {
+        PaginationInfo: () => null,
+        WorkspaceEmoji: () => null,
+      },
+    }),
+    fetchExchange,
+  ],
   fetchOptions: {
     credentials: 'include',
   },

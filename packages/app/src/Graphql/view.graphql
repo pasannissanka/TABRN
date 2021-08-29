@@ -1,0 +1,27 @@
+query ViewsPagination($workspaceId: MongoID!) {
+  viewsPagination(filter: { workspaceId: $workspaceId }) {
+    count
+    items {
+      ...viewsData
+    }
+  }
+}
+
+query GetView($workspaceId: MongoID!, $viewSlug: String!) {
+  getView(filter: { workspaceId: $workspaceId, slug: $viewSlug }) {
+    ...viewsData
+  }
+}
+
+fragment viewsData on ViewInterface {
+  _id
+  workspaceId
+  userId
+  kind
+  title
+  slug
+  description
+  isDeleted
+  updatedAt
+  createdAt
+}

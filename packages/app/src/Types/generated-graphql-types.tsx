@@ -412,6 +412,104 @@ export type FilterFindManyWorkspace_IdOperatorsInput = {
   exists?: Maybe<Scalars['Boolean']>;
 };
 
+export type FilterFindOneCalenderInput = {
+  _id?: Maybe<Scalars['MongoID']>;
+  workspaceId?: Maybe<Scalars['MongoID']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  dateFormat?: Maybe<Scalars['String']>;
+  timeFormat?: Maybe<Scalars['String']>;
+  primaryTZ?: Maybe<Scalars['String']>;
+  secondaryTZ?: Maybe<Scalars['String']>;
+  weekStart?: Maybe<Scalars['String']>;
+  /** List of *indexed* fields that can be filtered via operators. */
+  _operators?: Maybe<FilterFindOneViewOperatorsInput>;
+  OR?: Maybe<Array<FilterFindOneViewInput>>;
+  AND?: Maybe<Array<FilterFindOneViewInput>>;
+};
+
+export type FilterFindOneListViewInput = {
+  _id?: Maybe<Scalars['MongoID']>;
+  workspaceId?: Maybe<Scalars['MongoID']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  filterProperties?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** List of *indexed* fields that can be filtered via operators. */
+  _operators?: Maybe<FilterFindOneViewOperatorsInput>;
+  OR?: Maybe<Array<FilterFindOneViewInput>>;
+  AND?: Maybe<Array<FilterFindOneViewInput>>;
+};
+
+export type FilterFindOneViewInput = {
+  workspaceId?: Maybe<Scalars['MongoID']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  _id?: Maybe<Scalars['MongoID']>;
+  kind?: Maybe<EnumDKeyViewKind>;
+  /** List of *indexed* fields that can be filtered via operators. */
+  _operators?: Maybe<FilterFindOneViewOperatorsInput>;
+  OR?: Maybe<Array<FilterFindOneViewInput>>;
+  AND?: Maybe<Array<FilterFindOneViewInput>>;
+};
+
+/** For performance reason this type contains only *indexed* fields. */
+export type FilterFindOneViewOperatorsInput = {
+  _id?: Maybe<FilterFindOneView_IdOperatorsInput>;
+};
+
+export type FilterFindOneView_IdOperatorsInput = {
+  gt?: Maybe<Scalars['MongoID']>;
+  gte?: Maybe<Scalars['MongoID']>;
+  lt?: Maybe<Scalars['MongoID']>;
+  lte?: Maybe<Scalars['MongoID']>;
+  ne?: Maybe<Scalars['MongoID']>;
+  in?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  nin?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  exists?: Maybe<Scalars['Boolean']>;
+};
+
+export type FilterFindOneWorkspaceInput = {
+  title?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  _id?: Maybe<Scalars['MongoID']>;
+  /** List of *indexed* fields that can be filtered via operators. */
+  _operators?: Maybe<FilterFindOneWorkspaceOperatorsInput>;
+  OR?: Maybe<Array<FilterFindOneWorkspaceInput>>;
+  AND?: Maybe<Array<FilterFindOneWorkspaceInput>>;
+};
+
+/** For performance reason this type contains only *indexed* fields. */
+export type FilterFindOneWorkspaceOperatorsInput = {
+  slug?: Maybe<FilterFindOneWorkspaceSlugOperatorsInput>;
+  _id?: Maybe<FilterFindOneWorkspace_IdOperatorsInput>;
+};
+
+export type FilterFindOneWorkspaceSlugOperatorsInput = {
+  gt?: Maybe<Scalars['String']>;
+  gte?: Maybe<Scalars['String']>;
+  lt?: Maybe<Scalars['String']>;
+  lte?: Maybe<Scalars['String']>;
+  ne?: Maybe<Scalars['String']>;
+  in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  nin?: Maybe<Array<Maybe<Scalars['String']>>>;
+  regex?: Maybe<Scalars['RegExpAsString']>;
+  exists?: Maybe<Scalars['Boolean']>;
+};
+
+export type FilterFindOneWorkspace_IdOperatorsInput = {
+  gt?: Maybe<Scalars['MongoID']>;
+  gte?: Maybe<Scalars['MongoID']>;
+  lt?: Maybe<Scalars['MongoID']>;
+  lte?: Maybe<Scalars['MongoID']>;
+  ne?: Maybe<Scalars['MongoID']>;
+  in?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  nin?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  exists?: Maybe<Scalars['Boolean']>;
+};
+
 export type FilterUpdateOneWorkspaceInput = {
   title?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
@@ -565,9 +663,13 @@ export type Query = {
   __typename?: 'Query';
   workspacePagination?: Maybe<WorkspacePagination>;
   workspaceMany: Array<Workspace>;
+  workspaceOne?: Maybe<Workspace>;
   viewsPagination?: Maybe<ViewPagination>;
   viewListViews: Array<ListView>;
   viewCalenderViews: Array<Calender>;
+  getView?: Maybe<ViewInterface>;
+  getListView?: Maybe<ListView>;
+  getCalenderView?: Maybe<Calender>;
   entriesPagination?: Maybe<EntryPagination>;
   viewBookmarkEntries: Array<Bookmark>;
   viewNoteEntries: Array<Note>;
@@ -587,6 +689,13 @@ export type QueryWorkspaceManyArgs = {
   skip?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sort?: Maybe<SortFindManyWorkspaceInput>;
+};
+
+
+export type QueryWorkspaceOneArgs = {
+  filter?: Maybe<FilterFindOneWorkspaceInput>;
+  skip?: Maybe<Scalars['Int']>;
+  sort?: Maybe<SortFindOneWorkspaceInput>;
 };
 
 
@@ -611,6 +720,27 @@ export type QueryViewCalenderViewsArgs = {
   skip?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sort?: Maybe<SortFindManyCalenderInput>;
+};
+
+
+export type QueryGetViewArgs = {
+  filter?: Maybe<FilterFindOneViewInput>;
+  skip?: Maybe<Scalars['Int']>;
+  sort?: Maybe<SortFindOneViewInput>;
+};
+
+
+export type QueryGetListViewArgs = {
+  filter?: Maybe<FilterFindOneListViewInput>;
+  skip?: Maybe<Scalars['Int']>;
+  sort?: Maybe<SortFindOneListViewInput>;
+};
+
+
+export type QueryGetCalenderViewArgs = {
+  filter?: Maybe<FilterFindOneCalenderInput>;
+  skip?: Maybe<Scalars['Int']>;
+  sort?: Maybe<SortFindOneCalenderInput>;
 };
 
 
@@ -675,6 +805,28 @@ export enum SortFindManyViewInput {
 }
 
 export enum SortFindManyWorkspaceInput {
+  IdAsc = '_ID_ASC',
+  IdDesc = '_ID_DESC',
+  SlugAsc = 'SLUG_ASC',
+  SlugDesc = 'SLUG_DESC'
+}
+
+export enum SortFindOneCalenderInput {
+  IdAsc = '_ID_ASC',
+  IdDesc = '_ID_DESC'
+}
+
+export enum SortFindOneListViewInput {
+  IdAsc = '_ID_ASC',
+  IdDesc = '_ID_DESC'
+}
+
+export enum SortFindOneViewInput {
+  IdAsc = '_ID_ASC',
+  IdDesc = '_ID_DESC'
+}
+
+export enum SortFindOneWorkspaceInput {
   IdAsc = '_ID_ASC',
   IdDesc = '_ID_DESC',
   SlugAsc = 'SLUG_ASC',
@@ -813,24 +965,57 @@ export type WorkspacePagination = {
   pageInfo: PaginationInfo;
 };
 
-export type WorkspacesPaginationQueryVariables = Exact<{ [key: string]: never; }>;
+export type ViewsPaginationQueryVariables = Exact<{
+  workspaceId: Scalars['MongoID'];
+}>;
 
 
-export type WorkspacesPaginationQuery = { __typename?: 'Query', workspacePagination?: Maybe<{ __typename?: 'WorkspacePagination', count?: Maybe<number>, pageInfo: { __typename?: 'PaginationInfo', currentPage: number, perPage: number, pageCount?: Maybe<number>, itemCount?: Maybe<number>, hasNextPage?: Maybe<boolean>, hasPreviousPage?: Maybe<boolean> }, items?: Maybe<Array<{ __typename?: 'Workspace', userId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, isDeleted: boolean, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string> }> }>> }> };
+export type ViewsPaginationQuery = { __typename?: 'Query', viewsPagination?: Maybe<{ __typename?: 'ViewPagination', count?: Maybe<number>, items?: Maybe<Array<Maybe<{ __typename?: 'Calender', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> } | { __typename?: 'ListView', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> } | { __typename?: 'View', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> }>>> }> };
+
+export type GetViewQueryVariables = Exact<{
+  workspaceId: Scalars['MongoID'];
+  viewSlug: Scalars['String'];
+}>;
+
+
+export type GetViewQuery = { __typename?: 'Query', getView?: Maybe<{ __typename?: 'Calender', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> } | { __typename?: 'ListView', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> } | { __typename?: 'View', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> }> };
+
+type ViewsData_Calender_Fragment = { __typename?: 'Calender', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> };
+
+type ViewsData_ListView_Fragment = { __typename?: 'ListView', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> };
+
+type ViewsData_View_Fragment = { __typename?: 'View', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> };
+
+export type ViewsDataFragment = ViewsData_Calender_Fragment | ViewsData_ListView_Fragment | ViewsData_View_Fragment;
+
+export type WorkspacesPaginationQueryVariables = Exact<{
+  perPage?: Maybe<Scalars['Int']>;
+  page?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type WorkspacesPaginationQuery = { __typename?: 'Query', workspacePagination?: Maybe<{ __typename?: 'WorkspacePagination', count?: Maybe<number>, pageInfo: { __typename?: 'PaginationInfo', currentPage: number, perPage: number, pageCount?: Maybe<number>, itemCount?: Maybe<number>, hasNextPage?: Maybe<boolean>, hasPreviousPage?: Maybe<boolean> }, items?: Maybe<Array<{ __typename?: 'Workspace', userId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, isDeleted: boolean, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string>, activeSkinTone?: Maybe<string>, originalUnified?: Maybe<string> }> }>> }> };
+
+export type GetWorkspaceQueryVariables = Exact<{
+  slug: Scalars['String'];
+}>;
+
+
+export type GetWorkspaceQuery = { __typename?: 'Query', workspaceOne?: Maybe<{ __typename?: 'Workspace', userId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, isDeleted: boolean, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string>, activeSkinTone?: Maybe<string>, originalUnified?: Maybe<string> }> }> };
 
 export type NewWorkspaceMutationVariables = Exact<{
   record: CreateOneWorkspaceInput;
 }>;
 
 
-export type NewWorkspaceMutation = { __typename?: 'Mutation', workspaceNew?: Maybe<{ __typename?: 'CreateOneWorkspacePayload', recordId?: Maybe<any>, record?: Maybe<{ __typename?: 'Workspace', userId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, isDeleted: boolean, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string> }> }> }> };
+export type NewWorkspaceMutation = { __typename?: 'Mutation', workspaceNew?: Maybe<{ __typename?: 'CreateOneWorkspacePayload', recordId?: Maybe<any>, record?: Maybe<{ __typename?: 'Workspace', userId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, isDeleted: boolean, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string>, activeSkinTone?: Maybe<string>, originalUnified?: Maybe<string> }> }> }> };
 
 export type DeleteWorkspaceMutationVariables = Exact<{
   id: Scalars['MongoID'];
 }>;
 
 
-export type DeleteWorkspaceMutation = { __typename?: 'Mutation', workspaceDeleteOne?: Maybe<{ __typename?: 'Workspace', userId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, isDeleted: boolean, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string> }> }> };
+export type DeleteWorkspaceMutation = { __typename?: 'Mutation', workspaceDeleteOne?: Maybe<{ __typename?: 'Workspace', userId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, isDeleted: boolean, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string>, activeSkinTone?: Maybe<string>, originalUnified?: Maybe<string> }> }> };
 
 export type UpdateWorkspaceMutationVariables = Exact<{
   filter: FilterUpdateOneWorkspaceInput;
@@ -838,10 +1023,35 @@ export type UpdateWorkspaceMutationVariables = Exact<{
 }>;
 
 
-export type UpdateWorkspaceMutation = { __typename?: 'Mutation', workspaceUpdateOne?: Maybe<{ __typename?: 'UpdateOneWorkspacePayload', recordId?: Maybe<any>, record?: Maybe<{ __typename?: 'Workspace', userId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, isDeleted: boolean, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string> }> }> }> };
+export type UpdateWorkspaceMutation = { __typename?: 'Mutation', workspaceUpdateOne?: Maybe<{ __typename?: 'UpdateOneWorkspacePayload', recordId?: Maybe<any>, record?: Maybe<{ __typename?: 'Workspace', userId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, isDeleted: boolean, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string>, activeSkinTone?: Maybe<string>, originalUnified?: Maybe<string> }> }> }> };
 
-export type WorkspaceDataFragment = { __typename?: 'Workspace', userId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, isDeleted: boolean, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string> }> };
+export type WorkspaceDataFragment = { __typename?: 'Workspace', userId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, isDeleted: boolean, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string>, activeSkinTone?: Maybe<string>, originalUnified?: Maybe<string> }> };
 
+export type EmojiDataFragment = { __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string>, activeSkinTone?: Maybe<string>, originalUnified?: Maybe<string> };
+
+export const ViewsDataFragmentDoc = gql`
+    fragment viewsData on ViewInterface {
+  _id
+  workspaceId
+  userId
+  kind
+  title
+  slug
+  description
+  isDeleted
+  updatedAt
+  createdAt
+}
+    `;
+export const EmojiDataFragmentDoc = gql`
+    fragment EmojiData on WorkspaceEmoji {
+  emoji
+  names
+  unified
+  activeSkinTone
+  originalUnified
+}
+    `;
 export const WorkspaceDataFragmentDoc = gql`
     fragment WorkspaceData on Workspace {
   userId
@@ -849,19 +1059,42 @@ export const WorkspaceDataFragmentDoc = gql`
   description
   slug
   emoji {
-    emoji
-    names
-    unified
+    ...EmojiData
   }
   isDeleted
   _id
   updatedAt
   createdAt
 }
-    `;
+    ${EmojiDataFragmentDoc}`;
+export const ViewsPaginationDocument = gql`
+    query ViewsPagination($workspaceId: MongoID!) {
+  viewsPagination(filter: {workspaceId: $workspaceId}) {
+    count
+    items {
+      ...viewsData
+    }
+  }
+}
+    ${ViewsDataFragmentDoc}`;
+
+export function useViewsPaginationQuery(options: Omit<Urql.UseQueryArgs<ViewsPaginationQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ViewsPaginationQuery>({ query: ViewsPaginationDocument, ...options });
+};
+export const GetViewDocument = gql`
+    query GetView($workspaceId: MongoID!, $viewSlug: String!) {
+  getView(filter: {workspaceId: $workspaceId, slug: $viewSlug}) {
+    ...viewsData
+  }
+}
+    ${ViewsDataFragmentDoc}`;
+
+export function useGetViewQuery(options: Omit<Urql.UseQueryArgs<GetViewQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetViewQuery>({ query: GetViewDocument, ...options });
+};
 export const WorkspacesPaginationDocument = gql`
-    query WorkspacesPagination {
-  workspacePagination {
+    query WorkspacesPagination($perPage: Int, $page: Int) {
+  workspacePagination(perPage: $perPage, page: $page) {
     count
     pageInfo {
       currentPage
@@ -880,6 +1113,17 @@ export const WorkspacesPaginationDocument = gql`
 
 export function useWorkspacesPaginationQuery(options: Omit<Urql.UseQueryArgs<WorkspacesPaginationQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<WorkspacesPaginationQuery>({ query: WorkspacesPaginationDocument, ...options });
+};
+export const GetWorkspaceDocument = gql`
+    query getWorkspace($slug: String!) {
+  workspaceOne(filter: {slug: $slug}) {
+    ...WorkspaceData
+  }
+}
+    ${WorkspaceDataFragmentDoc}`;
+
+export function useGetWorkspaceQuery(options: Omit<Urql.UseQueryArgs<GetWorkspaceQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetWorkspaceQuery>({ query: GetWorkspaceDocument, ...options });
 };
 export const NewWorkspaceDocument = gql`
     mutation NewWorkspace($record: CreateOneWorkspaceInput!) {

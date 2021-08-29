@@ -11,3 +11,6 @@ generates:
   ./src/Graphql/schema.graphql:
     plugins:
       - schema-ast
+  ./src/Graphql/schema.json:
+    plugins:
+      - introspection

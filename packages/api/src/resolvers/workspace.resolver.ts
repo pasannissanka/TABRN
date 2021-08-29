@@ -60,6 +60,28 @@ schemaComposer.Query.addFields({
       return next(rp);
     })
     .withMiddlewares([authMiddlewareGql]),
+  workspaceOne: workspaceTC.mongooseResolvers
+    .findOne({
+      filter: {
+        removeFields: [
+          'userId',
+          'emoji',
+          'isDeleted',
+          'updatedAt',
+          'createdAt',
+          'description',
+        ],
+      },
+    })
+    .wrapResolve((next) => (rp) => {
+      // forcibly set this arg to logged user id
+      rp.args.filter = {
+        ...rp.args.filter,
+        userId: rp.context.user.id,
+        isDeleted: false,
+      };
+      return next(rp);
+    }),
 });
 
 schemaComposer.Mutation.addFields({

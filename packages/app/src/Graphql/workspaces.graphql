@@ -1,5 +1,5 @@
-query WorkspacesPagination {
-  workspacePagination {
+query WorkspacesPagination($perPage: Int, $page: Int) {
+  workspacePagination(perPage: $perPage, page: $page) {
     count
     pageInfo {
       currentPage
@@ -12,6 +12,12 @@ query WorkspacesPagination {
     items {
       ...WorkspaceData
     }
+  }
+}
+
+query getWorkspace($slug: String!) {
+  workspaceOne(filter: { slug: $slug }) {
+    ...WorkspaceData
   }
 }
 
@@ -48,12 +54,18 @@ fragment WorkspaceData on Workspace {
   description
   slug
   emoji {
-    emoji
-    names
-    unified
+    ...EmojiData
   }
   isDeleted
   _id
   updatedAt
   createdAt
+}
+
+fragment EmojiData on WorkspaceEmoji {
+  emoji
+  names
+  unified
+  activeSkinTone
+  originalUnified
 }

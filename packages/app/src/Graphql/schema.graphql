@@ -405,6 +405,108 @@ input FilterFindManyWorkspace_idOperatorsInput {
   exists: Boolean
 }
 
+input FilterFindOneCalenderInput {
+  _id: MongoID
+  workspaceId: MongoID
+  title: String
+  description: String
+  slug: String
+  dateFormat: String
+  timeFormat: String
+  primaryTZ: String
+  secondaryTZ: String
+  weekStart: String
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindOneViewOperatorsInput
+  OR: [FilterFindOneViewInput!]
+  AND: [FilterFindOneViewInput!]
+}
+
+input FilterFindOneListViewInput {
+  _id: MongoID
+  workspaceId: MongoID
+  title: String
+  description: String
+  slug: String
+  filterProperties: [String]
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindOneViewOperatorsInput
+  OR: [FilterFindOneViewInput!]
+  AND: [FilterFindOneViewInput!]
+}
+
+input FilterFindOneViewInput {
+  workspaceId: MongoID
+  title: String
+  description: String
+  slug: String
+  _id: MongoID
+  kind: EnumDKeyViewKind
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindOneViewOperatorsInput
+  OR: [FilterFindOneViewInput!]
+  AND: [FilterFindOneViewInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindOneViewOperatorsInput {
+  _id: FilterFindOneView_idOperatorsInput
+}
+
+input FilterFindOneView_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+input FilterFindOneWorkspaceInput {
+  title: String
+  slug: String
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindOneWorkspaceOperatorsInput
+  OR: [FilterFindOneWorkspaceInput!]
+  AND: [FilterFindOneWorkspaceInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindOneWorkspaceOperatorsInput {
+  slug: FilterFindOneWorkspaceSlugOperatorsInput
+  _id: FilterFindOneWorkspace_idOperatorsInput
+}
+
+input FilterFindOneWorkspaceSlugOperatorsInput {
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ne: String
+  in: [String]
+  nin: [String]
+  regex: RegExpAsString
+  exists: Boolean
+}
+
+input FilterFindOneWorkspace_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
 input FilterUpdateOneWorkspaceInput {
   title: String
   slug: String
@@ -563,6 +665,12 @@ type Query {
     limit: Int = 100
     sort: SortFindManyWorkspaceInput
   ): [Workspace!]!
+  workspaceOne(
+    """Filter by fields"""
+    filter: FilterFindOneWorkspaceInput
+    skip: Int
+    sort: SortFindOneWorkspaceInput
+  ): Workspace
   viewsPagination(
     """Page number for displaying"""
     page: Int
@@ -586,6 +694,24 @@ type Query {
     limit: Int = 100
     sort: SortFindManyCalenderInput
   ): [Calender!]!
+  getView(
+    """Filter by fields"""
+    filter: FilterFindOneViewInput
+    skip: Int
+    sort: SortFindOneViewInput
+  ): ViewInterface
+  getListView(
+    """Filter by fields"""
+    filter: FilterFindOneListViewInput
+    skip: Int
+    sort: SortFindOneListViewInput
+  ): ListView
+  getCalenderView(
+    """Filter by fields"""
+    filter: FilterFindOneCalenderInput
+    skip: Int
+    sort: SortFindOneCalenderInput
+  ): Calender
   entriesPagination(
     """Page number for displaying"""
     page: Int
@@ -652,6 +778,28 @@ enum SortFindManyViewInput {
 }
 
 enum SortFindManyWorkspaceInput {
+  _ID_ASC
+  _ID_DESC
+  SLUG_ASC
+  SLUG_DESC
+}
+
+enum SortFindOneCalenderInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+enum SortFindOneListViewInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+enum SortFindOneViewInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+enum SortFindOneWorkspaceInput {
   _ID_ASC
   _ID_DESC
   SLUG_ASC

@@ -1,7 +1,21 @@
+import { Workspace, WorkspaceDataFragment } from './generated-graphql-types';
+
 export interface AuthContextState {
   user: IUser | undefined;
   setUser: React.Dispatch<React.SetStateAction<IUser | undefined>>;
   isLoading: boolean;
+}
+
+export interface AppContextState {
+  workspaceData: WorkspaceState | undefined;
+  setWorkspaceData: React.Dispatch<
+    React.SetStateAction<WorkspaceState | undefined>
+  >;
+}
+
+export interface WorkspaceState {
+  workspaceSlug: string;
+  workspaceData?: WorkspaceDataFragment;
 }
 
 export interface IMongoDocument {
