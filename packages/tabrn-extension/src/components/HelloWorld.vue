@@ -1,21 +1,28 @@
 <template>
   <div>
     <p>{{ defaultText }}</p>
+    <button @click="click">Test</button>
   </div>
 </template>
 
 <script>
 export default {
   name: 'HelloWorld',
-  mounted () {
-    browser.runtime.sendMessage({})
+  mounted() {
+    browser.runtime.sendMessage({});
   },
   computed: {
-    defaultText () {
-      return browser.i18n.getMessage('extName')
-    }
-  }
-}
+    defaultText() {
+      return 'Hello';
+    },
+  },
+  methods: {
+    click: function () {
+      console.log(this);
+      this.$router.push('about');
+    },
+  },
+};
 </script>
 
 <style scoped>
