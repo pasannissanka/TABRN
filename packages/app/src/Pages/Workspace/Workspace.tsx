@@ -41,9 +41,9 @@ export const WorkspaceItem = () => {
         workspaceData: dataWorkspace,
       });
     }
-    return () => {
-      setWorkspaceData(undefined);
-    };
+    // return () => {
+    //   setWorkspaceData(undefined);
+    // };
   }, [dataWorkspace]);
 
   return (

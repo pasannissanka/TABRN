@@ -1,31 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { AuthContext } from './Context/AuthContextProvider';
+import { useFetch } from './Hooks/useFetch';
 import { Home } from './Pages/Home/Home';
 import { Login } from './Pages/Login/Login';
-import { getUser } from './Query/api';
-import { IUser } from './Types/types';
+import { IResponse, IUser } from './Types/types';
 import PrivateRoute from './Utils/PrivateRoute';
 import PublicRoute from './Utils/PublicRoute';
 
 function App() {
-  const [user, setuser] = useState<IUser>();
-  const { data, isLoading } = useQuery('loggedUser', getUser, { retry: false });
+  const [user, setUser] = useState<IUser>();
+  const { data, isLoading } = useFetch<IResponse<IUser>>(
+    'http://localhost:4001/user',
+    {
+      method: 'GET',
+      credentials: 'include',
+    }
+  );
 
   useEffect(() => {
     if (data) {
-      setuser(data);
+      setUser(data.data);
     }
   }, [data]);
 
-  return (
-    <div className="App">
+  const getRoutes = () => {
+    return (
       <AuthContext.Provider
         value={{
-          user: user,
-          setUser: setuser,
-          isLoading: isLoading,
+          user,
+          setUser,
+          isLoading,
         }}
       >
         <BrowserRouter>
@@ -42,6 +47,16 @@ function App() {
           </Switch>
         </BrowserRouter>
       </AuthContext.Provider>
+    );
+  };
+
+  return (
+    <div className="App">
+      {
+        <Suspense fallback={<div>loading...</div>}>
+          {!data ? <div>Authenticating...</div> : getRoutes()}
+        </Suspense>
+      }
     </div>
   );
 }

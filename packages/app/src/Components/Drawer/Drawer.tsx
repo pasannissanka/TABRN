@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { AppContext } from '../../Context/AppContextProvider';
 import {
   useViewsPaginationQuery,
@@ -12,11 +13,13 @@ interface DrawerProps {
 
 export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
   const { workspaceData } = useContext(AppContext);
+  const location = useLocation();
+  const [isWorkspace, setIsWorkspace] = useState(false);
+
   const [result] = useWorkspacesPaginationQuery({
     requestPolicy: 'cache-and-network',
   });
   const { data, fetching } = result;
-
   const [resultViews] = useViewsPaginationQuery({
     variables: {
       workspaceId: workspaceData?.workspaceData?._id,
@@ -24,10 +27,15 @@ export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
     requestPolicy: 'cache-only',
     pause: !workspaceData?.workspaceSlug && !workspaceData?.workspaceData?._id,
   });
-
   const dataViews = resultViews.data;
 
-  console.log(workspaceData, dataViews);
+  useEffect(() => {
+    if (location.pathname.startsWith('/w/')) {
+      setIsWorkspace(true);
+    } else {
+      setIsWorkspace(false);
+    }
+  }, [location]);
 
   return (
     <React.Fragment>
@@ -66,7 +74,7 @@ export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
                 </ul>
               </DrawerDisclosure>
             </li>
-            {workspaceData && dataViews ? (
+            {isWorkspace && workspaceData && dataViews ? (
               <li>
                 <DrawerDisclosure
                   to={`/w/${workspaceData?.workspaceSlug}`}

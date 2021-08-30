@@ -1,6 +1,6 @@
 import React from 'react';
 import { Disclosure } from '@headlessui/react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 type DrawerLinkProps = {
   to: string;
@@ -11,13 +11,15 @@ type DrawerLinkProps = {
 export const DrawerLink = ({ icon, title, to }: DrawerLinkProps) => {
   return (
     <>
-      <Link
+      <NavLink
+        activeClassName="text-primary-900"
+        exact={true}
         className="flex items-center p-2 hover:bg-gray-100 rounded-md space-x-2"
         to={to}
       >
         <span>{icon}</span>
         <span className="line-clamp-1">{title}</span>
-      </Link>
+      </NavLink>
     </>
   );
 };

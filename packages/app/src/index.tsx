@@ -1,15 +1,12 @@
 import { cacheExchange } from '@urql/exchange-graphcache';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { Client, dedupExchange, fetchExchange, Provider } from 'urql';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import schema from './Graphql/schema.json';
 import { IntrospectionData } from '@urql/exchange-graphcache/dist/types/ast';
-
-const queryClient = new QueryClient();
 
 const client = new Client({
   url: 'http://localhost:4001/graphql',
@@ -31,11 +28,9 @@ const client = new Client({
 
 ReactDOM.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <Provider value={client}>
-        <App />
-      </Provider>
-    </QueryClientProvider>
+    <Provider value={client}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
