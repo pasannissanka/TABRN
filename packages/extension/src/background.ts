@@ -41,6 +41,23 @@ async function getBookmarkData() {
   }
 }
 
+async function getViewData(workspaceId: string) {
+  const cookieOk = await getCookieConsent();
+  const userId = await getUserId();
+  if (cookieOk && userId.id !== undefined) {
+    const request = await fetch(
+      `http://localhost:4001/extension/${workspaceId}/views`,
+      {
+        method: 'GET',
+        credentials: 'include',
+      }
+    );
+    return request.json();
+  } else {
+    return Promise.reject(new Error('Unauthorized'));
+  }
+}
+
 async function createNewBookmark(payload: any) {
   const cookieOk = await getCookieConsent();
   const userId = await getUserId();
@@ -111,6 +128,8 @@ browser.runtime.onMessage.addListener(
       return createNewBookmark(data.payload);
     } else if (data.message === 'get_cookie_consent') {
       return getCookieConsent();
+    } else if (data.message === 'get_workspace_views') {
+      return getViewData(data.payload.workspaceId);
     }
     return Promise.reject(false);
   }

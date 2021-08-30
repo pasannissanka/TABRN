@@ -24,13 +24,18 @@
     <div class="w-100 flex justify-center mx-5 my-4 bg-gray-400 border"></div>
     <form>
       <div class="w-100 flex justify-center">
-        <p
+        <!-- <p
           v-text="text_content"
           class="tribute-input mx-5 w-full h-48 max-h-72 overflow-y-scroll"
           name="bookmark_data"
           id="bookmark_data"
-        ></p>
-        <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
+        ></p> -->
+        <textarea
+          v-model="text_content"
+          class="tribute-input mx-5 w-full h-48 max-h-72 overflow-y-scroll"
+          name="bookmark_data"
+          id="bookmark_data"
+        ></textarea>
       </div>
       <div class="w-100 grid gap-2 grid-cols-5 mb-2 mt-4 mx-5">
         <div
@@ -102,24 +107,14 @@ export default {
       workspaces: [],
       tags: [],
       selectedWorkspace: '',
-      items: [
-        {
-          value: 'cat',
-          label: 'Mr Cat',
-        },
-        {
-          value: 'dog',
-          label: 'Mr Dog',
-        },
-      ],
+      views: [],
       isEditable: true,
     };
   },
   mounted() {
     browser.tabs.query({ currentWindow: true, active: true }).then((tab) => {
-      this.text_content = `# ${tab[0].title}\n\n`;
+      this.text_content += `# ${tab[0].title}\n\n`;
     });
-
     this.getBookmarkData()
       .then((data) => {
         console.log(data);
@@ -136,42 +131,53 @@ export default {
       collection: [
         {
           // The function that gets call on select that retuns the content to insert
-          selectTemplate: function (item) {
+          selectTemplate: (item) => {
             // if (this.range.isContentEditable(this.current.element)) {
             const value = `<span contenteditable="false"><a href="http://zurb.com" target="_blank" title="'
-              ${item.original.email}"> ${item.original.value}</a></span>`;
-            this.text_content += value;
+              ${item.original.key}"> ${item.original.value}</a></span>`;
+            // this.text_content += JSON.stringify(item);
             return value;
             // }
             // return '@' + item.original.value;
-          },
-
-          // the array of objects
-          values: [
-            {
-              key: 'Jordan Humphreys',
-              value: 'Jordan Humphreys',
-              email: 'jordan@zurb.com',
-            },
-            {
-              key: 'Sir Walter Riley',
-              value: 'Sir Walter Riley',
-              email: 'jordan+riley@zurb.com',
-            },
-          ],
-        },
-        {
-          // The symbol that starts the lookup
-          trigger: '#',
-
-          // The function that gets call on select that retuns the content to insert
-          selectTemplate: function (item) {
-            return '#' + item.original.value;
           },
           // function retrieving an array of objects
           values: (_, cb) => {
             console.log(this.workspaces);
             cb(this.workspaces);
+          },
+          lookup: 'value',
+
+          fillAttr: 'value',
+        },
+        // {
+        //   // The symbol that starts the lookup
+        //   trigger: '#',
+
+        //   // The function that gets call on select that retuns the content to insert
+        //   selectTemplate: function (item) {
+        //     return '#' + item.original.value;
+        //   },
+        //   // function retrieving an array of objects
+        //   values: (_, cb) => {
+        //     console.log(this.workspaces);
+        //     cb(this.workspaces);
+        //   },
+        //   lookup: 'value',
+
+        //   fillAttr: 'value',
+        // },
+        {
+          // The symbol that starts the lookup
+          trigger: '!',
+
+          // The function that gets call on select that retuns the content to insert
+          selectTemplate: function (item) {
+            return '!' + item.original.value;
+          },
+          // function retrieving an array of objects
+          values: (_, cb) => {
+            console.log(this.views);
+            cb(this.views);
           },
           lookup: 'value',
 
@@ -203,6 +209,28 @@ export default {
         message: 'get_create_bookmark_data',
       });
       return data;
+    },
+    async getViewsData(workspaceId) {
+      const data = await browser.runtime.sendMessage({
+        message: 'get_workspace_views',
+        payload: {
+          workspaceId,
+        },
+      });
+      return data;
+    },
+  },
+  watch: {
+    selectedWorkspace: function (val, oldVal) {
+      this.getViewsData(val)
+        .then((data) => {
+          this.views = data.data.views;
+          console.log(this.views);
+        })
+        .catch((err) => console.log(err));
+    },
+    text_content: function (val) {
+      console.log(val);
     },
   },
 };

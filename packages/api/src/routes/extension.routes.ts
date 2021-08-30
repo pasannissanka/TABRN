@@ -11,4 +11,10 @@ router.get(
   catchAsync(extensionController.getWorkspacesTagsKeyValue)
 );
 
+router.get(
+  '/:workspace_id/views',
+  isLoggedIn,
+  catchAsync(extensionController.getViewsAsKeyValue)
+);
+
 export default router;

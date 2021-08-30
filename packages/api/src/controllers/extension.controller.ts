@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { successResponse } from '../helpers/responses/success_response';
 import { TagModel } from '../modules/tags/model/tag.model';
+import { ViewModel } from '../modules/workspace-view/model/view.model';
 import { WorkspaceModel } from '../modules/workspace/model/workspace.model';
 
 class ExtensionController {
@@ -35,6 +36,30 @@ class ExtensionController {
     successResponse(res, {
       workspaces,
       tags,
+    });
+  }
+
+  public async getViewsAsKeyValue(req: Request, res: Response) {
+    const user = req.user;
+    const { workspace_id } = req.params;
+
+    const viewsData = await ViewModel.find({
+      userId: user?.id,
+      workspaceId: workspace_id,
+      isDeleted: false,
+    });
+
+    const views = viewsData.map((view) => {
+      return {
+        key: view.id,
+        value: view.title,
+        slug: view.slug,
+        kind: view.kind,
+      };
+    });
+
+    successResponse(res, {
+      views,
     });
   }
 }
