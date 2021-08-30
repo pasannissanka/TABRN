@@ -1,7 +1,6 @@
 <template>
   <div>
     <p>{{ defaultText }}</p>
-    <button @click="click">Test</button>
   </div>
 </template>
 
