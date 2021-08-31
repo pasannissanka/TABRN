@@ -23,19 +23,48 @@
     </div>
     <div class="w-100 flex justify-center mx-5 my-4 bg-gray-400 border"></div>
     <form>
-      <div class="w-100 flex justify-center">
-        <!-- <p
-          v-text="text_content"
-          class="tribute-input mx-5 w-full h-48 max-h-72 overflow-y-scroll"
-          name="bookmark_data"
-          id="bookmark_data"
-        ></p> -->
-        <textarea
-          v-model="text_content"
-          class="tribute-input mx-5 w-full h-48 max-h-72 overflow-y-scroll"
-          name="bookmark_data"
-          id="bookmark_data"
-        ></textarea>
+      <div class="w-100 relative flex justify-center">
+        <Mentionable
+          :keys="['@', '!']"
+          :items="items"
+          offset="6"
+          insert-space
+          @open="onOpen"
+          class="mx-5 w-full"
+        >
+          <textarea
+            class="w-full h-48 max-h-72 overflow-y-scroll"
+            v-model="text_content"
+          />
+
+          <template #no-result>
+            <div class="dim">
+              {{
+                loading
+                  ? 'Loading...'
+                  : isError
+                  ? 'Select a workspace'
+                  : 'No result'
+              }}
+            </div>
+          </template>
+
+          <template #item-@="{ item }">
+            <div class="user truncate">
+              {{ item.title }}
+              <!-- <span class="dim"> ({{ item.slug }}) </span> -->
+            </div>
+          </template>
+
+          <template #item-!="{ item }">
+            <div class="issue">
+              <span class="number"> !{{ item.title }} -</span>
+              <span class="dim">
+                {{ item.kind }}
+              </span>
+            </div>
+          </template>
+        </Mentionable>
       </div>
       <div class="w-100 grid gap-2 grid-cols-5 mb-2 mt-4 mx-5">
         <div
@@ -97,7 +126,12 @@
   </div>
 </template>
 <script>
+import { Mentionable } from 'vue-mention';
+
 export default {
+  components: {
+    Mentionable,
+  },
   data() {
     return {
       text_content: '',
@@ -105,6 +139,9 @@ export default {
       tags: [],
       selectedWorkspace: '',
       views: [],
+      loading: false,
+      items: [],
+      isError: false,
     };
   },
   mounted() {
@@ -142,7 +179,28 @@ export default {
           workspaceId,
         },
       });
+      console.log(data);
       return data;
+    },
+    onOpen(key) {
+      this.items = key === '@' ? this.workspaces : this.tags;
+      if (key === '@') {
+        this.items = this.workspaces;
+        return;
+      } else if (key === '!') {
+        this.loading = true;
+        this.getViewsData(this.selectedWorkspace)
+          .then((data) => {
+            this.views = data.data.views;
+            this.items = this.views;
+            this.loading = false;
+          })
+          .catch((err) => {
+            this.loading = false;
+            this.isError = true;
+            console.log(err);
+          });
+      }
     },
   },
   watch: {
@@ -160,3 +218,125 @@ export default {
   },
 };
 </script>
+<style>
+.mention-item {
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.mention-selected {
+  @apply focus:ring-primary-200 bg-primary-500 w-full text-sm border rounded-md transition-colors duration-300 focus:ring-1;
+}
+
+.dim {
+  color: #666;
+}
+
+.tooltip {
+  display: block !important;
+  z-index: 10000;
+  @apply text-sm;
+}
+
+.tooltip .tooltip-inner {
+  background: black;
+  color: white;
+  border-radius: 16px;
+  padding: 5px 10px 4px;
+}
+
+.tooltip .tooltip-arrow {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  position: absolute;
+  margin: 5px;
+  border-color: black;
+  z-index: 1;
+}
+
+.tooltip[x-placement^='top'] {
+  margin-bottom: 5px;
+}
+
+.tooltip[x-placement^='top'] .tooltip-arrow {
+  border-width: 5px 5px 0 5px;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+  bottom: -5px;
+  left: calc(50% - 5px);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.tooltip[x-placement^='bottom'] {
+  margin-top: 5px;
+}
+
+.tooltip[x-placement^='bottom'] .tooltip-arrow {
+  border-width: 0 5px 5px 5px;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-top-color: transparent !important;
+  top: -5px;
+  left: calc(50% - 5px);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.tooltip[x-placement^='right'] {
+  margin-left: 5px;
+}
+
+.tooltip[x-placement^='right'] .tooltip-arrow {
+  border-width: 5px 5px 5px 0;
+  border-left-color: transparent !important;
+  border-top-color: transparent !important;
+  border-bottom-color: transparent !important;
+  left: -5px;
+  top: calc(50% - 5px);
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.tooltip[x-placement^='left'] {
+  margin-right: 5px;
+}
+
+.tooltip[x-placement^='left'] .tooltip-arrow {
+  border-width: 5px 0 5px 5px;
+  border-top-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+  right: -5px;
+  top: calc(50% - 5px);
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.tooltip.popover .popover-inner {
+  background: #f9f9f9;
+  color: black;
+  padding: 10px;
+  border-radius: 0.5rem;
+  box-shadow: 0 5px 30px rgba(black, 0.1);
+  @apply shadow-md;
+}
+
+.tooltip.popover .popover-arrow {
+  border-color: #f9f9f9;
+}
+
+.tooltip[aria-hidden='true'] {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.15s, visibility 0.15s;
+}
+
+.tooltip[aria-hidden='false'] {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+</style>

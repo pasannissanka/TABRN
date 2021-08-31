@@ -119,11 +119,11 @@ browser.runtime.onMessage.addListener(async function (
     }
     return Promise.reject();
   } else if (request.message === 'create_new_bookmark') {
-    return createNewBookmark(data.payload);
+    return createNewBookmark(request.payload);
   } else if (request.message === 'get_cookie_consent') {
     return getCookieConsent();
   } else if (request.message === 'get_workspace_views') {
-    return getViewData(data.payload.workspaceId);
+    return getViewData(request.payload.workspaceId);
   } else if (request.message === 'remove_cookie_consent') {
     return removeCookieConsent();
   }
