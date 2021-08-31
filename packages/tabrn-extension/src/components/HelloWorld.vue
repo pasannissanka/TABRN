@@ -8,7 +8,16 @@
 export default {
   name: 'HelloWorld',
   mounted() {
-    browser.runtime.sendMessage({});
+    browser.runtime
+      .sendMessage({ message: 'get_cookie_consent' })
+      .then((data) => {
+        if (data) {
+          this.$router.push('Login');
+        } else {
+          this.$router.push('Cookie');
+        }
+      })
+      .catch((err) => console.log(err));
   },
   computed: {
     defaultText() {

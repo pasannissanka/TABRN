@@ -1,6 +1,8 @@
 {
-  "name": "tabrn-extension",
-  "version": "0.1.0",
+  "name": "@tabrn/tabrn-extension",
+  "version": "0.0.1",
+  "author": "Pasan Nissanka",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service build --mode development --watch",

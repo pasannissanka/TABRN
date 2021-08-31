@@ -10,8 +10,8 @@ export default {
 
 <style>
 html {
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 200px;
 }
 
 /* purgecss start ignore */
