@@ -17,4 +17,10 @@ router.get(
   catchAsync(extensionController.getViewsAsKeyValue)
 );
 
+router.post(
+  '/new_bookmark',
+  isLoggedIn,
+  catchAsync(extensionController.createBookmark)
+);
+
 export default router;

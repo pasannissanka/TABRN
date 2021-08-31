@@ -35,4 +35,5 @@ export interface ParsedBookmarkContent {
   title: string;
   tags: string[];
   description: string;
+  workspace_views: string[];
 }

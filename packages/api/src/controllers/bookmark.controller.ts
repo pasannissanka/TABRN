@@ -61,24 +61,24 @@ class BookmarkController {
       bookmarkDetails.title = `Untitled${cStr}`;
     }
 
-    const bookmarkData: IBookmark = {
-      userId: user?.id,
-      workspaceId: workspaceData.id,
-      tags: tagIds,
-      title: bookmarkDetails.title,
-      description: bookmarkDetails.description,
-      url: data.url,
-      linkData: {
-        faviconUrl: data.linkData.faviconUrl,
-        hostname: data.linkData.hostname,
-        title: data.linkData.title,
-      },
-    };
+    // const bookmarkData: IBookmark = {
+    //   userId: user?.id,
+    //   workspaceId: workspaceData.id,
+    //   tags: tagIds,
+    //   title: bookmarkDetails.title,
+    //   description: bookmarkDetails.description,
+    //   url: data.url,
+    //   linkData: {
+    //     faviconUrl: data.linkData.faviconUrl,
+    //     hostname: data.linkData.hostname,
+    //     title: data.linkData.title,
+    //   },
+    // };
 
-    const bookmark = new BookmarkModel(bookmarkData);
-    await bookmark.save();
+    // const bookmark = new BookmarkModel(bookmarkData);
+    // await bookmark.save();
 
-    successResponse(res, bookmark);
+    successResponse(res, {});
   }
 
   public async paginate(req: Request, res: Response) {

@@ -5,6 +5,7 @@ import { EntryType } from '../constants/entry.constants';
 export interface BaseEntry {
   userId: string;
   workspaceId: string;
+  viewId: string;
   title: string;
   description: string;
   slug?: string;

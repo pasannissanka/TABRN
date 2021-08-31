@@ -1,17 +1,41 @@
 import marked from 'marked';
 import { ParsedBookmarkContent } from '../../modules/workspace-entry/types/bookmark.type';
 
-const tag = {
-  name: 'tag',
+const workspaceType = {
+  name: 'workspace-type',
   level: 'inline', // Is this a block-level or inline-level tokenizer?
   tokenizer(src: string, _) {
-    const rule = /#(?![0-9_]+\b)([a-zA-Z0-9_]{1,})/; // Regex for the complete token
+    const rule = /!(?![0-9_]+\b)([a-zA-Z0-9_]{1,})/; // Regex for the complete token
     const match = rule.exec(src);
     // console.log('match', match);
     if (match) {
       const token = {
         // Token to generate
-        type: 'tag', // Should match "name" above
+        type: 'workspace-type', // Should match "name" above
+        raw: match[0], // Text to consume from the source
+        text: match[1].trim(), // Additional custom properties
+      };
+      // this.lexer.inline(token.text, token.tokens); // Queue this data to be processed for inline tokens
+      return token;
+    }
+    return;
+  },
+  // renderer(token) {
+  //   return `<dl>${this.parser.parseInline(token.tokens)}\n</dl>`; // parseInline to turn child tokens into HTML
+  // }
+};
+
+const workspaceAt = {
+  name: 'workspace',
+  level: 'inline', // Is this a block-level or inline-level tokenizer?
+  tokenizer(src: string, _) {
+    const rule = /@(?![0-9_]+\b)([a-zA-Z0-9_]{1,})/; // Regex for the complete token
+    const match = rule.exec(src);
+    // console.log('match', match);
+    if (match) {
+      const token = {
+        // Token to generate
+        type: 'workspace', // Should match "name" above
         raw: match[0], // Text to consume from the source
         text: match[1].trim(), // Additional custom properties
       };
@@ -26,7 +50,7 @@ const tag = {
 };
 
 export const parseBookmarkDetails = (input: string): ParsedBookmarkContent => {
-  marked.use({ extensions: [tag] });
+  marked.use({ extensions: [workspaceType, workspaceAt] });
 
   const tokens = marked.lexer(input);
   const titles = tokens.filter((token) => token.type === 'heading') as any[];
@@ -35,7 +59,15 @@ export const parseBookmarkDetails = (input: string): ParsedBookmarkContent => {
     para?.tokens.filter((token: any) => token.type === 'tag')
   );
 
-  // console.log(titles, desc, tagTokens);
+  const workspaceTypeTok = desc.map((para: any) =>
+    para?.tokens.filter((token: any) => token.type === 'workspace-type')
+  );
+
+  const workspaceTok = desc.map((para: any) =>
+    para?.tokens.filter((token: any) => token.type === 'workspace')
+  );
+
+  console.log(titles, desc, tagTokens, workspaceTok, workspaceTypeTok);
 
   let title: string;
   if (titles.length >= 1) {
@@ -62,9 +94,17 @@ export const parseBookmarkDetails = (input: string): ParsedBookmarkContent => {
     return prev;
   }, new Set<string>());
 
+  let view = workspaceTypeTok.reduce((acc: Set<string>, cur: any[]) => {
+    cur.filter((v) => !acc.has(v.text)).forEach((v) => acc.add(v.text));
+    return acc;
+  }, new Set<string>());
+
+  console.log(view);
+
   return {
     title,
     description,
     tags: [...tags],
+    workspace_views: [...view],
   };
 };
