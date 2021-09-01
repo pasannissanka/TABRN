@@ -1,0 +1,66 @@
+query entriesPagination($viewId: MongoID!, $workspaceId: MongoID!) {
+  entriesPagination(filter: { viewId: $viewId, workspaceId: $workspaceId }) {
+    items {
+      ...entryData
+    }
+  }
+}
+
+fragment entryData on EntryInterface {
+  _id
+  kind
+  workspaceId
+  title
+  description
+  slug
+  tags
+  isDeleted
+  updatedAt
+  createdAt
+}
+
+query bookmarksPagination($viewId: MongoID!, $workspaceId: MongoID!) {
+  bookmarksPagination(filter: { viewId: $viewId, workspaceId: $workspaceId }) {
+    items {
+      ...bookmarkEntryData
+    }
+  }
+}
+
+query getBookmarkEntry($id: MongoID!) {
+  getBookmarkEntry(filter: { _id: $id }) {
+    ...bookmarkEntryData
+  }
+}
+
+fragment entryData on EntryInterface {
+  _id
+  kind
+  workspaceId
+  title
+  description
+  slug
+  tags
+  isDeleted
+  updatedAt
+  createdAt
+}
+
+fragment bookmarkEntryData on Bookmark {
+  _id
+  kind
+  workspaceId
+  title
+  description
+  slug
+  tags
+  isDeleted
+  updatedAt
+  createdAt
+  linkData {
+    title
+    hostname
+    faviconUrl
+  }
+  url
+}

@@ -71,14 +71,25 @@ async function createNewBookmark(payload) {
   const cookieOk = await getCookieConsent();
   const userId = await getUserId();
   if (cookieOk && userId.id !== undefined) {
-    const request = await fetch('http://localhost:4001/bookmark/create', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const request = await fetch(
+      'http://localhost:4001/extension/new_bookmark',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          url: payload.url,
+          workspaceId: payload.workspaceId,
+          content: payload.content,
+          linkData: {
+            title: payload.linkData.title,
+            faviconUrl: payload.linkData.faviconUrl,
+          },
+        }),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     return request.json();
   } else {
     return Promise.reject(new Error('Unauthorized'));

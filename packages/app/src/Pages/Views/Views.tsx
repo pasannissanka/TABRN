@@ -10,9 +10,11 @@ import { ListView } from './ListView/ListView';
 import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
 
 export const Views = () => {
-  const { view_slug, work_slug } =
-    useParams<{ work_slug: string; view_slug: string }>();
   const { workspaceData } = useContext(AppContext);
+  const { view_slug, work_slug } = useParams<{
+    work_slug: string;
+    view_slug: string;
+  }>();
 
   const [result] = useGetViewQuery({
     requestPolicy: 'cache-first',
@@ -55,7 +57,7 @@ export const Views = () => {
             </div>
             <div>
               {viewData?.getView?.kind === EnumDKeyViewKind.ListView ? (
-                <ListView></ListView>
+                <ListView viewData={viewData?.getView}></ListView>
               ) : (
                 <div></div>
               )}

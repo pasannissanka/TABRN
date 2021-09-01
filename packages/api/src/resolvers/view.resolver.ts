@@ -6,7 +6,7 @@ import { ListViewModel } from '../modules/workspace-view/model/listView.model';
 import { ViewModel } from '../modules/workspace-view/model/view.model';
 import { workspaceTC } from './workspace.resolver';
 
-const ViewDTC = composeWithMongooseDiscriminators(ViewModel, {
+export const ViewDTC = composeWithMongooseDiscriminators(ViewModel, {
   resolvers: {
     pagination: {
       findManyOpts: {

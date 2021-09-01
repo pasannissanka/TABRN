@@ -4,11 +4,36 @@ import { authMiddlewareGql } from '../helpers/auth/authenticate';
 import { BookmarkModel } from '../modules/workspace-entry/model/bookmark.model';
 import { EntryModel } from '../modules/workspace-entry/model/entry.model';
 import { NoteModel } from '../modules/workspace-entry/model/note.model';
+import { ViewDTC } from './view.resolver';
 import { workspaceTC } from './workspace.resolver';
 
-const EntryDTC = composeWithMongooseDiscriminators(EntryModel);
+// Mongoose Resolver options
+const EntryDTC = composeWithMongooseDiscriminators(EntryModel, {
+  resolvers: {
+    pagination: {
+      findManyOpts: {
+        filter: {
+          removeFields: ['userId', 'isDeleted', 'createdAt', 'updatedAt'],
+        },
+      },
+    },
+  },
+});
 const BookmarkTC = EntryDTC.discriminator(BookmarkModel, {
   resolvers: {
+    pagination: {
+      findManyOpts: {
+        filter: {
+          removeFields: [
+            'userId',
+            'isDeleted',
+            'createdAt',
+            'updatedAt',
+            'linkData',
+          ],
+        },
+      },
+    },
     createOne: {
       record: {
         removeFields: [
@@ -32,10 +57,27 @@ const BookmarkTC = EntryDTC.discriminator(BookmarkModel, {
         ],
       },
     },
+    findOne: {
+      filter: {
+        removeFields: [
+          'userId',
+          'isDeleted',
+          'description',
+          'filterProperties',
+        ],
+      },
+    },
   },
 });
 const NoteTC = EntryDTC.discriminator(NoteModel, {
   resolvers: {
+    pagination: {
+      findManyOpts: {
+        filter: {
+          removeFields: ['userId', 'isDeleted', 'createdAt', 'updatedAt'],
+        },
+      },
+    },
     createOne: {
       record: {
         removeFields: [
@@ -50,12 +92,13 @@ const NoteTC = EntryDTC.discriminator(NoteModel, {
     },
     findMany: {
       filter: {
-        removeFields: ['_id', 'userId', 'isDeleted', 'description'],
+        removeFields: ['_id', 'userId', 'isDeleted', 'description', 'linkData'],
       },
     },
   },
 });
 
+// Reationships
 EntryDTC.addRelation('workspace', {
   resolver: () => workspaceTC.mongooseResolvers.findById(),
   prepareArgs: {
@@ -64,6 +107,15 @@ EntryDTC.addRelation('workspace', {
   projection: { workspaceId: 1 },
 });
 
+EntryDTC.addRelation('view', {
+  resolver: () => ViewDTC.getResolver('findById'),
+  prepareArgs: {
+    _id: (source) => source.viewId,
+  },
+  projection: { viewId: 1 },
+});
+
+// Query/ Mutation resolvers
 schemaComposer.Query.addFields({
   entriesPagination: EntryDTC.getResolver('pagination')
     .wrapResolve((next) => (rp) => {
@@ -76,7 +128,40 @@ schemaComposer.Query.addFields({
       return next(rp);
     })
     .withMiddlewares([authMiddlewareGql]),
+  bookmarksPagination: BookmarkTC.getResolver('pagination').wrapResolve(
+    (next) => (rp) => {
+      // forcibly set this arg to logged user id
+      rp.args.filter = {
+        ...rp.args.filter,
+        userId: rp.context.user.id,
+        isDeleted: false,
+      };
+      return next(rp);
+    }
+  ),
   viewBookmarkEntries: BookmarkTC.getResolver('findMany').wrapResolve(
+    (next) => (rp) => {
+      // forcibly set this arg to logged user id
+      rp.args.filter = {
+        ...rp.args.filter,
+        userId: rp.context.user.id,
+        isDeleted: false,
+      };
+      return next(rp);
+    }
+  ),
+  getBookmarkEntry: BookmarkTC.getResolver('findOne').wrapResolve(
+    (next) => (rp) => {
+      // forcibly set this arg to logged user id
+      rp.args.filter = {
+        ...rp.args.filter,
+        userId: rp.context.user.id,
+        isDeleted: false,
+      };
+      return next(rp);
+    }
+  ),
+  notesPagination: NoteTC.getResolver('pagination').wrapResolve(
     (next) => (rp) => {
       // forcibly set this arg to logged user id
       rp.args.filter = {
@@ -98,6 +183,15 @@ schemaComposer.Query.addFields({
       return next(rp);
     }
   ),
+  getNoteEntry: NoteTC.getResolver('findOne').wrapResolve((next) => (rp) => {
+    // forcibly set this arg to logged user id
+    rp.args.filter = {
+      ...rp.args.filter,
+      userId: rp.context.user.id,
+      isDeleted: false,
+    };
+    return next(rp);
+  }),
 });
 
 schemaComposer.Mutation.addFields({

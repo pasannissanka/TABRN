@@ -142,10 +142,12 @@ export default {
       loading: false,
       items: [],
       isError: false,
+      tabData: [],
     };
   },
   mounted() {
     browser.tabs.query({ currentWindow: true, active: true }).then((tab) => {
+      this.tabData = tab;
       this.text_content += `# ${tab[0].title}\n\n`;
     });
     this.getBookmarkData()
@@ -165,6 +167,24 @@ export default {
       event.preventDefault();
       console.log(event);
       console.log(this.text_content, this.selectedWorkspace);
+      console.log(this.tabData);
+
+      browser.runtime
+        .sendMessage({
+          message: 'create_new_bookmark',
+          payload: {
+            url: this.tabData[0].url,
+            workspaceId: this.selectedWorkspace,
+            content: this.text_content.toString(),
+            linkData: {
+              title: this.tabData[0].title,
+              faviconUrl: this.tabData[0].favIconUrl,
+            },
+          },
+        })
+        .then((data) => {
+          console.log(data);
+        });
     },
     async getBookmarkData() {
       const data = await browser.runtime.sendMessage({

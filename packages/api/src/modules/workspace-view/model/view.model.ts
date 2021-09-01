@@ -1,5 +1,6 @@
 import { model, Schema, Types } from 'mongoose';
 import mongooseSlug from 'mongoose-slug-updater';
+import { EntryType } from '../../workspace-entry/constants/entry.constants';
 import { View } from '../types/view.type';
 
 const BaseView = new Schema(
@@ -13,6 +14,10 @@ const BaseView = new Schema(
       type: Types.ObjectId,
       ref: 'Workspace',
       required: true,
+    },
+    entryType: {
+      type: String,
+      enum: [EntryType.BOOKMARK, EntryType.NOTE],
     },
     title: {
       type: String,

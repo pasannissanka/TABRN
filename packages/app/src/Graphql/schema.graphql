@@ -14,6 +14,7 @@ type Bookmark implements EntryInterface {
   url: String!
   linkData: BookmarkLinkData
   workspace: Workspace
+  view: ViewInterface
 }
 
 type BookmarkLinkData {
@@ -30,11 +31,24 @@ input BookmarkLinkDataInput {
   _id: MongoID
 }
 
+"""List of items with pagination."""
+type BookmarkPagination {
+  """Total object count."""
+  count: Int
+
+  """Array of objects."""
+  items: [Bookmark!]
+
+  """Information to aid in pagination."""
+  pageInfo: PaginationInfo!
+}
+
 type Calender implements ViewInterface {
   _id: MongoID!
   kind: EnumDKeyViewKind
   userId: MongoID!
   workspaceId: MongoID!
+  entryType: EnumViewEntryType
   title: String!
   description: String
   slug: String
@@ -74,6 +88,7 @@ type CreateOneBookmarkPayload {
 
 input CreateOneCalenderInput {
   workspaceId: MongoID!
+  entryType: EnumViewEntryType
   title: String!
   description: String
   dateFormat: String
@@ -98,6 +113,7 @@ type CreateOneCalenderPayload {
 
 input CreateOneListViewInput {
   workspaceId: MongoID!
+  entryType: EnumViewEntryType
   title: String!
   description: String
   filterProperties: [String]
@@ -177,6 +193,7 @@ type Entry implements EntryInterface {
   updatedAt: Date
   createdAt: Date
   workspace: Workspace
+  view: ViewInterface
 }
 
 interface EntryInterface {
@@ -193,6 +210,7 @@ interface EntryInterface {
   updatedAt: Date
   createdAt: Date
   workspace: Workspace
+  view: ViewInterface
 }
 
 """List of items with pagination."""
@@ -215,6 +233,11 @@ enum EnumDKeyEntryKind {
 enum EnumDKeyViewKind {
   Calender
   ListView
+}
+
+enum EnumViewEntryType {
+  Bookmark
+  Note
 }
 
 interface ErrorInterface {
@@ -245,6 +268,7 @@ input FilterFindManyBookmarkLinkDataInput {
 
 input FilterFindManyCalenderInput {
   workspaceId: MongoID
+  entryType: EnumViewEntryType
   title: String
   slug: String
   updatedAt: Date
@@ -296,6 +320,7 @@ input FilterFindManyEntry_idOperatorsInput {
 
 input FilterFindManyListViewInput {
   workspaceId: MongoID
+  entryType: EnumViewEntryType
   title: String
   slug: String
   updatedAt: Date
@@ -320,6 +345,7 @@ input FilterFindManyNoteInput {
 input FilterFindManyViewInput {
   userId: MongoID
   workspaceId: MongoID
+  entryType: EnumViewEntryType
   title: String
   description: String
   slug: String
@@ -405,9 +431,35 @@ input FilterFindManyWorkspace_idOperatorsInput {
   exists: Boolean
 }
 
+input FilterFindOneBookmarkInput {
+  _id: MongoID
+  workspaceId: MongoID
+  viewId: MongoID
+  title: String
+  slug: String
+  tags: [MongoID]
+  updatedAt: Date
+  createdAt: Date
+  url: String
+  linkData: FilterFindOneBookmarkLinkDataInput
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindOneEntryOperatorsInput
+  OR: [FilterFindOneEntryInput!]
+  AND: [FilterFindOneEntryInput!]
+}
+
+input FilterFindOneBookmarkLinkDataInput {
+  title: String
+  hostname: String
+  faviconUrl: String
+  _id: MongoID
+}
+
 input FilterFindOneCalenderInput {
   _id: MongoID
   workspaceId: MongoID
+  entryType: EnumViewEntryType
   title: String
   description: String
   slug: String
@@ -423,9 +475,46 @@ input FilterFindOneCalenderInput {
   AND: [FilterFindOneViewInput!]
 }
 
+input FilterFindOneEntryInput {
+  userId: MongoID
+  workspaceId: MongoID
+  viewId: MongoID
+  title: String
+  description: String
+  slug: String
+  tags: [MongoID]
+  isDeleted: Boolean
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+  kind: EnumDKeyEntryKind
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindOneEntryOperatorsInput
+  OR: [FilterFindOneEntryInput!]
+  AND: [FilterFindOneEntryInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindOneEntryOperatorsInput {
+  _id: FilterFindOneEntry_idOperatorsInput
+}
+
+input FilterFindOneEntry_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
 input FilterFindOneListViewInput {
   _id: MongoID
   workspaceId: MongoID
+  entryType: EnumViewEntryType
   title: String
   description: String
   slug: String
@@ -437,8 +526,29 @@ input FilterFindOneListViewInput {
   AND: [FilterFindOneViewInput!]
 }
 
+input FilterFindOneNoteInput {
+  _id: MongoID
+  userId: MongoID
+  workspaceId: MongoID
+  viewId: MongoID
+  title: String
+  description: String
+  slug: String
+  tags: [MongoID]
+  isDeleted: Boolean
+  updatedAt: Date
+  createdAt: Date
+  content: String
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindOneEntryOperatorsInput
+  OR: [FilterFindOneEntryInput!]
+  AND: [FilterFindOneEntryInput!]
+}
+
 input FilterFindOneViewInput {
   workspaceId: MongoID
+  entryType: EnumViewEntryType
   title: String
   description: String
   slug: String
@@ -557,6 +667,7 @@ type ListView implements ViewInterface {
   kind: EnumDKeyViewKind
   userId: MongoID!
   workspaceId: MongoID!
+  entryType: EnumViewEntryType
   title: String!
   description: String
   slug: String
@@ -637,6 +748,19 @@ type Note implements EntryInterface {
   createdAt: Date
   content: String
   workspace: Workspace
+  view: ViewInterface
+}
+
+"""List of items with pagination."""
+type NotePagination {
+  """Total object count."""
+  count: Int
+
+  """Array of objects."""
+  items: [Note!]
+
+  """Information to aid in pagination."""
+  pageInfo: PaginationInfo!
 }
 
 type PaginationInfo {
@@ -721,6 +845,15 @@ type Query {
     filter: FilterFindManyEntryInput
     sort: SortFindManyEntryInput
   ): EntryPagination
+  bookmarksPagination(
+    """Page number for displaying"""
+    page: Int
+    perPage: Int = 20
+
+    """Filter by fields"""
+    filter: FilterFindManyBookmarkInput
+    sort: SortFindManyBookmarkInput
+  ): BookmarkPagination
   viewBookmarkEntries(
     """Filter by fields"""
     filter: FilterFindManyBookmarkInput
@@ -728,6 +861,21 @@ type Query {
     limit: Int = 100
     sort: SortFindManyBookmarkInput
   ): [Bookmark!]!
+  getBookmarkEntry(
+    """Filter by fields"""
+    filter: FilterFindOneBookmarkInput
+    skip: Int
+    sort: SortFindOneBookmarkInput
+  ): Bookmark
+  notesPagination(
+    """Page number for displaying"""
+    page: Int
+    perPage: Int = 20
+
+    """Filter by fields"""
+    filter: FilterFindManyNoteInput
+    sort: SortFindManyNoteInput
+  ): NotePagination
   viewNoteEntries(
     """Filter by fields"""
     filter: FilterFindManyNoteInput
@@ -735,6 +883,12 @@ type Query {
     limit: Int = 100
     sort: SortFindManyNoteInput
   ): [Note!]!
+  getNoteEntry(
+    """Filter by fields"""
+    filter: FilterFindOneNoteInput
+    skip: Int
+    sort: SortFindOneNoteInput
+  ): Note
 }
 
 """
@@ -784,12 +938,22 @@ enum SortFindManyWorkspaceInput {
   SLUG_DESC
 }
 
+enum SortFindOneBookmarkInput {
+  _ID_ASC
+  _ID_DESC
+}
+
 enum SortFindOneCalenderInput {
   _ID_ASC
   _ID_DESC
 }
 
 enum SortFindOneListViewInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+enum SortFindOneNoteInput {
   _ID_ASC
   _ID_DESC
 }
@@ -869,6 +1033,7 @@ type View implements ViewInterface {
   kind: EnumDKeyViewKind
   userId: MongoID!
   workspaceId: MongoID!
+  entryType: EnumViewEntryType
   title: String!
   description: String
   slug: String
@@ -883,6 +1048,7 @@ interface ViewInterface {
   kind: EnumDKeyViewKind
   userId: MongoID!
   workspaceId: MongoID!
+  entryType: EnumViewEntryType
   title: String!
   description: String
   slug: String

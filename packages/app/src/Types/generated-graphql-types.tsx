@@ -38,6 +38,7 @@ export type Bookmark = EntryInterface & {
   url: Scalars['String'];
   linkData?: Maybe<BookmarkLinkData>;
   workspace?: Maybe<Workspace>;
+  view?: Maybe<ViewInterface>;
 };
 
 export type BookmarkLinkData = {
@@ -55,12 +56,24 @@ export type BookmarkLinkDataInput = {
   _id?: Maybe<Scalars['MongoID']>;
 };
 
+/** List of items with pagination. */
+export type BookmarkPagination = {
+  __typename?: 'BookmarkPagination';
+  /** Total object count. */
+  count?: Maybe<Scalars['Int']>;
+  /** Array of objects. */
+  items?: Maybe<Array<Bookmark>>;
+  /** Information to aid in pagination. */
+  pageInfo: PaginationInfo;
+};
+
 export type Calender = ViewInterface & {
   __typename?: 'Calender';
   _id: Scalars['MongoID'];
   kind?: Maybe<EnumDKeyViewKind>;
   userId: Scalars['MongoID'];
   workspaceId: Scalars['MongoID'];
+  entryType?: Maybe<EnumViewEntryType>;
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
@@ -97,6 +110,7 @@ export type CreateOneBookmarkPayload = {
 
 export type CreateOneCalenderInput = {
   workspaceId: Scalars['MongoID'];
+  entryType?: Maybe<EnumViewEntryType>;
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   dateFormat?: Maybe<Scalars['String']>;
@@ -118,6 +132,7 @@ export type CreateOneCalenderPayload = {
 
 export type CreateOneListViewInput = {
   workspaceId: Scalars['MongoID'];
+  entryType?: Maybe<EnumViewEntryType>;
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   filterProperties?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -188,6 +203,7 @@ export type Entry = EntryInterface & {
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
   workspace?: Maybe<Workspace>;
+  view?: Maybe<ViewInterface>;
 };
 
 export type EntryInterface = {
@@ -204,6 +220,7 @@ export type EntryInterface = {
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
   workspace?: Maybe<Workspace>;
+  view?: Maybe<ViewInterface>;
 };
 
 /** List of items with pagination. */
@@ -225,6 +242,11 @@ export enum EnumDKeyEntryKind {
 export enum EnumDKeyViewKind {
   Calender = 'Calender',
   ListView = 'ListView'
+}
+
+export enum EnumViewEntryType {
+  Bookmark = 'Bookmark',
+  Note = 'Note'
 }
 
 export type ErrorInterface = {
@@ -255,6 +277,7 @@ export type FilterFindManyBookmarkLinkDataInput = {
 
 export type FilterFindManyCalenderInput = {
   workspaceId?: Maybe<Scalars['MongoID']>;
+  entryType?: Maybe<EnumViewEntryType>;
   title?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['Date']>;
@@ -305,6 +328,7 @@ export type FilterFindManyEntry_IdOperatorsInput = {
 
 export type FilterFindManyListViewInput = {
   workspaceId?: Maybe<Scalars['MongoID']>;
+  entryType?: Maybe<EnumViewEntryType>;
   title?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['Date']>;
@@ -329,6 +353,7 @@ export type FilterFindManyNoteInput = {
 export type FilterFindManyViewInput = {
   userId?: Maybe<Scalars['MongoID']>;
   workspaceId?: Maybe<Scalars['MongoID']>;
+  entryType?: Maybe<EnumViewEntryType>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
@@ -412,9 +437,34 @@ export type FilterFindManyWorkspace_IdOperatorsInput = {
   exists?: Maybe<Scalars['Boolean']>;
 };
 
+export type FilterFindOneBookmarkInput = {
+  _id?: Maybe<Scalars['MongoID']>;
+  workspaceId?: Maybe<Scalars['MongoID']>;
+  viewId?: Maybe<Scalars['MongoID']>;
+  title?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  updatedAt?: Maybe<Scalars['Date']>;
+  createdAt?: Maybe<Scalars['Date']>;
+  url?: Maybe<Scalars['String']>;
+  linkData?: Maybe<FilterFindOneBookmarkLinkDataInput>;
+  /** List of *indexed* fields that can be filtered via operators. */
+  _operators?: Maybe<FilterFindOneEntryOperatorsInput>;
+  OR?: Maybe<Array<FilterFindOneEntryInput>>;
+  AND?: Maybe<Array<FilterFindOneEntryInput>>;
+};
+
+export type FilterFindOneBookmarkLinkDataInput = {
+  title?: Maybe<Scalars['String']>;
+  hostname?: Maybe<Scalars['String']>;
+  faviconUrl?: Maybe<Scalars['String']>;
+  _id?: Maybe<Scalars['MongoID']>;
+};
+
 export type FilterFindOneCalenderInput = {
   _id?: Maybe<Scalars['MongoID']>;
   workspaceId?: Maybe<Scalars['MongoID']>;
+  entryType?: Maybe<EnumViewEntryType>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
@@ -429,9 +479,45 @@ export type FilterFindOneCalenderInput = {
   AND?: Maybe<Array<FilterFindOneViewInput>>;
 };
 
+export type FilterFindOneEntryInput = {
+  userId?: Maybe<Scalars['MongoID']>;
+  workspaceId?: Maybe<Scalars['MongoID']>;
+  viewId?: Maybe<Scalars['MongoID']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  isDeleted?: Maybe<Scalars['Boolean']>;
+  _id?: Maybe<Scalars['MongoID']>;
+  updatedAt?: Maybe<Scalars['Date']>;
+  createdAt?: Maybe<Scalars['Date']>;
+  kind?: Maybe<EnumDKeyEntryKind>;
+  /** List of *indexed* fields that can be filtered via operators. */
+  _operators?: Maybe<FilterFindOneEntryOperatorsInput>;
+  OR?: Maybe<Array<FilterFindOneEntryInput>>;
+  AND?: Maybe<Array<FilterFindOneEntryInput>>;
+};
+
+/** For performance reason this type contains only *indexed* fields. */
+export type FilterFindOneEntryOperatorsInput = {
+  _id?: Maybe<FilterFindOneEntry_IdOperatorsInput>;
+};
+
+export type FilterFindOneEntry_IdOperatorsInput = {
+  gt?: Maybe<Scalars['MongoID']>;
+  gte?: Maybe<Scalars['MongoID']>;
+  lt?: Maybe<Scalars['MongoID']>;
+  lte?: Maybe<Scalars['MongoID']>;
+  ne?: Maybe<Scalars['MongoID']>;
+  in?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  nin?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  exists?: Maybe<Scalars['Boolean']>;
+};
+
 export type FilterFindOneListViewInput = {
   _id?: Maybe<Scalars['MongoID']>;
   workspaceId?: Maybe<Scalars['MongoID']>;
+  entryType?: Maybe<EnumViewEntryType>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
@@ -442,8 +528,28 @@ export type FilterFindOneListViewInput = {
   AND?: Maybe<Array<FilterFindOneViewInput>>;
 };
 
+export type FilterFindOneNoteInput = {
+  _id?: Maybe<Scalars['MongoID']>;
+  userId?: Maybe<Scalars['MongoID']>;
+  workspaceId?: Maybe<Scalars['MongoID']>;
+  viewId?: Maybe<Scalars['MongoID']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
+  isDeleted?: Maybe<Scalars['Boolean']>;
+  updatedAt?: Maybe<Scalars['Date']>;
+  createdAt?: Maybe<Scalars['Date']>;
+  content?: Maybe<Scalars['String']>;
+  /** List of *indexed* fields that can be filtered via operators. */
+  _operators?: Maybe<FilterFindOneEntryOperatorsInput>;
+  OR?: Maybe<Array<FilterFindOneEntryInput>>;
+  AND?: Maybe<Array<FilterFindOneEntryInput>>;
+};
+
 export type FilterFindOneViewInput = {
   workspaceId?: Maybe<Scalars['MongoID']>;
+  entryType?: Maybe<EnumViewEntryType>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
@@ -556,6 +662,7 @@ export type ListView = ViewInterface & {
   kind?: Maybe<EnumDKeyViewKind>;
   userId: Scalars['MongoID'];
   workspaceId: Scalars['MongoID'];
+  entryType?: Maybe<EnumViewEntryType>;
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
@@ -647,6 +754,18 @@ export type Note = EntryInterface & {
   createdAt?: Maybe<Scalars['Date']>;
   content?: Maybe<Scalars['String']>;
   workspace?: Maybe<Workspace>;
+  view?: Maybe<ViewInterface>;
+};
+
+/** List of items with pagination. */
+export type NotePagination = {
+  __typename?: 'NotePagination';
+  /** Total object count. */
+  count?: Maybe<Scalars['Int']>;
+  /** Array of objects. */
+  items?: Maybe<Array<Note>>;
+  /** Information to aid in pagination. */
+  pageInfo: PaginationInfo;
 };
 
 export type PaginationInfo = {
@@ -671,8 +790,12 @@ export type Query = {
   getListView?: Maybe<ListView>;
   getCalenderView?: Maybe<Calender>;
   entriesPagination?: Maybe<EntryPagination>;
+  bookmarksPagination?: Maybe<BookmarkPagination>;
   viewBookmarkEntries: Array<Bookmark>;
+  getBookmarkEntry?: Maybe<Bookmark>;
+  notesPagination?: Maybe<NotePagination>;
   viewNoteEntries: Array<Note>;
+  getNoteEntry?: Maybe<Note>;
 };
 
 
@@ -752,6 +875,14 @@ export type QueryEntriesPaginationArgs = {
 };
 
 
+export type QueryBookmarksPaginationArgs = {
+  page?: Maybe<Scalars['Int']>;
+  perPage?: Maybe<Scalars['Int']>;
+  filter?: Maybe<FilterFindManyBookmarkInput>;
+  sort?: Maybe<SortFindManyBookmarkInput>;
+};
+
+
 export type QueryViewBookmarkEntriesArgs = {
   filter?: Maybe<FilterFindManyBookmarkInput>;
   skip?: Maybe<Scalars['Int']>;
@@ -760,11 +891,33 @@ export type QueryViewBookmarkEntriesArgs = {
 };
 
 
+export type QueryGetBookmarkEntryArgs = {
+  filter?: Maybe<FilterFindOneBookmarkInput>;
+  skip?: Maybe<Scalars['Int']>;
+  sort?: Maybe<SortFindOneBookmarkInput>;
+};
+
+
+export type QueryNotesPaginationArgs = {
+  page?: Maybe<Scalars['Int']>;
+  perPage?: Maybe<Scalars['Int']>;
+  filter?: Maybe<FilterFindManyNoteInput>;
+  sort?: Maybe<SortFindManyNoteInput>;
+};
+
+
 export type QueryViewNoteEntriesArgs = {
   filter?: Maybe<FilterFindManyNoteInput>;
   skip?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sort?: Maybe<SortFindManyNoteInput>;
+};
+
+
+export type QueryGetNoteEntryArgs = {
+  filter?: Maybe<FilterFindOneNoteInput>;
+  skip?: Maybe<Scalars['Int']>;
+  sort?: Maybe<SortFindOneNoteInput>;
 };
 
 
@@ -811,12 +964,22 @@ export enum SortFindManyWorkspaceInput {
   SlugDesc = 'SLUG_DESC'
 }
 
+export enum SortFindOneBookmarkInput {
+  IdAsc = '_ID_ASC',
+  IdDesc = '_ID_DESC'
+}
+
 export enum SortFindOneCalenderInput {
   IdAsc = '_ID_ASC',
   IdDesc = '_ID_DESC'
 }
 
 export enum SortFindOneListViewInput {
+  IdAsc = '_ID_ASC',
+  IdDesc = '_ID_DESC'
+}
+
+export enum SortFindOneNoteInput {
   IdAsc = '_ID_ASC',
   IdDesc = '_ID_DESC'
 }
@@ -890,6 +1053,7 @@ export type View = ViewInterface & {
   kind?: Maybe<EnumDKeyViewKind>;
   userId: Scalars['MongoID'];
   workspaceId: Scalars['MongoID'];
+  entryType?: Maybe<EnumViewEntryType>;
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
@@ -904,6 +1068,7 @@ export type ViewInterface = {
   kind?: Maybe<EnumDKeyViewKind>;
   userId: Scalars['MongoID'];
   workspaceId: Scalars['MongoID'];
+  entryType?: Maybe<EnumViewEntryType>;
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
@@ -964,6 +1129,39 @@ export type WorkspacePagination = {
   /** Information to aid in pagination. */
   pageInfo: PaginationInfo;
 };
+
+export type EntriesPaginationQueryVariables = Exact<{
+  viewId: Scalars['MongoID'];
+  workspaceId: Scalars['MongoID'];
+}>;
+
+
+export type EntriesPaginationQuery = { __typename?: 'Query', entriesPagination?: Maybe<{ __typename?: 'EntryPagination', items?: Maybe<Array<Maybe<{ __typename?: 'Bookmark', _id: any, kind?: Maybe<EnumDKeyEntryKind>, workspaceId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, tags?: Maybe<Array<Maybe<any>>>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> } | { __typename?: 'Entry', _id: any, kind?: Maybe<EnumDKeyEntryKind>, workspaceId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, tags?: Maybe<Array<Maybe<any>>>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> } | { __typename?: 'Note', _id: any, kind?: Maybe<EnumDKeyEntryKind>, workspaceId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, tags?: Maybe<Array<Maybe<any>>>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> }>>> }> };
+
+type EntryData_Bookmark_Fragment = { __typename?: 'Bookmark', _id: any, kind?: Maybe<EnumDKeyEntryKind>, workspaceId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, tags?: Maybe<Array<Maybe<any>>>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> };
+
+type EntryData_Entry_Fragment = { __typename?: 'Entry', _id: any, kind?: Maybe<EnumDKeyEntryKind>, workspaceId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, tags?: Maybe<Array<Maybe<any>>>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> };
+
+type EntryData_Note_Fragment = { __typename?: 'Note', _id: any, kind?: Maybe<EnumDKeyEntryKind>, workspaceId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, tags?: Maybe<Array<Maybe<any>>>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> };
+
+export type EntryDataFragment = EntryData_Bookmark_Fragment | EntryData_Entry_Fragment | EntryData_Note_Fragment;
+
+export type BookmarksPaginationQueryVariables = Exact<{
+  viewId: Scalars['MongoID'];
+  workspaceId: Scalars['MongoID'];
+}>;
+
+
+export type BookmarksPaginationQuery = { __typename?: 'Query', bookmarksPagination?: Maybe<{ __typename?: 'BookmarkPagination', items?: Maybe<Array<{ __typename?: 'Bookmark', _id: any, kind?: Maybe<EnumDKeyEntryKind>, workspaceId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, tags?: Maybe<Array<Maybe<any>>>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, url: string, linkData?: Maybe<{ __typename?: 'BookmarkLinkData', title?: Maybe<string>, hostname?: Maybe<string>, faviconUrl?: Maybe<string> }> }>> }> };
+
+export type GetBookmarkEntryQueryVariables = Exact<{
+  id: Scalars['MongoID'];
+}>;
+
+
+export type GetBookmarkEntryQuery = { __typename?: 'Query', getBookmarkEntry?: Maybe<{ __typename?: 'Bookmark', _id: any, kind?: Maybe<EnumDKeyEntryKind>, workspaceId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, tags?: Maybe<Array<Maybe<any>>>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, url: string, linkData?: Maybe<{ __typename?: 'BookmarkLinkData', title?: Maybe<string>, hostname?: Maybe<string>, faviconUrl?: Maybe<string> }> }> };
+
+export type BookmarkEntryDataFragment = { __typename?: 'Bookmark', _id: any, kind?: Maybe<EnumDKeyEntryKind>, workspaceId: any, title: string, description?: Maybe<string>, slug?: Maybe<string>, tags?: Maybe<Array<Maybe<any>>>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, url: string, linkData?: Maybe<{ __typename?: 'BookmarkLinkData', title?: Maybe<string>, hostname?: Maybe<string>, faviconUrl?: Maybe<string> }> };
 
 export type ViewsPaginationQueryVariables = Exact<{
   workspaceId: Scalars['MongoID'];
@@ -1029,6 +1227,40 @@ export type WorkspaceDataFragment = { __typename?: 'Workspace', userId: any, tit
 
 export type EmojiDataFragment = { __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string>, activeSkinTone?: Maybe<string>, originalUnified?: Maybe<string> };
 
+export const EntryDataFragmentDoc = gql`
+    fragment entryData on EntryInterface {
+  _id
+  kind
+  workspaceId
+  title
+  description
+  slug
+  tags
+  isDeleted
+  updatedAt
+  createdAt
+}
+    `;
+export const BookmarkEntryDataFragmentDoc = gql`
+    fragment bookmarkEntryData on Bookmark {
+  _id
+  kind
+  workspaceId
+  title
+  description
+  slug
+  tags
+  isDeleted
+  updatedAt
+  createdAt
+  linkData {
+    title
+    hostname
+    faviconUrl
+  }
+  url
+}
+    `;
 export const ViewsDataFragmentDoc = gql`
     fragment viewsData on ViewInterface {
   _id
@@ -1067,6 +1299,43 @@ export const WorkspaceDataFragmentDoc = gql`
   createdAt
 }
     ${EmojiDataFragmentDoc}`;
+export const EntriesPaginationDocument = gql`
+    query entriesPagination($viewId: MongoID!, $workspaceId: MongoID!) {
+  entriesPagination(filter: {viewId: $viewId, workspaceId: $workspaceId}) {
+    items {
+      ...entryData
+    }
+  }
+}
+    ${EntryDataFragmentDoc}`;
+
+export function useEntriesPaginationQuery(options: Omit<Urql.UseQueryArgs<EntriesPaginationQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<EntriesPaginationQuery>({ query: EntriesPaginationDocument, ...options });
+};
+export const BookmarksPaginationDocument = gql`
+    query bookmarksPagination($viewId: MongoID!, $workspaceId: MongoID!) {
+  bookmarksPagination(filter: {viewId: $viewId, workspaceId: $workspaceId}) {
+    items {
+      ...bookmarkEntryData
+    }
+  }
+}
+    ${BookmarkEntryDataFragmentDoc}`;
+
+export function useBookmarksPaginationQuery(options: Omit<Urql.UseQueryArgs<BookmarksPaginationQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<BookmarksPaginationQuery>({ query: BookmarksPaginationDocument, ...options });
+};
+export const GetBookmarkEntryDocument = gql`
+    query getBookmarkEntry($id: MongoID!) {
+  getBookmarkEntry(filter: {_id: $id}) {
+    ...bookmarkEntryData
+  }
+}
+    ${BookmarkEntryDataFragmentDoc}`;
+
+export function useGetBookmarkEntryQuery(options: Omit<Urql.UseQueryArgs<GetBookmarkEntryQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetBookmarkEntryQuery>({ query: GetBookmarkEntryDocument, ...options });
+};
 export const ViewsPaginationDocument = gql`
     query ViewsPagination($workspaceId: MongoID!) {
   viewsPagination(filter: {workspaceId: $workspaceId}) {
