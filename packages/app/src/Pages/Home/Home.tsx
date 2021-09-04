@@ -38,11 +38,8 @@ export const Home = () => {
                 <Route exact path="/workspace">
                   <WorkspaceDashboard />
                 </Route>
-                <Route exact path="/w/:work_slug">
+                <Route path="/w/:work_slug">
                   <WorkspaceItem />
-                </Route>
-                <Route exact path="/w/:work_slug/:view_slug">
-                  <Views />
                 </Route>
                 <Route path="*">
                   <div>Not Found</div>

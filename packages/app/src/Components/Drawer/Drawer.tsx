@@ -24,7 +24,7 @@ export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
     variables: {
       workspaceId: workspaceData?.workspaceData?._id,
     },
-    requestPolicy: 'cache-only',
+    requestPolicy: 'cache-first',
     pause: !workspaceData?.workspaceSlug && !workspaceData?.workspaceData?._id,
   });
   const dataViews = resultViews.data;

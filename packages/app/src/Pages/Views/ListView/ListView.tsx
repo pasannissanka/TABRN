@@ -80,7 +80,6 @@ export const BookmarkListItem = ({
   });
   const { data, fetching } = result;
 
-  console.log(data);
   return (
     <>
       <NavigationCard

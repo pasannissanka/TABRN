@@ -1,17 +1,24 @@
-import React, { useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import Button from '../../Components/Button/Button';
+import React, { useContext, useEffect } from 'react';
+import { useParams, useRouteMatch } from 'react-router-dom';
 import { AppContext } from '../../Context/AppContextProvider';
+import { BreadcrumbsContext } from '../../Context/BreadcrumbsContextProvider';
 import {
   EnumDKeyViewKind,
   useGetViewQuery,
 } from '../../Types/generated-graphql-types';
 import { ListView } from './ListView/ListView';
-import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
 
-export const Views = () => {
+type ViewsProps = {
+  level: number;
+};
+
+export const Views = ({ level }: ViewsProps) => {
+  const { path } = useRouteMatch();
+
   const { workspaceData } = useContext(AppContext);
-  const { view_slug, work_slug } = useParams<{
+  const { navData, setNavData } = useContext(BreadcrumbsContext);
+
+  const { view_slug } = useParams<{
     work_slug: string;
     view_slug: string;
   }>();
@@ -27,43 +34,32 @@ export const Views = () => {
 
   const viewData = result.data;
 
+  useEffect(() => {
+    if (viewData) {
+      setNavData([
+        ...[navData[0]],
+        {
+          level: 1,
+          title: viewData.getView?.title!,
+          description: viewData.getView?.description as string,
+          path: path,
+        },
+      ]);
+    }
+    return () => {
+      setNavData([...[navData[0]]]);
+    };
+  }, [viewData]);
+
   return (
     <>
-      <div className="container mx-auto">
-        <div className="grid gap-7 grid-cols-3 mt-3">
-          <div className="col-span-3 lg:col-span-2">
-            <div>
-              <div className="flex justify-between">
-                <h2 className="text-2xl font-semibold">
-                  {workspaceData?.workspaceData?.emoji?.emoji}{' '}
-                  <span className="text-gray-500 font-medium">
-                    {workspaceData?.workspaceData?.title}/
-                  </span>{' '}
-                  {viewData?.getView?.title}
-                </h2>
-              </div>
-              <h4 className="line-clamp-2 my-4 text-base">
-                {viewData?.getView?.description}
-              </h4>
-              <div className="flex gap-1 justify-end">
-                <Button varient="flat" size="sm">
-                  Filter
-                </Button>
-                <Button varient="flat" size="sm">
-                  <PlusSMSVG className="flex-1 mr-1 w-5 h-5" /> New
-                </Button>
-              </div>
-              <div className="mt-1 border"></div>
-            </div>
-            <div>
-              {viewData?.getView?.kind === EnumDKeyViewKind.ListView ? (
-                <ListView viewData={viewData?.getView}></ListView>
-              ) : (
-                <div></div>
-              )}
-            </div>
-          </div>
-          <div className="hidden col-span-1 lg:block">Side Summary</div>
+      <div className="mx-auto">
+        <div>
+          {viewData?.getView?.kind === EnumDKeyViewKind.ListView ? (
+            <ListView viewData={viewData?.getView}></ListView>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </>

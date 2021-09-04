@@ -1,3 +1,4 @@
+import React from 'react';
 import { Workspace, WorkspaceDataFragment } from './generated-graphql-types';
 
 export interface AuthContextState {
@@ -11,6 +12,19 @@ export interface AppContextState {
   setWorkspaceData: React.Dispatch<
     React.SetStateAction<WorkspaceState | undefined>
   >;
+}
+
+export interface BreadcrumbsContextState {
+  navData: NavDataBC[];
+  setNavData: React.Dispatch<React.SetStateAction<NavDataBC[]>>;
+}
+
+export interface NavDataBC {
+  level: number;
+  title: string;
+  path: string;
+  icon?: string;
+  description: string;
 }
 
 export interface WorkspaceState {
