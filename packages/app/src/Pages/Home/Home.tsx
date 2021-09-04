@@ -4,9 +4,8 @@ import { AppBar } from '../../Components/AppBar/AppBar';
 import { Drawer } from '../../Components/Drawer/Drawer';
 import { AppContext } from '../../Context/AppContextProvider';
 import { AppContextState, WorkspaceState } from '../../Types/types';
-import { Views } from '../Views/Views';
-import { WorkspaceDashboard } from '../Workspace/Dashboard/WorkspaceDashboard';
-import { WorkspaceItem } from '../Workspace/Workspace';
+import { WorkspaceDashboard } from '../Workspace/Dashboard/WorkspacesDashboard';
+import { WorkspaceItem } from '../Workspace/WorkspaceIndex';
 
 export const Home = () => {
   const [isDrawerOpen, setDrawerOpenState] = useState(false);

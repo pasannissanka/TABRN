@@ -42,7 +42,9 @@ export const Views = ({ level }: ViewsProps) => {
           level: 1,
           title: viewData.getView?.title!,
           description: viewData.getView?.description as string,
-          path: path,
+          path: path
+            .replace(':work_slug', workspaceData?.workspaceSlug as string)
+            .replace(':view_slug', view_slug),
         },
       ]);
     }
@@ -53,14 +55,15 @@ export const Views = ({ level }: ViewsProps) => {
 
   return (
     <>
-      <div className="mx-auto">
-        <div>
+      <div className="grid gap-7 grid-cols-3 mt-3">
+        <div className="col-span-3 lg:col-span-2">
           {viewData?.getView?.kind === EnumDKeyViewKind.ListView ? (
             <ListView viewData={viewData?.getView}></ListView>
           ) : (
             <div></div>
           )}
         </div>
+        <div className="hidden col-span-1 lg:block">Side Summary</div>
       </div>
     </>
   );
