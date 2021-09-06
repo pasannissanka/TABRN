@@ -1,5 +1,9 @@
 import React from 'react';
-import { Workspace, WorkspaceDataFragment } from './generated-graphql-types';
+import {
+  EnumDKeyViewKind,
+  Workspace,
+  WorkspaceDataFragment,
+} from './generated-graphql-types';
 
 export interface AuthContextState {
   user: IUser | undefined;
@@ -19,12 +23,20 @@ export interface BreadcrumbsContextState {
   setNavData: React.Dispatch<React.SetStateAction<NavDataBC[]>>;
 }
 
+export interface Action {
+  title: string;
+  type: 'CREATE' | 'UPDATE' | 'DELETE';
+  icon?: string | React.ReactNode;
+  action: (event?: any, data?: any) => void;
+}
+
 export interface NavDataBC {
   level: number;
   title: string;
   path: string;
   icon?: string;
   description: string;
+  actions?: Action[];
 }
 
 export interface WorkspaceState {
@@ -101,3 +113,9 @@ export interface BookmarkBase {
 }
 
 export interface Bookmark extends BookmarkBase, IMongoDocument {}
+
+export interface WorkspaceViewBase {
+  title: string;
+  description: string;
+  kind: EnumDKeyViewKind | '';
+}

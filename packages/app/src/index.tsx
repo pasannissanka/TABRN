@@ -17,6 +17,7 @@ const client = new Client({
       keys: {
         PaginationInfo: () => null,
         WorkspaceEmoji: () => null,
+        ViewPagination: () => null,
       },
     }),
     fetchExchange,

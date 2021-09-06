@@ -35,12 +35,22 @@ export const Breadcrumbs = (props: BreadcrumbsType) => {
         {navData[navData.length - 1]?.description}
       </h4>
       <div className="flex gap-1 justify-end">
-        <Button varient="flat" size="sm">
-          Filter
-        </Button>
-        <Button varient="flat" size="sm">
-          <PlusSMSVG className="flex-1 mr-1 w-5 h-5" /> New
-        </Button>
+        {navData[navData.length - 1]?.actions?.map((action, idx) => {
+          return (
+            <Button
+              varient="flat"
+              size="sm"
+              onClick={(e) => action.action(e, navData[navData.length - 1])}
+            >
+              {action.type === 'CREATE' ? (
+                <PlusSMSVG className="flex-1 mr-1 w-5 h-5" />
+              ) : (
+                <PlusSMSVG className="flex-1 mr-1 w-5 h-5" />
+              )}{' '}
+              {action.title}
+            </Button>
+          );
+        })}
       </div>
       <div className="mt-1 border"></div>
     </div>

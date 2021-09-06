@@ -254,6 +254,18 @@ export type ErrorInterface = {
   message?: Maybe<Scalars['String']>;
 };
 
+export type FilterCountViewInput = {
+  workspaceId?: Maybe<Scalars['MongoID']>;
+  entryType?: Maybe<EnumViewEntryType>;
+  title?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  kind?: Maybe<EnumDKeyViewKind>;
+  OR?: Maybe<Array<FilterCountViewInput>>;
+  AND?: Maybe<Array<FilterCountViewInput>>;
+  /** Search title by Regexp */
+  titleRegExp?: Maybe<Scalars['String']>;
+};
+
 export type FilterFindManyBookmarkInput = {
   workspaceId?: Maybe<Scalars['MongoID']>;
   viewId?: Maybe<Scalars['MongoID']>;
@@ -784,6 +796,7 @@ export type Query = {
   workspaceMany: Array<Workspace>;
   workspaceOne?: Maybe<Workspace>;
   viewsPagination?: Maybe<ViewPagination>;
+  viewsCount?: Maybe<Scalars['Int']>;
   viewListViews: Array<ListView>;
   viewCalenderViews: Array<Calender>;
   getView?: Maybe<ViewInterface>;
@@ -827,6 +840,11 @@ export type QueryViewsPaginationArgs = {
   perPage?: Maybe<Scalars['Int']>;
   filter?: Maybe<FilterFindManyViewInput>;
   sort?: Maybe<SortFindManyViewInput>;
+};
+
+
+export type QueryViewsCountArgs = {
+  filter?: Maybe<FilterCountViewInput>;
 };
 
 
@@ -1178,6 +1196,24 @@ export type GetViewQueryVariables = Exact<{
 
 export type GetViewQuery = { __typename?: 'Query', getView?: Maybe<{ __typename?: 'Calender', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> } | { __typename?: 'ListView', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> } | { __typename?: 'View', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> }> };
 
+export type GetViewsCountQueryVariables = Exact<{
+  titleRegex: Scalars['String'];
+  workspaceId?: Maybe<Scalars['MongoID']>;
+  kind?: Maybe<EnumDKeyViewKind>;
+}>;
+
+
+export type GetViewsCountQuery = { __typename?: 'Query', viewsCount?: Maybe<number> };
+
+export type CreateNewListViewMutationVariables = Exact<{
+  workspaceId: Scalars['MongoID'];
+  title: Scalars['String'];
+  description: Scalars['String'];
+}>;
+
+
+export type CreateNewListViewMutation = { __typename?: 'Mutation', createListView?: Maybe<{ __typename?: 'CreateOneListViewPayload', record?: Maybe<{ __typename?: 'ListView', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> }> }> };
+
 type ViewsData_Calender_Fragment = { __typename?: 'Calender', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> };
 
 type ViewsData_ListView_Fragment = { __typename?: 'ListView', _id: any, workspaceId: any, userId: any, kind?: Maybe<EnumDKeyViewKind>, title: string, slug?: Maybe<string>, description?: Maybe<string>, isDeleted: boolean, updatedAt?: Maybe<any>, createdAt?: Maybe<any> };
@@ -1360,6 +1396,32 @@ export const GetViewDocument = gql`
 
 export function useGetViewQuery(options: Omit<Urql.UseQueryArgs<GetViewQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GetViewQuery>({ query: GetViewDocument, ...options });
+};
+export const GetViewsCountDocument = gql`
+    query GetViewsCount($titleRegex: String!, $workspaceId: MongoID, $kind: EnumDKeyViewKind) {
+  viewsCount(
+    filter: {titleRegExp: $titleRegex, kind: $kind, workspaceId: $workspaceId}
+  )
+}
+    `;
+
+export function useGetViewsCountQuery(options: Omit<Urql.UseQueryArgs<GetViewsCountQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetViewsCountQuery>({ query: GetViewsCountDocument, ...options });
+};
+export const CreateNewListViewDocument = gql`
+    mutation CreateNewListView($workspaceId: MongoID!, $title: String!, $description: String!) {
+  createListView(
+    record: {workspaceId: $workspaceId, title: $title, description: $description}
+  ) {
+    record {
+      ...viewsData
+    }
+  }
+}
+    ${ViewsDataFragmentDoc}`;
+
+export function useCreateNewListViewMutation() {
+  return Urql.useMutation<CreateNewListViewMutation, CreateNewListViewMutationVariables>(CreateNewListViewDocument);
 };
 export const WorkspacesPaginationDocument = gql`
     query WorkspacesPagination($perPage: Int, $page: Int) {

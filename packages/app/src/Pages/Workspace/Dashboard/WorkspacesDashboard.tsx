@@ -26,9 +26,9 @@ export const WorkspaceDashboard = (props: WorkspaceProps) => {
 
   const { data, fetching } = result;
 
-  const [_, addNewWorkspace] = useNewWorkspaceMutation();
-  const [__, editWorkspace] = useUpdateWorkspaceMutation();
-  const [___, deleteWorkspace] = useDeleteWorkspaceMutation();
+  const addNewWorkspace = useNewWorkspaceMutation()[1];
+  const editWorkspace = useUpdateWorkspaceMutation()[1];
+  const deleteWorkspace = useDeleteWorkspaceMutation()[1];
 
   const [deleteConfModal, setdeleteConfModal] = useState<{
     _id: string;

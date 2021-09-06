@@ -1,7 +1,16 @@
 import React from 'react';
 
 export type ButtonProps = {
-  varient: string;
+  varient?:
+    | ''
+    | 'primary'
+    | 'secondary'
+    | 'warn'
+    | 'outline'
+    | 'outline-primary'
+    | 'outline-secondary'
+    | 'outline-warn'
+    | 'flat';
   size?: 'sm' | 'md';
   children?: React.ReactNode;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
@@ -14,7 +23,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
         className={`${sizeStyle} inline-flex h-full justify-center text-sm font-medium rounded-md focus:ring-1 focus:ring-primary-200 transition-colors duration-300
-          btn-${varient}
+          btn-${varient} ${props.className}
         `}
       >
         {children}

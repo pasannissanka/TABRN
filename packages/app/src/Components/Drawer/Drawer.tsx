@@ -20,11 +20,12 @@ export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
     requestPolicy: 'cache-and-network',
   });
   const { data, fetching } = result;
+
   const [resultViews] = useViewsPaginationQuery({
     variables: {
       workspaceId: workspaceData?.workspaceData?._id,
     },
-    requestPolicy: 'cache-first',
+    requestPolicy: 'network-only',
     pause: !workspaceData?.workspaceSlug && !workspaceData?.workspaceData?._id,
   });
   const dataViews = resultViews.data;

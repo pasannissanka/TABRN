@@ -13,6 +13,34 @@ query GetView($workspaceId: MongoID!, $viewSlug: String!) {
   }
 }
 
+query GetViewsCount(
+  $titleRegex: String!
+  $workspaceId: MongoID
+  $kind: EnumDKeyViewKind
+) {
+  viewsCount(
+    filter: { titleRegExp: $titleRegex, kind: $kind, workspaceId: $workspaceId }
+  )
+}
+
+mutation CreateNewListView(
+  $workspaceId: MongoID!
+  $title: String!
+  $description: String!
+) {
+  createListView(
+    record: {
+      workspaceId: $workspaceId
+      title: $title
+      description: $description
+    }
+  ) {
+    record {
+      ...viewsData
+    }
+  }
+}
+
 fragment viewsData on ViewInterface {
   _id
   workspaceId

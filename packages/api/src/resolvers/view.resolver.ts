@@ -20,6 +20,18 @@ export const ViewDTC = composeWithMongooseDiscriminators(ViewModel, {
         removeFields: ['userId', 'isDeleted', 'createdAt', 'updatedAt'],
       },
     },
+    count: {
+      filter: {
+        removeFields: [
+          '_id',
+          'userId',
+          'isDeleted',
+          'description',
+          'createdAt',
+          'updatedAt',
+        ],
+      },
+    },
   },
 });
 const ListViewTC = ViewDTC.discriminator(ListViewModel, {
@@ -91,6 +103,25 @@ ViewDTC.addRelation('workspace', {
 
 schemaComposer.Query.addFields({
   viewsPagination: ViewDTC.getResolver('pagination')
+    .wrapResolve((next) => (rp) => {
+      // forcibly set this arg to logged user id
+      rp.args.filter = {
+        ...rp.args.filter,
+        userId: rp.context.user.id,
+        isDeleted: false,
+      };
+      return next(rp);
+    })
+    .withMiddlewares([authMiddlewareGql]),
+  viewsCount: ViewDTC.getResolver('count')
+    .addFilterArg({
+      name: 'titleRegExp',
+      type: 'String',
+      description: 'Search title by Regexp',
+      query: (query, value) => {
+        query.title = new RegExp(value, 'i');
+      },
+    })
     .wrapResolve((next) => (rp) => {
       // forcibly set this arg to logged user id
       rp.args.filter = {

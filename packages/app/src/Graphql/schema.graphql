@@ -245,6 +245,19 @@ interface ErrorInterface {
   message: String
 }
 
+input FilterCountViewInput {
+  workspaceId: MongoID
+  entryType: EnumViewEntryType
+  title: String
+  slug: String
+  kind: EnumDKeyViewKind
+  OR: [FilterCountViewInput!]
+  AND: [FilterCountViewInput!]
+
+  """Search title by Regexp"""
+  titleRegExp: String
+}
+
 input FilterFindManyBookmarkInput {
   workspaceId: MongoID
   viewId: MongoID
@@ -804,6 +817,10 @@ type Query {
     filter: FilterFindManyViewInput
     sort: SortFindManyViewInput
   ): ViewPagination
+  viewsCount(
+    """Filter by fields"""
+    filter: FilterCountViewInput
+  ): Int
   viewListViews(
     """Filter by fields"""
     filter: FilterFindManyListViewInput
