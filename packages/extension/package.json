@@ -1,7 +1,7 @@
 {
   "name": "@tabrn/extension",
   "version": "0.0.1",
-  "description": "tabrn Extension",
+  "description": "DEPRECATED - USE TABRN-EXTENSION",
   "author": "Pasan Nissanka",
   "license": "MIT",
   "private": true,
