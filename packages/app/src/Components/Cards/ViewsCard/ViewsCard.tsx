@@ -1,11 +1,10 @@
 import React from 'react';
-import { ViewInterface } from '../../../Types/generated-graphql-types';
-import Button from '../../Button/Button';
 import { ReactComponent as PlusSMSVG } from '../../../svg/plus-sm.svg';
+import Button from '../../Button/Button';
 
 type ViewsCardProps = {
   viewType: string;
-  viewData: ViewInterface;
+  viewData: any;
   children: React.ReactNode;
 };
 

@@ -1,5 +1,5 @@
 query WorkspacesPagination($perPage: Int, $page: Int) {
-  workspacePagination(perPage: $perPage, page: $page) {
+  workspacePaginate(perPage: $perPage, page: $page) {
     count
     pageInfo {
       currentPage
@@ -22,7 +22,7 @@ query getWorkspace($slug: String!) {
 }
 
 mutation NewWorkspace($record: CreateOneWorkspaceInput!) {
-  workspaceNew(record: $record) {
+  workspaceCreateOne(record: $record) {
     recordId
     record {
       ...WorkspaceData
@@ -30,17 +30,17 @@ mutation NewWorkspace($record: CreateOneWorkspaceInput!) {
   }
 }
 
-mutation DeleteWorkspace($id: MongoID!) {
-  workspaceDeleteOne(_id: $id) {
-    ...WorkspaceData
-  }
-}
+# mutation DeleteWorkspace($id: MongoID!) {
+#   workspaceDeleteOne(_id: $id) {
+#     ...WorkspaceData
+#   }
+# }
 
 mutation UpdateWorkspace(
   $filter: FilterUpdateOneWorkspaceInput!
   $record: UpdateOneWorkspaceInput!
 ) {
-  workspaceUpdateOne(record: $record, filter: $filter) {
+  workspaceUpdate(record: $record, filter: $filter) {
     recordId
     record {
       ...WorkspaceData
@@ -49,17 +49,22 @@ mutation UpdateWorkspace(
 }
 
 fragment WorkspaceData on Workspace {
+  _id
   userId
-  title
-  description
   slug
+  isDeleted
+  createdAt
+  updatedAt
+  title
   emoji {
     ...EmojiData
   }
-  isDeleted
-  _id
-  updatedAt
-  createdAt
+  description
+  fields {
+    key
+    value
+    kind
+  }
 }
 
 fragment EmojiData on WorkspaceEmoji {

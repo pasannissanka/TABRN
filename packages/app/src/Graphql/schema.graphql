@@ -1,84 +1,102 @@
-type Bookmark implements EntryInterface {
-  _id: MongoID!
-  kind: EnumDKeyEntryKind
+type Collections {
   userId: MongoID!
   workspaceId: MongoID!
-  viewId: MongoID!
-  title: String!
-  description: String
+  type: EnumCollectionsType
   slug: String
-  tags: [MongoID]
   isDeleted: Boolean!
+  title: String!
+  emoji: CollectionsEmoji
+  description: String
+  fields: [CollectionsFields]
+  _id: MongoID!
   updatedAt: Date
   createdAt: Date
-  url: String!
-  linkData: BookmarkLinkData
-  workspace: Workspace
-  view: ViewInterface
 }
 
-type BookmarkLinkData {
-  title: String
-  hostname: String
-  faviconUrl: String
-  _id: MongoID
+type CollectionsEmoji {
+  activeSkinTone: String
+  emoji: String
+  names: [String]
+  originalUnified: String
+  unified: String
 }
 
-input BookmarkLinkDataInput {
-  title: String
-  hostname: String
-  faviconUrl: String
+input CollectionsEmojiInput {
+  activeSkinTone: String
+  emoji: String
+  names: [String]
+  originalUnified: String
+  unified: String
+}
+
+type CollectionsFields {
+  key: String!
+  value: JSON!
+  kind: EnumCollectionsFieldsKind
   _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
+input CollectionsFieldsInput {
+  key: String!
+  value: JSON!
+  kind: EnumCollectionsFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
 }
 
 """List of items with pagination."""
-type BookmarkPagination {
+type CollectionsPagination {
   """Total object count."""
   count: Int
 
   """Array of objects."""
-  items: [Bookmark!]
+  items: [Collections!]
 
   """Information to aid in pagination."""
   pageInfo: PaginationInfo!
 }
 
-type Calender implements ViewInterface {
-  _id: MongoID!
-  kind: EnumDKeyViewKind
-  userId: MongoID!
+input CreateOneCollectionsInput {
   workspaceId: MongoID!
-  entryType: EnumViewEntryType
+  type: EnumCollectionsType
   title: String!
+  emoji: CollectionsEmojiInput
   description: String
-  slug: String
-  isDeleted: Boolean!
-  updatedAt: Date
-  createdAt: Date
-  dateFormat: String
-  timeFormat: String
-  primaryTZ: String
-  secondaryTZ: String
-  weekStart: String
-  workspace: Workspace
+  fields: [CollectionsFieldsInput]
 }
 
-input CreateOneBookmarkInput {
+type CreateOneCollectionsPayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Created document"""
+  record: Collections
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+input CreateOneEntriesInput {
   workspaceId: MongoID!
-  viewId: MongoID!
+  collectionId: MongoID!
   title: String!
+  emoji: EntriesEmojiInput
   description: String
   tags: [MongoID]
-  url: String!
-  linkData: BookmarkLinkDataInput
+  fields: [EntriesFieldsInput]
 }
 
-type CreateOneBookmarkPayload {
+type CreateOneEntriesPayload {
   """Document ID"""
   recordId: MongoID
 
   """Created document"""
-  record: Bookmark
+  record: Entries
 
   """
   Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
@@ -86,67 +104,18 @@ type CreateOneBookmarkPayload {
   error: ErrorInterface
 }
 
-input CreateOneCalenderInput {
-  workspaceId: MongoID!
-  entryType: EnumViewEntryType
-  title: String!
-  description: String
-  dateFormat: String
-  timeFormat: String
-  primaryTZ: String
-  secondaryTZ: String
-  weekStart: String
+input CreateOneTagsInput {
+  workspaceId: MongoID
+  collectionId: MongoID
+  title: String
 }
 
-type CreateOneCalenderPayload {
+type CreateOneTagsPayload {
   """Document ID"""
   recordId: MongoID
 
   """Created document"""
-  record: Calender
-
-  """
-  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
-  """
-  error: ErrorInterface
-}
-
-input CreateOneListViewInput {
-  workspaceId: MongoID!
-  entryType: EnumViewEntryType
-  title: String!
-  description: String
-  filterProperties: [String]
-}
-
-type CreateOneListViewPayload {
-  """Document ID"""
-  recordId: MongoID
-
-  """Created document"""
-  record: ListView
-
-  """
-  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
-  """
-  error: ErrorInterface
-}
-
-input CreateOneNoteInput {
-  workspaceId: MongoID!
-  viewId: MongoID!
-  title: String!
-  description: String
-  tags: [MongoID]
-  content: String
-}
-
-type CreateOneNotePayload {
-  """Document ID"""
-  recordId: MongoID
-
-  """Created document"""
-  record: Note
+  record: Tags
 
   """
   Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
@@ -155,13 +124,10 @@ type CreateOneNotePayload {
 }
 
 input CreateOneWorkspaceInput {
+  emoji: WorkspaceEmojiInput
   title: String!
   description: String
-  slug: String
-  emoji: WorkspaceEmojiInput
-  _id: MongoID
-  updatedAt: Date
-  createdAt: Date
+  fields: [WorkspaceFieldsInput]
 }
 
 type CreateOneWorkspacePayload {
@@ -179,218 +145,23 @@ type CreateOneWorkspacePayload {
 
 scalar Date
 
-type Entry implements EntryInterface {
-  _id: MongoID!
-  kind: EnumDKeyEntryKind
+type Entries {
   userId: MongoID!
   workspaceId: MongoID!
-  viewId: MongoID!
-  title: String!
-  description: String
+  collectionId: MongoID!
   slug: String
-  tags: [MongoID]
   isDeleted: Boolean!
-  updatedAt: Date
-  createdAt: Date
-  workspace: Workspace
-  view: ViewInterface
-}
-
-interface EntryInterface {
+  title: String!
+  emoji: EntriesEmoji
+  description: String
+  tags: [MongoID]
+  fields: [EntriesFields]
   _id: MongoID!
-  kind: EnumDKeyEntryKind
-  userId: MongoID!
-  workspaceId: MongoID!
-  viewId: MongoID!
-  title: String!
-  description: String
-  slug: String
-  tags: [MongoID]
-  isDeleted: Boolean!
   updatedAt: Date
   createdAt: Date
-  workspace: Workspace
-  view: ViewInterface
 }
 
-"""List of items with pagination."""
-type EntryPagination {
-  """Total object count."""
-  count: Int
-
-  """Array of objects."""
-  items: [EntryInterface]
-
-  """Information to aid in pagination."""
-  pageInfo: PaginationInfo!
-}
-
-enum EnumDKeyEntryKind {
-  Bookmark
-  Note
-}
-
-enum EnumDKeyViewKind {
-  Calender
-  ListView
-}
-
-enum EnumViewEntryType {
-  Bookmark
-  Note
-}
-
-interface ErrorInterface {
-  """Generic error message"""
-  message: String
-}
-
-input FilterCountViewInput {
-  workspaceId: MongoID
-  entryType: EnumViewEntryType
-  title: String
-  slug: String
-  kind: EnumDKeyViewKind
-  OR: [FilterCountViewInput!]
-  AND: [FilterCountViewInput!]
-
-  """Search title by Regexp"""
-  titleRegExp: String
-}
-
-input FilterFindManyBookmarkInput {
-  workspaceId: MongoID
-  viewId: MongoID
-  title: String
-  slug: String
-  tags: [MongoID]
-  updatedAt: Date
-  createdAt: Date
-  url: String
-  linkData: FilterFindManyBookmarkLinkDataInput
-  OR: [FilterFindManyEntryInput!]
-  AND: [FilterFindManyEntryInput!]
-}
-
-input FilterFindManyBookmarkLinkDataInput {
-  title: String
-  hostname: String
-  faviconUrl: String
-  _id: MongoID
-}
-
-input FilterFindManyCalenderInput {
-  workspaceId: MongoID
-  entryType: EnumViewEntryType
-  title: String
-  slug: String
-  updatedAt: Date
-  createdAt: Date
-  dateFormat: String
-  timeFormat: String
-  primaryTZ: String
-  secondaryTZ: String
-  weekStart: String
-  OR: [FilterFindManyViewInput!]
-  AND: [FilterFindManyViewInput!]
-}
-
-input FilterFindManyEntryInput {
-  userId: MongoID
-  workspaceId: MongoID
-  viewId: MongoID
-  title: String
-  description: String
-  slug: String
-  tags: [MongoID]
-  isDeleted: Boolean
-  _id: MongoID
-  updatedAt: Date
-  createdAt: Date
-  kind: EnumDKeyEntryKind
-
-  """List of *indexed* fields that can be filtered via operators."""
-  _operators: FilterFindManyEntryOperatorsInput
-  OR: [FilterFindManyEntryInput!]
-  AND: [FilterFindManyEntryInput!]
-}
-
-"""For performance reason this type contains only *indexed* fields."""
-input FilterFindManyEntryOperatorsInput {
-  _id: FilterFindManyEntry_idOperatorsInput
-}
-
-input FilterFindManyEntry_idOperatorsInput {
-  gt: MongoID
-  gte: MongoID
-  lt: MongoID
-  lte: MongoID
-  ne: MongoID
-  in: [MongoID]
-  nin: [MongoID]
-  exists: Boolean
-}
-
-input FilterFindManyListViewInput {
-  workspaceId: MongoID
-  entryType: EnumViewEntryType
-  title: String
-  slug: String
-  updatedAt: Date
-  createdAt: Date
-  OR: [FilterFindManyViewInput!]
-  AND: [FilterFindManyViewInput!]
-}
-
-input FilterFindManyNoteInput {
-  workspaceId: MongoID
-  viewId: MongoID
-  title: String
-  slug: String
-  tags: [MongoID]
-  updatedAt: Date
-  createdAt: Date
-  content: String
-  OR: [FilterFindManyEntryInput!]
-  AND: [FilterFindManyEntryInput!]
-}
-
-input FilterFindManyViewInput {
-  userId: MongoID
-  workspaceId: MongoID
-  entryType: EnumViewEntryType
-  title: String
-  description: String
-  slug: String
-  isDeleted: Boolean
-  _id: MongoID
-  updatedAt: Date
-  createdAt: Date
-  kind: EnumDKeyViewKind
-
-  """List of *indexed* fields that can be filtered via operators."""
-  _operators: FilterFindManyViewOperatorsInput
-  OR: [FilterFindManyViewInput!]
-  AND: [FilterFindManyViewInput!]
-}
-
-"""For performance reason this type contains only *indexed* fields."""
-input FilterFindManyViewOperatorsInput {
-  _id: FilterFindManyView_idOperatorsInput
-}
-
-input FilterFindManyView_idOperatorsInput {
-  gt: MongoID
-  gte: MongoID
-  lt: MongoID
-  lte: MongoID
-  ne: MongoID
-  in: [MongoID]
-  nin: [MongoID]
-  exists: Boolean
-}
-
-input FilterFindManyWorkspaceEmojiInput {
+type EntriesEmoji {
   activeSkinTone: String
   emoji: String
   names: [String]
@@ -398,16 +169,341 @@ input FilterFindManyWorkspaceEmojiInput {
   unified: String
 }
 
-input FilterFindManyWorkspaceInput {
-  userId: MongoID
-  title: String
-  description: String
-  slug: String
-  emoji: FilterFindManyWorkspaceEmojiInput
-  isDeleted: Boolean
+input EntriesEmojiInput {
+  activeSkinTone: String
+  emoji: String
+  names: [String]
+  originalUnified: String
+  unified: String
+}
+
+type EntriesFields {
+  key: String!
+  value: JSON!
+  kind: EnumEntriesFieldsKind
   _id: MongoID
   updatedAt: Date
   createdAt: Date
+}
+
+input EntriesFieldsInput {
+  key: String!
+  value: JSON!
+  kind: EnumEntriesFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
+"""List of items with pagination."""
+type EntriesPagination {
+  """Total object count."""
+  count: Int
+
+  """Array of objects."""
+  items: [Entries!]
+
+  """Information to aid in pagination."""
+  pageInfo: PaginationInfo!
+}
+
+enum EnumCollectionsFieldsKind {
+  string
+  date
+  number
+  link
+}
+
+enum EnumCollectionsType {
+  calender
+  kanban
+  list
+}
+
+enum EnumEntriesFieldsKind {
+  string
+  date
+  number
+  link
+}
+
+enum EnumWorkspaceFieldsKind {
+  string
+  date
+  number
+  link
+}
+
+interface ErrorInterface {
+  """Generic error message"""
+  message: String
+}
+
+input FilterCountCollectionsEmojiInput {
+  activeSkinTone: String
+  emoji: String
+  names: [String]
+  originalUnified: String
+  unified: String
+}
+
+input FilterCountCollectionsFieldsInput {
+  key: String
+  value: JSON
+  kind: EnumCollectionsFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
+input FilterCountCollectionsInput {
+  userId: MongoID
+  workspaceId: MongoID
+  type: EnumCollectionsType
+  slug: String
+  isDeleted: Boolean
+  title: String
+  emoji: FilterCountCollectionsEmojiInput
+  description: String
+  fields: [FilterCountCollectionsFieldsInput]
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterCountCollectionsOperatorsInput
+  OR: [FilterCountCollectionsInput!]
+  AND: [FilterCountCollectionsInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterCountCollectionsOperatorsInput {
+  _id: FilterCountCollections_idOperatorsInput
+}
+
+input FilterCountCollections_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+input FilterCountEntriesEmojiInput {
+  activeSkinTone: String
+  emoji: String
+  names: [String]
+  originalUnified: String
+  unified: String
+}
+
+input FilterCountEntriesFieldsInput {
+  key: String
+  value: JSON
+  kind: EnumEntriesFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
+input FilterCountEntriesInput {
+  userId: MongoID
+  workspaceId: MongoID
+  collectionId: MongoID
+  slug: String
+  isDeleted: Boolean
+  title: String
+  emoji: FilterCountEntriesEmojiInput
+  description: String
+  tags: [MongoID]
+  fields: [FilterCountEntriesFieldsInput]
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterCountEntriesOperatorsInput
+  OR: [FilterCountEntriesInput!]
+  AND: [FilterCountEntriesInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterCountEntriesOperatorsInput {
+  _id: FilterCountEntries_idOperatorsInput
+}
+
+input FilterCountEntries_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+input FilterCountTagsInput {
+  userId: MongoID
+  workspaceId: MongoID
+  collectionId: MongoID
+  title: String
+  slug: String
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterCountTagsOperatorsInput
+  OR: [FilterCountTagsInput!]
+  AND: [FilterCountTagsInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterCountTagsOperatorsInput {
+  _id: FilterCountTags_idOperatorsInput
+}
+
+input FilterCountTags_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+input FilterCountWorkspaceEmojiInput {
+  activeSkinTone: String
+  emoji: String
+  names: [String]
+  originalUnified: String
+  unified: String
+}
+
+input FilterCountWorkspaceFieldsInput {
+  key: String
+  value: JSON
+  kind: EnumWorkspaceFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
+input FilterCountWorkspaceInput {
+  userId: MongoID
+  slug: String
+  emoji: FilterCountWorkspaceEmojiInput
+  isDeleted: Boolean
+  title: String
+  description: String
+  fields: [FilterCountWorkspaceFieldsInput]
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterCountWorkspaceOperatorsInput
+  OR: [FilterCountWorkspaceInput!]
+  AND: [FilterCountWorkspaceInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterCountWorkspaceOperatorsInput {
+  slug: FilterCountWorkspaceSlugOperatorsInput
+  _id: FilterCountWorkspace_idOperatorsInput
+}
+
+input FilterCountWorkspaceSlugOperatorsInput {
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ne: String
+  in: [String]
+  nin: [String]
+  regex: RegExpAsString
+  exists: Boolean
+}
+
+input FilterCountWorkspace_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+input FilterFindManyCollectionsFieldsInput {
+  key: String
+  value: JSON
+  kind: EnumCollectionsFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
+input FilterFindManyCollectionsInput {
+  workspaceId: MongoID
+  type: EnumCollectionsType
+  title: String
+  description: String
+  fields: [FilterFindManyCollectionsFieldsInput]
+  OR: [FilterFindManyCollectionsInput!]
+  AND: [FilterFindManyCollectionsInput!]
+}
+
+input FilterFindManyEntriesFieldsInput {
+  key: String
+  value: JSON
+  kind: EnumEntriesFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
+input FilterFindManyEntriesInput {
+  workspaceId: MongoID
+  collectionId: MongoID
+  title: String
+  description: String
+  tags: [MongoID]
+  fields: [FilterFindManyEntriesFieldsInput]
+  OR: [FilterFindManyEntriesInput!]
+  AND: [FilterFindManyEntriesInput!]
+}
+
+input FilterFindManyTagsInput {
+  workspaceId: MongoID
+  collectionId: MongoID
+  title: String
+  OR: [FilterFindManyTagsInput!]
+  AND: [FilterFindManyTagsInput!]
+}
+
+input FilterFindManyWorkspaceFieldsInput {
+  key: String
+  value: JSON
+  kind: EnumWorkspaceFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
+input FilterFindManyWorkspaceInput {
+  slug: String
+  title: String
+  description: String
+  fields: [FilterFindManyWorkspaceFieldsInput]
+  _id: MongoID
 
   """List of *indexed* fields that can be filtered via operators."""
   _operators: FilterFindManyWorkspaceOperatorsInput
@@ -444,155 +540,20 @@ input FilterFindManyWorkspace_idOperatorsInput {
   exists: Boolean
 }
 
-input FilterFindOneBookmarkInput {
-  _id: MongoID
-  workspaceId: MongoID
-  viewId: MongoID
-  title: String
-  slug: String
-  tags: [MongoID]
-  updatedAt: Date
-  createdAt: Date
-  url: String
-  linkData: FilterFindOneBookmarkLinkDataInput
-
-  """List of *indexed* fields that can be filtered via operators."""
-  _operators: FilterFindOneEntryOperatorsInput
-  OR: [FilterFindOneEntryInput!]
-  AND: [FilterFindOneEntryInput!]
-}
-
-input FilterFindOneBookmarkLinkDataInput {
-  title: String
-  hostname: String
-  faviconUrl: String
-  _id: MongoID
-}
-
-input FilterFindOneCalenderInput {
-  _id: MongoID
-  workspaceId: MongoID
-  entryType: EnumViewEntryType
-  title: String
-  description: String
-  slug: String
-  dateFormat: String
-  timeFormat: String
-  primaryTZ: String
-  secondaryTZ: String
-  weekStart: String
-
-  """List of *indexed* fields that can be filtered via operators."""
-  _operators: FilterFindOneViewOperatorsInput
-  OR: [FilterFindOneViewInput!]
-  AND: [FilterFindOneViewInput!]
-}
-
-input FilterFindOneEntryInput {
-  userId: MongoID
-  workspaceId: MongoID
-  viewId: MongoID
-  title: String
-  description: String
-  slug: String
-  tags: [MongoID]
-  isDeleted: Boolean
+input FilterFindOneWorkspaceFieldsInput {
+  key: String
+  value: JSON
+  kind: EnumWorkspaceFieldsKind
   _id: MongoID
   updatedAt: Date
   createdAt: Date
-  kind: EnumDKeyEntryKind
-
-  """List of *indexed* fields that can be filtered via operators."""
-  _operators: FilterFindOneEntryOperatorsInput
-  OR: [FilterFindOneEntryInput!]
-  AND: [FilterFindOneEntryInput!]
-}
-
-"""For performance reason this type contains only *indexed* fields."""
-input FilterFindOneEntryOperatorsInput {
-  _id: FilterFindOneEntry_idOperatorsInput
-}
-
-input FilterFindOneEntry_idOperatorsInput {
-  gt: MongoID
-  gte: MongoID
-  lt: MongoID
-  lte: MongoID
-  ne: MongoID
-  in: [MongoID]
-  nin: [MongoID]
-  exists: Boolean
-}
-
-input FilterFindOneListViewInput {
-  _id: MongoID
-  workspaceId: MongoID
-  entryType: EnumViewEntryType
-  title: String
-  description: String
-  slug: String
-  filterProperties: [String]
-
-  """List of *indexed* fields that can be filtered via operators."""
-  _operators: FilterFindOneViewOperatorsInput
-  OR: [FilterFindOneViewInput!]
-  AND: [FilterFindOneViewInput!]
-}
-
-input FilterFindOneNoteInput {
-  _id: MongoID
-  userId: MongoID
-  workspaceId: MongoID
-  viewId: MongoID
-  title: String
-  description: String
-  slug: String
-  tags: [MongoID]
-  isDeleted: Boolean
-  updatedAt: Date
-  createdAt: Date
-  content: String
-
-  """List of *indexed* fields that can be filtered via operators."""
-  _operators: FilterFindOneEntryOperatorsInput
-  OR: [FilterFindOneEntryInput!]
-  AND: [FilterFindOneEntryInput!]
-}
-
-input FilterFindOneViewInput {
-  workspaceId: MongoID
-  entryType: EnumViewEntryType
-  title: String
-  description: String
-  slug: String
-  _id: MongoID
-  kind: EnumDKeyViewKind
-
-  """List of *indexed* fields that can be filtered via operators."""
-  _operators: FilterFindOneViewOperatorsInput
-  OR: [FilterFindOneViewInput!]
-  AND: [FilterFindOneViewInput!]
-}
-
-"""For performance reason this type contains only *indexed* fields."""
-input FilterFindOneViewOperatorsInput {
-  _id: FilterFindOneView_idOperatorsInput
-}
-
-input FilterFindOneView_idOperatorsInput {
-  gt: MongoID
-  gte: MongoID
-  lt: MongoID
-  lte: MongoID
-  ne: MongoID
-  in: [MongoID]
-  nin: [MongoID]
-  exists: Boolean
 }
 
 input FilterFindOneWorkspaceInput {
-  title: String
   slug: String
+  title: String
+  description: String
+  fields: [FilterFindOneWorkspaceFieldsInput]
   _id: MongoID
 
   """List of *indexed* fields that can be filtered via operators."""
@@ -630,9 +591,20 @@ input FilterFindOneWorkspace_idOperatorsInput {
   exists: Boolean
 }
 
+input FilterUpdateOneWorkspaceFieldsInput {
+  key: String
+  value: JSON
+  kind: EnumWorkspaceFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
 input FilterUpdateOneWorkspaceInput {
-  title: String
   slug: String
+  title: String
+  description: String
+  fields: [FilterUpdateOneWorkspaceFieldsInput]
   _id: MongoID
 
   """List of *indexed* fields that can be filtered via operators."""
@@ -675,22 +647,6 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON
 
-type ListView implements ViewInterface {
-  _id: MongoID!
-  kind: EnumDKeyViewKind
-  userId: MongoID!
-  workspaceId: MongoID!
-  entryType: EnumViewEntryType
-  title: String!
-  description: String
-  slug: String
-  isDeleted: Boolean!
-  updatedAt: Date
-  createdAt: Date
-  filterProperties: [String]
-  workspace: Workspace
-}
-
 type MongoError implements ErrorInterface {
   """MongoDB error message"""
   message: String
@@ -708,12 +664,12 @@ type Mutation {
   """
   Create one document with mongoose defaults, setters, hooks and validation
   """
-  workspaceNew(record: CreateOneWorkspaceInput!): CreateOneWorkspacePayload
+  workspaceCreateOne(record: CreateOneWorkspaceInput!): CreateOneWorkspacePayload
 
   """
   Update one document: 1) Retrieve one document via findOne. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it.
   """
-  workspaceUpdateOne(
+  workspaceUpdate(
     record: UpdateOneWorkspaceInput!
 
     """Filter by fields"""
@@ -722,58 +678,35 @@ type Mutation {
     skip: Int
   ): UpdateOneWorkspacePayload
 
-  """Soft delete a record"""
-  workspaceDeleteOne(_id: MongoID!): Workspace
+  """
+  Create one document with mongoose defaults, setters, hooks and validation
+  """
+  collectionCreateOne(record: CreateOneCollectionsInput!): CreateOneCollectionsPayload
+
+  """
+  Update one document: 1) Retrieve one document by findById. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it.
+  """
+  collectionUpdateById(_id: MongoID!, record: UpdateByIdCollectionsInput!): UpdateByIdCollectionsPayload
 
   """
   Create one document with mongoose defaults, setters, hooks and validation
   """
-  createListView(record: CreateOneListViewInput!): CreateOneListViewPayload
+  EntryCreateOne(record: CreateOneEntriesInput!): CreateOneEntriesPayload
+
+  """
+  Update one document: 1) Retrieve one document by findById. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it.
+  """
+  EntryUpdateById(_id: MongoID!, record: UpdateByIdEntriesInput!): UpdateByIdEntriesPayload
 
   """
   Create one document with mongoose defaults, setters, hooks and validation
   """
-  createCalenderView(record: CreateOneCalenderInput!): CreateOneCalenderPayload
+  TagCreateOne(record: CreateOneTagsInput!): CreateOneTagsPayload
 
   """
-  Create one document with mongoose defaults, setters, hooks and validation
+  Update one document: 1) Retrieve one document by findById. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it.
   """
-  createNote(record: CreateOneNoteInput!): CreateOneNotePayload
-
-  """
-  Create one document with mongoose defaults, setters, hooks and validation
-  """
-  createBookmark(record: CreateOneBookmarkInput!): CreateOneBookmarkPayload
-}
-
-type Note implements EntryInterface {
-  _id: MongoID!
-  kind: EnumDKeyEntryKind
-  userId: MongoID!
-  workspaceId: MongoID!
-  viewId: MongoID!
-  title: String!
-  description: String
-  slug: String
-  tags: [MongoID]
-  isDeleted: Boolean!
-  updatedAt: Date
-  createdAt: Date
-  content: String
-  workspace: Workspace
-  view: ViewInterface
-}
-
-"""List of items with pagination."""
-type NotePagination {
-  """Total object count."""
-  count: Int
-
-  """Array of objects."""
-  items: [Note!]
-
-  """Information to aid in pagination."""
-  pageInfo: PaginationInfo!
+  TagUpdateById(_id: MongoID!, record: UpdateByIdTagsInput!): UpdateByIdTagsPayload
 }
 
 type PaginationInfo {
@@ -786,7 +719,21 @@ type PaginationInfo {
 }
 
 type Query {
-  workspacePagination(
+  workspaceFind(
+    """Filter by fields"""
+    filter: FilterFindManyWorkspaceInput
+    skip: Int
+    limit: Int = 100
+    sort: SortFindManyWorkspaceInput
+  ): [Workspace!]!
+  workspaceById(_id: MongoID!): Workspace
+  workspaceOne(
+    """Filter by fields"""
+    filter: FilterFindOneWorkspaceInput
+    skip: Int
+    sort: SortFindOneWorkspaceInput
+  ): Workspace
+  workspacePaginate(
     """Page number for displaying"""
     page: Int
     perPage: Int = 20
@@ -795,117 +742,73 @@ type Query {
     filter: FilterFindManyWorkspaceInput
     sort: SortFindManyWorkspaceInput
   ): WorkspacePagination
-  workspaceMany(
+  workspaceCount(
     """Filter by fields"""
-    filter: FilterFindManyWorkspaceInput
-    skip: Int
-    limit: Int = 100
-    sort: SortFindManyWorkspaceInput
-  ): [Workspace!]!
-  workspaceOne(
-    """Filter by fields"""
-    filter: FilterFindOneWorkspaceInput
-    skip: Int
-    sort: SortFindOneWorkspaceInput
-  ): Workspace
-  viewsPagination(
-    """Page number for displaying"""
-    page: Int
-    perPage: Int = 20
-
-    """Filter by fields"""
-    filter: FilterFindManyViewInput
-    sort: SortFindManyViewInput
-  ): ViewPagination
-  viewsCount(
-    """Filter by fields"""
-    filter: FilterCountViewInput
+    filter: FilterCountWorkspaceInput
   ): Int
-  viewListViews(
+  collectionFind(
     """Filter by fields"""
-    filter: FilterFindManyListViewInput
+    filter: FilterFindManyCollectionsInput
     skip: Int
     limit: Int = 100
-    sort: SortFindManyListViewInput
-  ): [ListView!]!
-  viewCalenderViews(
-    """Filter by fields"""
-    filter: FilterFindManyCalenderInput
-    skip: Int
-    limit: Int = 100
-    sort: SortFindManyCalenderInput
-  ): [Calender!]!
-  getView(
-    """Filter by fields"""
-    filter: FilterFindOneViewInput
-    skip: Int
-    sort: SortFindOneViewInput
-  ): ViewInterface
-  getListView(
-    """Filter by fields"""
-    filter: FilterFindOneListViewInput
-    skip: Int
-    sort: SortFindOneListViewInput
-  ): ListView
-  getCalenderView(
-    """Filter by fields"""
-    filter: FilterFindOneCalenderInput
-    skip: Int
-    sort: SortFindOneCalenderInput
-  ): Calender
-  entriesPagination(
+    sort: SortFindManyCollectionsInput
+  ): [Collections!]!
+  collectionById(_id: MongoID!): Collections
+  collectionPaginate(
     """Page number for displaying"""
     page: Int
     perPage: Int = 20
 
     """Filter by fields"""
-    filter: FilterFindManyEntryInput
-    sort: SortFindManyEntryInput
-  ): EntryPagination
-  bookmarksPagination(
+    filter: FilterFindManyCollectionsInput
+    sort: SortFindManyCollectionsInput
+  ): CollectionsPagination
+  collectionCount(
+    """Filter by fields"""
+    filter: FilterCountCollectionsInput
+  ): Int
+  EntryFind(
+    """Filter by fields"""
+    filter: FilterFindManyEntriesInput
+    skip: Int
+    limit: Int = 100
+    sort: SortFindManyEntriesInput
+  ): [Entries!]!
+  EntryById(_id: MongoID!): Entries
+  EntryPaginate(
     """Page number for displaying"""
     page: Int
     perPage: Int = 20
 
     """Filter by fields"""
-    filter: FilterFindManyBookmarkInput
-    sort: SortFindManyBookmarkInput
-  ): BookmarkPagination
-  viewBookmarkEntries(
+    filter: FilterFindManyEntriesInput
+    sort: SortFindManyEntriesInput
+  ): EntriesPagination
+  EntryCount(
     """Filter by fields"""
-    filter: FilterFindManyBookmarkInput
+    filter: FilterCountEntriesInput
+  ): Int
+  TagFind(
+    """Filter by fields"""
+    filter: FilterFindManyTagsInput
     skip: Int
     limit: Int = 100
-    sort: SortFindManyBookmarkInput
-  ): [Bookmark!]!
-  getBookmarkEntry(
-    """Filter by fields"""
-    filter: FilterFindOneBookmarkInput
-    skip: Int
-    sort: SortFindOneBookmarkInput
-  ): Bookmark
-  notesPagination(
+    sort: SortFindManyTagsInput
+  ): [Tags!]!
+  TagById(_id: MongoID!): Tags
+  TagPaginate(
     """Page number for displaying"""
     page: Int
     perPage: Int = 20
 
     """Filter by fields"""
-    filter: FilterFindManyNoteInput
-    sort: SortFindManyNoteInput
-  ): NotePagination
-  viewNoteEntries(
+    filter: FilterFindManyTagsInput
+    sort: SortFindManyTagsInput
+  ): TagsPagination
+  TagCount(
     """Filter by fields"""
-    filter: FilterFindManyNoteInput
-    skip: Int
-    limit: Int = 100
-    sort: SortFindManyNoteInput
-  ): [Note!]!
-  getNoteEntry(
-    """Filter by fields"""
-    filter: FilterFindOneNoteInput
-    skip: Int
-    sort: SortFindOneNoteInput
-  ): Note
+    filter: FilterCountTagsInput
+  ): Int
 }
 
 """
@@ -918,32 +821,17 @@ type RuntimeError implements ErrorInterface {
   message: String
 }
 
-enum SortFindManyBookmarkInput {
+enum SortFindManyCollectionsInput {
   _ID_ASC
   _ID_DESC
 }
 
-enum SortFindManyCalenderInput {
+enum SortFindManyEntriesInput {
   _ID_ASC
   _ID_DESC
 }
 
-enum SortFindManyEntryInput {
-  _ID_ASC
-  _ID_DESC
-}
-
-enum SortFindManyListViewInput {
-  _ID_ASC
-  _ID_DESC
-}
-
-enum SortFindManyNoteInput {
-  _ID_ASC
-  _ID_DESC
-}
-
-enum SortFindManyViewInput {
+enum SortFindManyTagsInput {
   _ID_ASC
   _ID_DESC
 }
@@ -953,31 +841,6 @@ enum SortFindManyWorkspaceInput {
   _ID_DESC
   SLUG_ASC
   SLUG_DESC
-}
-
-enum SortFindOneBookmarkInput {
-  _ID_ASC
-  _ID_DESC
-}
-
-enum SortFindOneCalenderInput {
-  _ID_ASC
-  _ID_DESC
-}
-
-enum SortFindOneListViewInput {
-  _ID_ASC
-  _ID_DESC
-}
-
-enum SortFindOneNoteInput {
-  _ID_ASC
-  _ID_DESC
-}
-
-enum SortFindOneViewInput {
-  _ID_ASC
-  _ID_DESC
 }
 
 enum SortFindOneWorkspaceInput {
@@ -994,6 +857,127 @@ enum SortUpdateOneWorkspaceInput {
   SLUG_DESC
 }
 
+type Tags {
+  userId: MongoID!
+  workspaceId: MongoID
+  collectionId: MongoID
+  title: String
+  slug: String
+  _id: MongoID!
+  updatedAt: Date
+  createdAt: Date
+}
+
+"""List of items with pagination."""
+type TagsPagination {
+  """Total object count."""
+  count: Int
+
+  """Array of objects."""
+  items: [Tags!]
+
+  """Information to aid in pagination."""
+  pageInfo: PaginationInfo!
+}
+
+input UpdateByIdCollectionsEmojiInput {
+  activeSkinTone: String
+  emoji: String
+  names: [String]
+  originalUnified: String
+  unified: String
+}
+
+input UpdateByIdCollectionsFieldsInput {
+  key: String
+  value: JSON
+  kind: EnumCollectionsFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
+input UpdateByIdCollectionsInput {
+  workspaceId: MongoID
+  type: EnumCollectionsType
+  title: String
+  emoji: UpdateByIdCollectionsEmojiInput
+  description: String
+  fields: [UpdateByIdCollectionsFieldsInput]
+}
+
+type UpdateByIdCollectionsPayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Updated document"""
+  record: Collections
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+input UpdateByIdEntriesEmojiInput {
+  activeSkinTone: String
+  emoji: String
+  names: [String]
+  originalUnified: String
+  unified: String
+}
+
+input UpdateByIdEntriesFieldsInput {
+  key: String
+  value: JSON
+  kind: EnumEntriesFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
+input UpdateByIdEntriesInput {
+  workspaceId: MongoID
+  collectionId: MongoID
+  title: String
+  emoji: UpdateByIdEntriesEmojiInput
+  description: String
+  tags: [MongoID]
+  fields: [UpdateByIdEntriesFieldsInput]
+}
+
+type UpdateByIdEntriesPayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Updated document"""
+  record: Entries
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+input UpdateByIdTagsInput {
+  workspaceId: MongoID
+  collectionId: MongoID
+  title: String
+}
+
+type UpdateByIdTagsPayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Updated document"""
+  record: Tags
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
 input UpdateOneWorkspaceEmojiInput {
   activeSkinTone: String
   emoji: String
@@ -1002,10 +986,20 @@ input UpdateOneWorkspaceEmojiInput {
   unified: String
 }
 
+input UpdateOneWorkspaceFieldsInput {
+  key: String
+  value: JSON
+  kind: EnumWorkspaceFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
 input UpdateOneWorkspaceInput {
+  emoji: UpdateOneWorkspaceEmojiInput
   title: String
   description: String
-  emoji: UpdateOneWorkspaceEmojiInput
+  fields: [UpdateOneWorkspaceFieldsInput]
 }
 
 type UpdateOneWorkspacePayload {
@@ -1045,55 +1039,14 @@ type ValidatorError {
   idx: Int!
 }
 
-type View implements ViewInterface {
-  _id: MongoID!
-  kind: EnumDKeyViewKind
-  userId: MongoID!
-  workspaceId: MongoID!
-  entryType: EnumViewEntryType
-  title: String!
-  description: String
-  slug: String
-  isDeleted: Boolean!
-  updatedAt: Date
-  createdAt: Date
-  workspace: Workspace
-}
-
-interface ViewInterface {
-  _id: MongoID!
-  kind: EnumDKeyViewKind
-  userId: MongoID!
-  workspaceId: MongoID!
-  entryType: EnumViewEntryType
-  title: String!
-  description: String
-  slug: String
-  isDeleted: Boolean!
-  updatedAt: Date
-  createdAt: Date
-  workspace: Workspace
-}
-
-"""List of items with pagination."""
-type ViewPagination {
-  """Total object count."""
-  count: Int
-
-  """Array of objects."""
-  items: [ViewInterface]
-
-  """Information to aid in pagination."""
-  pageInfo: PaginationInfo!
-}
-
 type Workspace {
   userId: MongoID!
-  title: String!
-  description: String
   slug: String
   emoji: WorkspaceEmoji
   isDeleted: Boolean!
+  title: String!
+  description: String
+  fields: [WorkspaceFields]
   _id: MongoID!
   updatedAt: Date
   createdAt: Date
@@ -1113,6 +1066,24 @@ input WorkspaceEmojiInput {
   names: [String]
   originalUnified: String
   unified: String
+}
+
+type WorkspaceFields {
+  key: String!
+  value: JSON!
+  kind: EnumWorkspaceFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+}
+
+input WorkspaceFieldsInput {
+  key: String!
+  value: JSON!
+  kind: EnumWorkspaceFieldsKind
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
 }
 
 """List of items with pagination."""

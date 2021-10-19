@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  EnumDKeyViewKind,
-  Workspace,
-  WorkspaceDataFragment,
-} from './generated-graphql-types';
+import { WorkspaceDataFragment } from './generated-graphql-types';
 
 export interface AuthContextState {
   user: IUser | undefined;
@@ -117,5 +113,5 @@ export interface Bookmark extends BookmarkBase, IMongoDocument {}
 export interface CollectionBase {
   title: string;
   description: string;
-  kind: EnumDKeyViewKind | '';
+  kind: any | '';
 }

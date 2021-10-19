@@ -4,24 +4,31 @@ import {
   authMiddlewareGql,
   GqlComposeAuthWrapper,
 } from '../helpers/auth/authenticate';
-import { defaultFieldsGQL as defaultFields } from '../helpers/defaults/gqlComposeDefaults';
+import {
+  defaultFieldsGQL as defaultFields,
+  defaultFilterFields,
+} from '../helpers/defaults/gqlComposeDefaults';
 import { WorkspaceModel } from '../modules/workspace/model/workspace.model';
 
 const WorkspaceTC = composeMongoose(WorkspaceModel, {
-  name: 'Workspaces',
+  name: 'Workspace',
 });
 
 schemaComposer.Query.addFields({
   workspaceFind: WorkspaceTC.mongooseResolvers
     .findMany({
-      filter: {
-        removeFields: [...defaultFields, 'emoji'],
-      },
+      filter: { removeFields: [...defaultFilterFields, 'emoji'] },
     })
     .wrapResolve(GqlComposeAuthWrapper)
     .withMiddlewares([authMiddlewareGql]),
   workspaceById: WorkspaceTC.mongooseResolvers
     .findById()
+    .wrapResolve(GqlComposeAuthWrapper)
+    .withMiddlewares([authMiddlewareGql]),
+  workspaceOne: WorkspaceTC.mongooseResolvers
+    .findOne({
+      filter: { removeFields: [...defaultFilterFields, 'emoji'] },
+    })
     .wrapResolve(GqlComposeAuthWrapper)
     .withMiddlewares([authMiddlewareGql]),
   workspacePaginate: WorkspaceTC.mongooseResolvers
@@ -43,8 +50,9 @@ schemaComposer.Mutation.addFields({
     })
     .wrapResolve(GqlComposeAuthWrapper)
     .withMiddlewares([authMiddlewareGql]),
-  workspaceUpdateById: WorkspaceTC.mongooseResolvers
-    .updateById({
+  workspaceUpdate: WorkspaceTC.mongooseResolvers
+    .updateOne({
+      filter: { removeFields: [...defaultFilterFields, 'emoji'] },
       record: {
         removeFields: defaultFields,
       },

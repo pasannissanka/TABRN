@@ -1,10 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AppContext } from '../../Context/AppContextProvider';
-import {
-  useViewsPaginationQuery,
-  useWorkspacesPaginationQuery,
-} from '../../Types/generated-graphql-types';
+import { useWorkspacesPaginationQuery } from '../../Types/generated-graphql-types';
 import { DrawerDisclosure, DrawerLink } from './DrawerDisclosure';
 
 interface DrawerProps {
@@ -21,14 +18,14 @@ export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
   });
   const { data, fetching } = result;
 
-  const [resultViews] = useViewsPaginationQuery({
-    variables: {
-      workspaceId: workspaceData?.workspaceData?._id,
-    },
-    requestPolicy: 'network-only',
-    pause: !workspaceData?.workspaceSlug && !workspaceData?.workspaceData?._id,
-  });
-  const dataViews = resultViews.data;
+  // const [resultViews] = useViewsPaginationQuery({
+  //   variables: {
+  //     workspaceId: workspaceData?.workspaceData?._id,
+  //   },
+  //   requestPolicy: 'network-only',
+  //   pause: !workspaceData?.workspaceSlug && !workspaceData?.workspaceData?._id,
+  // });
+  // const dataViews = resultViews.data;
 
   useEffect(() => {
     if (location.pathname.startsWith('/w/')) {
@@ -61,7 +58,7 @@ export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
             <li>
               <DrawerDisclosure to="/workspace" title="Workspaces" icon="💼">
                 <ul>
-                  {data?.workspacePagination?.items?.map((workspace, index) => {
+                  {data?.workspacePaginate?.items?.map((workspace, index) => {
                     return (
                       <li key={index}>
                         <DrawerDisclosure
@@ -75,7 +72,7 @@ export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
                 </ul>
               </DrawerDisclosure>
             </li>
-            {isWorkspace && workspaceData && dataViews ? (
+            {/* {isWorkspace && workspaceData && dataViews ? (
               <li>
                 <DrawerDisclosure
                   to={`/w/${workspaceData?.workspaceSlug}`}
@@ -102,7 +99,7 @@ export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
               </li>
             ) : (
               <></>
-            )}
+            )} */}
           </ul>
         </nav>
       </aside>

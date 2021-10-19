@@ -8,7 +8,6 @@ import {
 import { ConfirmationDialog, Modal } from '../../Components/Modal/Modal';
 import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
 import {
-  useDeleteWorkspaceMutation,
   useNewWorkspaceMutation,
   useUpdateWorkspaceMutation,
   useWorkspacesPaginationQuery,
@@ -27,7 +26,6 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
 
   const addNewWorkspace = useNewWorkspaceMutation()[1];
   const editWorkspace = useUpdateWorkspaceMutation()[1];
-  const deleteWorkspace = useDeleteWorkspaceMutation()[1];
 
   const [deleteConfModal, setdeleteConfModal] = useState<{
     _id: string;
@@ -62,9 +60,7 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
       icon: <PlusSMSVG />,
       onClick: (e, key) => {
         console.log(e, key);
-        const ele = data?.workspacePagination?.items?.find(
-          (v) => v._id === key
-        );
+        const ele = data?.workspacePaginate?.items?.find((v) => v._id === key);
         console.log(ele);
         if (ele) {
           setNewWorkspaceValue(ele! as any);
@@ -77,9 +73,7 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
       icon: <PlusSMSVG />,
       onClick: (e, key) => {
         console.log(e, key);
-        const ele = data?.workspacePagination?.items?.find(
-          (v) => v._id === key
-        );
+        const ele = data?.workspacePaginate?.items?.find((v) => v._id === key);
         console.log(ele);
         if (ele) {
           setdeleteConfModal({
@@ -145,9 +139,7 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
 
   const onWorkspaceDelete = () => {
     if (deleteConfModal._id) {
-      deleteWorkspace({
-        id: deleteConfModal._id,
-      }).then((result) => reexecuteQuery());
+      console.log('Delete');
     }
     setdeleteConfModal({
       _id: '',
@@ -180,7 +172,7 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
               </div>
               <div className="mt-3 border"></div>
             </div>
-            {data?.workspacePagination?.items
+            {data?.workspacePaginate?.items
               ?.filter((w) => w.isDeleted === false)
               .map((workspace, index) => {
                 return (

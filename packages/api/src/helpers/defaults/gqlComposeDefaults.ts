@@ -6,3 +6,10 @@ export const defaultFieldsGQL = [
   'createdAt',
   'slug',
 ];
+
+export const defaultFilterFields = [
+  'userId',
+  'isDeleted',
+  'updatedAt',
+  'createdAt',
+];

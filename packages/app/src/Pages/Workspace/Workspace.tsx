@@ -4,13 +4,8 @@ import { Breadcrumbs } from '../../Components/Breadcrumbs/Breadcrumbs';
 import { Modal } from '../../Components/Modal/Modal';
 import { AppContext } from '../../Context/AppContextProvider';
 import { BreadcrumbsContext } from '../../Context/BreadcrumbsContextProvider';
-import {
-  EnumDKeyViewKind,
-  useCreateNewListViewMutation,
-  useGetWorkspaceQuery,
-} from '../../Types/generated-graphql-types';
-import { NavDataBC, CollectionBase } from '../../Types/types';
-import { Views } from '../WorkspaceViews/Views';
+import { useGetWorkspaceQuery } from '../../Types/generated-graphql-types';
+import { CollectionBase, NavDataBC } from '../../Types/types';
 import { NewCollection } from './Modals/NewCollection';
 
 export const WorkspaceItem = () => {
@@ -22,7 +17,7 @@ export const WorkspaceItem = () => {
   const [newActionOpen, setNewActionOpen] = useState(false);
   const [navData, setNavData] = useState<NavDataBC[]>([]);
 
-  const createNewListView = useCreateNewListViewMutation()[1];
+  // const createNewListView = useCreateNewListViewMutation()[1];
 
   const [result] = useGetWorkspaceQuery({
     variables: {
@@ -69,13 +64,13 @@ export const WorkspaceItem = () => {
   const handleNewViewSubmit = (data: CollectionBase, mode: 'edit' | 'new') => {
     if (mode === 'new') {
       console.log(data);
-      if (data.kind === EnumDKeyViewKind.ListView) {
-        createNewListView({
-          workspaceId: dataWorkspace?._id,
-          description: data.description,
-          title: data.title,
-        });
-      }
+      // if (data.kind === EnumDKeyViewKind.ListView) {
+      //   createNewListView({
+      //     workspaceId: dataWorkspace?._id,
+      //     description: data.description,
+      //     title: data.title,
+      //   });
+      // }
     }
   };
 
@@ -97,7 +92,7 @@ export const WorkspaceItem = () => {
                     <div>Dashboard</div>
                   </Route>
                   <Route exact path={`${path}/:view_slug`}>
-                    <Views level={1} />
+                    <div>Collection</div>
                   </Route>
                 </Switch>
               </div>

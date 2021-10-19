@@ -1,11 +1,7 @@
 import { Field, Form, Formik, FormikProps } from 'formik';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import Button from '../../../Components/Button/Button';
 import { AppContext } from '../../../Context/AppContextProvider';
-import {
-  EnumDKeyViewKind,
-  useGetViewsCountQuery,
-} from '../../../Types/generated-graphql-types';
 import { CollectionBase } from '../../../Types/types';
 
 type NewCollectionProps = {
@@ -22,15 +18,15 @@ export const NewCollection = ({
   onSubmit,
 }: NewCollectionProps) => {
   const { workspaceData } = useContext(AppContext);
-  const [viewKind, setViewKind] = useState<EnumDKeyViewKind>();
-  const [result] = useGetViewsCountQuery({
-    variables: {
-      titleRegex: 'untitled',
-      workspaceId: workspaceData?.workspaceData?._id,
-    },
-    requestPolicy: 'network-only',
-    pause: mode === 'edit' || !workspaceData?.workspaceData,
-  });
+  // const [viewKind, setViewKind] = useState<EnumDKeyViewKind>();
+  // const [result] = useGetViewsCountQuery({
+  //   variables: {
+  //     titleRegex: 'untitled',
+  //     workspaceId: workspaceData?.workspaceData?._id,
+  //   },
+  //   requestPolicy: 'network-only',
+  //   pause: mode === 'edit' || !workspaceData?.workspaceData,
+  // });
 
   return (
     <>
@@ -41,20 +37,20 @@ export const NewCollection = ({
             mode === 'edit'
               ? data
               : {
-                  title: `Untitled (${result.data?.viewsCount! + 1})`,
+                  title: `Untitled`,
                   description: '',
                   kind: '',
                 }
           }
           onSubmit={({ title, description }) => {
-            onSubmit(
-              {
-                title,
-                description,
-                kind: viewKind!,
-              },
-              mode
-            );
+            // onSubmit(
+            //   {
+            //     title,
+            //     description,
+            //     kind: viewKind!,
+            //   },
+            //   mode
+            // );
             onClose();
           }}
         >
@@ -79,7 +75,7 @@ export const NewCollection = ({
                   varient="outline"
                   className="mx-auto my-1"
                   onClick={() => {
-                    setViewKind(EnumDKeyViewKind.ListView);
+                    // setViewKind(EnumDKeyViewKind.ListView);
                     // props.submitForm();
                   }}
                 >
@@ -106,7 +102,7 @@ export const NewCollection = ({
                   varient="outline"
                   className="mx-auto my-1"
                   onClick={() => {
-                    setViewKind(EnumDKeyViewKind.Calender);
+                    // setViewKind(EnumDKeyViewKind.Calender);
                     // props.submitForm();
                   }}
                 >
@@ -133,7 +129,7 @@ export const NewCollection = ({
                   varient="outline"
                   className="mx-auto my-1"
                   onClick={() => {
-                    setViewKind(EnumDKeyViewKind.ListView);
+                    // setViewKind(EnumDKeyViewKind.ListView);
                     // props.submitForm();
                   }}
                 >
