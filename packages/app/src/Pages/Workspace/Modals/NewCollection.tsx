@@ -1,26 +1,26 @@
 import { Field, Form, Formik, FormikProps } from 'formik';
 import React, { useContext, useState } from 'react';
-import Button from '../../Components/Button/Button';
-import { AppContext } from '../../Context/AppContextProvider';
+import Button from '../../../Components/Button/Button';
+import { AppContext } from '../../../Context/AppContextProvider';
 import {
   EnumDKeyViewKind,
   useGetViewsCountQuery,
-} from '../../Types/generated-graphql-types';
-import { WorkspaceViewBase } from '../../Types/types';
+} from '../../../Types/generated-graphql-types';
+import { CollectionBase } from '../../../Types/types';
 
-type NewWorkspaceViewProps = {
-  data: WorkspaceViewBase;
-  onSubmit(data: WorkspaceViewBase, mode: 'edit' | 'new'): void;
+type NewCollectionProps = {
+  data: CollectionBase;
+  onSubmit(data: CollectionBase, mode: 'edit' | 'new'): void;
   onClose(): void;
   mode: 'edit' | 'new';
 };
 
-export const NewWorkspaceView = ({
+export const NewCollection = ({
   data,
   mode,
   onClose,
   onSubmit,
-}: NewWorkspaceViewProps) => {
+}: NewCollectionProps) => {
   const { workspaceData } = useContext(AppContext);
   const [viewKind, setViewKind] = useState<EnumDKeyViewKind>();
   const [result] = useGetViewsCountQuery({
@@ -58,7 +58,7 @@ export const NewWorkspaceView = ({
             onClose();
           }}
         >
-          {(props: FormikProps<WorkspaceViewBase>) => (
+          {(props: FormikProps<CollectionBase>) => (
             <Form className="my-3">
               <Field
                 className="my-1 w-full"

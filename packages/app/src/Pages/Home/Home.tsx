@@ -4,8 +4,8 @@ import { AppBar } from '../../Components/AppBar/AppBar';
 import { Drawer } from '../../Components/Drawer/Drawer';
 import { AppContext } from '../../Context/AppContextProvider';
 import { AppContextState, WorkspaceState } from '../../Types/types';
-import { WorkspaceDashboard } from '../Workspace/Dashboard/WorkspacesDashboard';
-import { WorkspaceItem } from '../Workspace/WorkspaceIndex';
+import { WorkspacesDashboard } from '../Workspace/WorkspacesDashboard';
+import { WorkspaceItem } from '../Workspace/Workspace';
 
 export const Home = () => {
   const [isDrawerOpen, setDrawerOpenState] = useState(false);
@@ -35,7 +35,7 @@ export const Home = () => {
                   <div>Read List</div>
                 </Route>
                 <Route exact path="/workspace">
-                  <WorkspaceDashboard />
+                  <WorkspacesDashboard />
                 </Route>
                 <Route path="/w/:work_slug">
                   <WorkspaceItem />

@@ -45,6 +45,22 @@ const userSchema = new Schema<IUser>(
         ),
       ],
     },
+    tokens: new Schema(
+      {
+        google: new Schema(
+          {
+            accessToken: {
+              type: String,
+            },
+            refreshToken: {
+              type: String,
+            },
+          },
+          { _id: false }
+        ),
+      },
+      { _id: false }
+    ),
   },
   { timestamps: true }
 );

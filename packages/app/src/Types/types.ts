@@ -114,7 +114,7 @@ export interface BookmarkBase {
 
 export interface Bookmark extends BookmarkBase, IMongoDocument {}
 
-export interface WorkspaceViewBase {
+export interface CollectionBase {
   title: string;
   description: string;
   kind: EnumDKeyViewKind | '';

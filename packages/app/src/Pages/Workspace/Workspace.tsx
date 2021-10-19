@@ -9,10 +9,9 @@ import {
   useCreateNewListViewMutation,
   useGetWorkspaceQuery,
 } from '../../Types/generated-graphql-types';
-import { NavDataBC, WorkspaceViewBase } from '../../Types/types';
+import { NavDataBC, CollectionBase } from '../../Types/types';
 import { Views } from '../WorkspaceViews/Views';
-import { WorkspaceItemDashboard } from './Dashboard/WorkspaceItemDashboard';
-import { NewWorkspaceView } from './NewWorkspaceView';
+import { NewCollection } from './Modals/NewCollection';
 
 export const WorkspaceItem = () => {
   const { work_slug } = useParams<{ work_slug: string }>();
@@ -67,10 +66,7 @@ export const WorkspaceItem = () => {
     // };
   }, [dataWorkspace]);
 
-  const handleNewViewSubmit = (
-    data: WorkspaceViewBase,
-    mode: 'edit' | 'new'
-  ) => {
+  const handleNewViewSubmit = (data: CollectionBase, mode: 'edit' | 'new') => {
     if (mode === 'new') {
       console.log(data);
       if (data.kind === EnumDKeyViewKind.ListView) {
@@ -98,7 +94,7 @@ export const WorkspaceItem = () => {
               <div>
                 <Switch>
                   <Route exact path={path}>
-                    <WorkspaceItemDashboard />
+                    <div>Dashboard</div>
                   </Route>
                   <Route exact path={`${path}/:view_slug`}>
                     <Views level={1} />
@@ -115,7 +111,7 @@ export const WorkspaceItem = () => {
             description="Use Workspace Views to categorize your content"
             size="full"
           >
-            <NewWorkspaceView
+            <NewCollection
               mode={'new'}
               onClose={() => setNewActionOpen(false)}
               onSubmit={handleNewViewSubmit}

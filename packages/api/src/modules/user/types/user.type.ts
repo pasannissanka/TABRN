@@ -1,5 +1,9 @@
 import { Document } from 'mongoose';
 
+interface IToken {
+  accessToken: string;
+  refreshToken: string;
+}
 export interface IUser extends Document {
   provider: string;
   googleId: string;
@@ -7,6 +11,9 @@ export interface IUser extends Document {
   name: {
     firstName: string;
     lastName: string;
+  };
+  tokens: {
+    google: IToken;
   };
   email: string;
   photos: any[];

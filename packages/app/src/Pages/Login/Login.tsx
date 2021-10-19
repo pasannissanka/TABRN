@@ -10,7 +10,7 @@ export const Login = (props: LoginProps) => {
   return (
     <>
       <div className="flex h-screen">
-        <div className="bg-pattern flex-auto w-1/4 bg-gray-600"></div>
+        <div className="bg-pattern flex-auto w-1/4"></div>
         <div className="flex-auto m-auto w-3/4 bg-white">
           <div className="container flex justify-center">
             <div>

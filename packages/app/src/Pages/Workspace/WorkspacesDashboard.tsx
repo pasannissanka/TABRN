@@ -1,25 +1,24 @@
 import React, { useState } from 'react';
-import Button from '../../../Components/Button/Button';
-import { NavigationCard } from '../../../Components/Cards/NavigationCard';
+import Button from '../../Components/Button/Button';
+import { NavigationCard } from '../../Components/Cards/NavigationCard';
 import {
   DropdownButonElement,
   DropdownLinkElement,
-} from '../../../Components/Dropdown/Dropdown';
-import { ConfirmationDialog, Modal } from '../../../Components/Modal/Modal';
+} from '../../Components/Dropdown/Dropdown';
+import { ConfirmationDialog, Modal } from '../../Components/Modal/Modal';
+import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
 import {
   useDeleteWorkspaceMutation,
   useNewWorkspaceMutation,
   useUpdateWorkspaceMutation,
   useWorkspacesPaginationQuery,
-  WorkspaceDataFragment,
-} from '../../../Types/generated-graphql-types';
-import { ReactComponent as PlusSMSVG } from '../../../svg/plus-sm.svg';
-import { NewWorkspace } from './NewWorkspace';
-import { WorkspaceBase } from '../../../Types/types';
+} from '../../Types/generated-graphql-types';
+import { WorkspaceBase } from '../../Types/types';
+import { NewWorkspace } from './Modals/NewWorkspace';
 
 interface WorkspaceProps {}
 
-export const WorkspaceDashboard = (props: WorkspaceProps) => {
+export const WorkspacesDashboard = (props: WorkspaceProps) => {
   const [result, reexecuteQuery] = useWorkspacesPaginationQuery({
     requestPolicy: 'network-only',
   });

@@ -1,5 +1,5 @@
-import { Strategy } from 'passport-google-oauth20';
 import passport from 'passport';
+import { Strategy } from 'passport-google-oauth20';
 import { UserModel } from '../modules/user/model/user.model';
 
 export default function () {
@@ -11,10 +11,27 @@ export default function () {
         callbackURL: '/auth/google/redirect',
         state: true,
       },
-      (_, __, profile, done) => {
+      (accessToken, refreshToken, profile, done) => {
         UserModel.findOne({ googleId: profile.id }).then((currentUser) => {
           if (currentUser) {
-            done(null, currentUser);
+            const user: any = {
+              ...currentUser,
+              tokens: {
+                google: {
+                  accessToken,
+                  refreshToken,
+                },
+              },
+            };
+            UserModel.findOneAndUpdate({ googleId: profile.id }, user, {
+              new: true,
+            }).then((updatedUser) => {
+              if (updatedUser) {
+                done(null, updatedUser);
+              } else {
+                done(null, currentUser);
+              }
+            });
           } else {
             new UserModel({
               provider: profile.provider,
@@ -26,6 +43,12 @@ export default function () {
               },
               email: profile.emails![0].value,
               photos: profile.photos,
+              tokens: {
+                google: {
+                  accessToken,
+                  refreshToken,
+                },
+              },
             })
               .save()
               .then((newUser) => {
