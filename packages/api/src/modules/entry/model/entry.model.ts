@@ -50,6 +50,12 @@ const EntrySchema = new Schema(
     description: {
       type: String,
     },
+    tags: [
+      {
+        type: Types.ObjectId,
+        ref: 'Tag',
+      },
+    ],
     /// Dynamic fields
     fields: [
       new Schema(

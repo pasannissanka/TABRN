@@ -9,6 +9,14 @@ const TagSchema = new Schema<Tag>(
       ref: 'User',
       required: true,
     },
+    workspaceId: {
+      type: Types.ObjectId,
+      ref: 'Workspace',
+    },
+    collectionId: {
+      type: Types.ObjectId,
+      ref: 'Collection',
+    },
     title: {
       type: String,
     },
