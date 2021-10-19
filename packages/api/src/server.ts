@@ -16,12 +16,8 @@ import { AppError } from './helpers/errors/app_error';
 import { errorHandler } from './helpers/errors/error_handler';
 import schema from './resolvers';
 import authRoute from './routes/auth.route';
-import bookmarkRoute from './routes/bookmark.route';
 import extensionRoute from './routes/extension.routes';
 import userRoute from './routes/user.routes';
-import viewRoute from './routes/view.route';
-import workspaceRoute from './routes/workspace.route';
-
 const main = async () => {
   const app = express();
 
@@ -110,10 +106,7 @@ const main = async () => {
 
   app.use('/auth', authRoute);
   app.use('/user', userRoute);
-  app.use('/workspace', workspaceRoute);
-  app.use('/bookmark', bookmarkRoute);
   app.use('/extension', extensionRoute);
-  app.use('/view', viewRoute);
 
   // Catch All Unhandled routes
   app.all('*', (req, _, next) => {
@@ -130,4 +123,4 @@ const main = async () => {
   });
 };
 
-main();
+main().catch(console.error);

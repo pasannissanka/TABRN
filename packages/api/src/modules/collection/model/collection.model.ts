@@ -40,6 +40,16 @@ const CollectionSchema = new Schema(
       type: String,
       required: true,
     },
+    emoji: new Schema(
+      {
+        activeSkinTone: String,
+        emoji: String,
+        names: [String],
+        originalUnified: String,
+        unified: String,
+      },
+      { _id: false }
+    ),
     description: {
       type: String,
     },

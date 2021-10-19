@@ -1,12 +1,17 @@
 import { Document } from 'mongoose';
+import { IField } from '../../collection/types/collection.types';
 
 export interface IWorkspace extends Document {
   userId: string;
-  title: string;
-  description: string;
   slug?: string;
   emoji?: IEmojiData;
   isDeleted: boolean;
+  // Fields
+  /// Primary
+  title: string;
+  description: string;
+  /// Dynamic fields
+  fields: IField[];
 }
 
 export interface IEmojiData {
