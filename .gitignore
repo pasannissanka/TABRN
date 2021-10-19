@@ -33,3 +33,6 @@ packages/web-react/.eslintcache
 
 .eslintcache
 .parcel-cache
+
+
+*.tsbuildinfo
