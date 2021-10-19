@@ -1,0 +1,68 @@
+mutation NewCollection($record: CreateOneCollectionInput!) {
+  collectionCreateOne(record: $record) {
+    recordId
+    record {
+      ...CollectionData
+    }
+    error {
+      message
+    }
+  }
+}
+
+query CollectionPaginate(
+  $page: Int
+  $perPage: Int
+  $filter: FilterFindManyCollectionInput
+  $sort: SortFindManyCollectionInput
+) {
+  collectionPaginate(perPage: $perPage, page: $page, filter: $filter) {
+    count
+    items {
+      ...CollectionData
+    }
+    pageInfo {
+      ...PaginationInfoData
+    }
+  }
+}
+
+fragment CollectionData on Collection {
+  _id
+  userId
+  workspaceId
+  type
+  slug
+  isDeleted
+  title
+  emoji {
+    ...CollectionEmojiData
+  }
+  description
+  fields {
+    ...CollectionFieldsData
+  }
+  updatedAt
+  createdAt
+}
+
+fragment CollectionEmojiData on CollectionEmoji {
+  emoji
+  names
+  unified
+}
+
+fragment CollectionFieldsData on CollectionFields {
+  key
+  value
+  kind
+}
+
+fragment PaginationInfoData on PaginationInfo {
+  currentPage
+  perPage
+  pageCount
+  itemCount
+  hasNextPage
+  hasPreviousPage
+}

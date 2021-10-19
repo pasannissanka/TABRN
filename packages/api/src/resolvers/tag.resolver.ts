@@ -8,7 +8,7 @@ import { defaultFieldsGQL } from '../helpers/defaults/gqlComposeDefaults';
 import { TagModel } from '../modules/tags/model/tag.model';
 
 const TagTC = composeMongoose(TagModel, {
-  name: 'Tags',
+  name: 'Tag',
 });
 
 schemaComposer.Query.addFields({

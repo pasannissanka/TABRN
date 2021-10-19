@@ -21,24 +21,24 @@ export type Scalars = {
   RegExpAsString: any;
 };
 
-export type Collections = {
-  __typename?: 'Collections';
+export type Collection = {
+  __typename?: 'Collection';
   userId: Scalars['MongoID'];
   workspaceId: Scalars['MongoID'];
-  type?: Maybe<EnumCollectionsType>;
+  type?: Maybe<EnumCollectionType>;
   slug?: Maybe<Scalars['String']>;
   isDeleted: Scalars['Boolean'];
   title: Scalars['String'];
-  emoji?: Maybe<CollectionsEmoji>;
+  emoji?: Maybe<CollectionEmoji>;
   description?: Maybe<Scalars['String']>;
-  fields?: Maybe<Array<Maybe<CollectionsFields>>>;
+  fields?: Maybe<Array<Maybe<CollectionFields>>>;
   _id: Scalars['MongoID'];
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
 
-export type CollectionsEmoji = {
-  __typename?: 'CollectionsEmoji';
+export type CollectionEmoji = {
+  __typename?: 'CollectionEmoji';
   activeSkinTone?: Maybe<Scalars['String']>;
   emoji?: Maybe<Scalars['String']>;
   names?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -46,7 +46,7 @@ export type CollectionsEmoji = {
   unified?: Maybe<Scalars['String']>;
 };
 
-export type CollectionsEmojiInput = {
+export type CollectionEmojiInput = {
   activeSkinTone?: Maybe<Scalars['String']>;
   emoji?: Maybe<Scalars['String']>;
   names?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -54,87 +54,87 @@ export type CollectionsEmojiInput = {
   unified?: Maybe<Scalars['String']>;
 };
 
-export type CollectionsFields = {
-  __typename?: 'CollectionsFields';
+export type CollectionFields = {
+  __typename?: 'CollectionFields';
   key: Scalars['String'];
   value: Scalars['JSON'];
-  kind?: Maybe<EnumCollectionsFieldsKind>;
+  kind?: Maybe<EnumCollectionFieldsKind>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
 
-export type CollectionsFieldsInput = {
+export type CollectionFieldsInput = {
   key: Scalars['String'];
   value: Scalars['JSON'];
-  kind?: Maybe<EnumCollectionsFieldsKind>;
+  kind?: Maybe<EnumCollectionFieldsKind>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
 
 /** List of items with pagination. */
-export type CollectionsPagination = {
-  __typename?: 'CollectionsPagination';
+export type CollectionPagination = {
+  __typename?: 'CollectionPagination';
   /** Total object count. */
   count?: Maybe<Scalars['Int']>;
   /** Array of objects. */
-  items?: Maybe<Array<Collections>>;
+  items?: Maybe<Array<Collection>>;
   /** Information to aid in pagination. */
   pageInfo: PaginationInfo;
 };
 
-export type CreateOneCollectionsInput = {
+export type CreateOneCollectionInput = {
   workspaceId: Scalars['MongoID'];
-  type?: Maybe<EnumCollectionsType>;
+  type?: Maybe<EnumCollectionType>;
   title: Scalars['String'];
-  emoji?: Maybe<CollectionsEmojiInput>;
+  emoji?: Maybe<CollectionEmojiInput>;
   description?: Maybe<Scalars['String']>;
-  fields?: Maybe<Array<Maybe<CollectionsFieldsInput>>>;
+  fields?: Maybe<Array<Maybe<CollectionFieldsInput>>>;
 };
 
-export type CreateOneCollectionsPayload = {
-  __typename?: 'CreateOneCollectionsPayload';
+export type CreateOneCollectionPayload = {
+  __typename?: 'CreateOneCollectionPayload';
   /** Document ID */
   recordId?: Maybe<Scalars['MongoID']>;
   /** Created document */
-  record?: Maybe<Collections>;
+  record?: Maybe<Collection>;
   /** Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response. */
   error?: Maybe<ErrorInterface>;
 };
 
-export type CreateOneEntriesInput = {
+export type CreateOneEntryInput = {
   workspaceId: Scalars['MongoID'];
   collectionId: Scalars['MongoID'];
   title: Scalars['String'];
-  emoji?: Maybe<EntriesEmojiInput>;
+  emoji?: Maybe<EntryEmojiInput>;
   description?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
-  fields?: Maybe<Array<Maybe<EntriesFieldsInput>>>;
+  fields?: Maybe<Array<Maybe<EntryFieldsInput>>>;
 };
 
-export type CreateOneEntriesPayload = {
-  __typename?: 'CreateOneEntriesPayload';
+export type CreateOneEntryPayload = {
+  __typename?: 'CreateOneEntryPayload';
   /** Document ID */
   recordId?: Maybe<Scalars['MongoID']>;
   /** Created document */
-  record?: Maybe<Entries>;
+  record?: Maybe<Entry>;
   /** Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response. */
   error?: Maybe<ErrorInterface>;
 };
 
-export type CreateOneTagsInput = {
+export type CreateOneTagInput = {
   workspaceId?: Maybe<Scalars['MongoID']>;
   collectionId?: Maybe<Scalars['MongoID']>;
   title?: Maybe<Scalars['String']>;
 };
 
-export type CreateOneTagsPayload = {
-  __typename?: 'CreateOneTagsPayload';
+export type CreateOneTagPayload = {
+  __typename?: 'CreateOneTagPayload';
   /** Document ID */
   recordId?: Maybe<Scalars['MongoID']>;
   /** Created document */
-  record?: Maybe<Tags>;
+  record?: Maybe<Tag>;
   /** Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response. */
   error?: Maybe<ErrorInterface>;
 };
@@ -157,25 +157,25 @@ export type CreateOneWorkspacePayload = {
 };
 
 
-export type Entries = {
-  __typename?: 'Entries';
+export type Entry = {
+  __typename?: 'Entry';
   userId: Scalars['MongoID'];
   workspaceId: Scalars['MongoID'];
   collectionId: Scalars['MongoID'];
   slug?: Maybe<Scalars['String']>;
   isDeleted: Scalars['Boolean'];
   title: Scalars['String'];
-  emoji?: Maybe<EntriesEmoji>;
+  emoji?: Maybe<EntryEmoji>;
   description?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
-  fields?: Maybe<Array<Maybe<EntriesFields>>>;
+  fields?: Maybe<Array<Maybe<EntryFields>>>;
   _id: Scalars['MongoID'];
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
 
-export type EntriesEmoji = {
-  __typename?: 'EntriesEmoji';
+export type EntryEmoji = {
+  __typename?: 'EntryEmoji';
   activeSkinTone?: Maybe<Scalars['String']>;
   emoji?: Maybe<Scalars['String']>;
   names?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -183,7 +183,7 @@ export type EntriesEmoji = {
   unified?: Maybe<Scalars['String']>;
 };
 
-export type EntriesEmojiInput = {
+export type EntryEmojiInput = {
   activeSkinTone?: Maybe<Scalars['String']>;
   emoji?: Maybe<Scalars['String']>;
   names?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -191,50 +191,50 @@ export type EntriesEmojiInput = {
   unified?: Maybe<Scalars['String']>;
 };
 
-export type EntriesFields = {
-  __typename?: 'EntriesFields';
+export type EntryFields = {
+  __typename?: 'EntryFields';
   key: Scalars['String'];
   value: Scalars['JSON'];
-  kind?: Maybe<EnumEntriesFieldsKind>;
+  kind?: Maybe<EnumEntryFieldsKind>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
 
-export type EntriesFieldsInput = {
+export type EntryFieldsInput = {
   key: Scalars['String'];
   value: Scalars['JSON'];
-  kind?: Maybe<EnumEntriesFieldsKind>;
+  kind?: Maybe<EnumEntryFieldsKind>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
 
 /** List of items with pagination. */
-export type EntriesPagination = {
-  __typename?: 'EntriesPagination';
+export type EntryPagination = {
+  __typename?: 'EntryPagination';
   /** Total object count. */
   count?: Maybe<Scalars['Int']>;
   /** Array of objects. */
-  items?: Maybe<Array<Entries>>;
+  items?: Maybe<Array<Entry>>;
   /** Information to aid in pagination. */
   pageInfo: PaginationInfo;
 };
 
-export enum EnumCollectionsFieldsKind {
+export enum EnumCollectionFieldsKind {
   String = 'string',
   Date = 'date',
   Number = 'number',
   Link = 'link'
 }
 
-export enum EnumCollectionsType {
+export enum EnumCollectionType {
   Calender = 'calender',
   Kanban = 'kanban',
   List = 'list'
 }
 
-export enum EnumEntriesFieldsKind {
+export enum EnumEntryFieldsKind {
   String = 'string',
   Date = 'date',
   Number = 'number',
@@ -253,7 +253,7 @@ export type ErrorInterface = {
   message?: Maybe<Scalars['String']>;
 };
 
-export type FilterCountCollectionsEmojiInput = {
+export type FilterCountCollectionEmojiInput = {
   activeSkinTone?: Maybe<Scalars['String']>;
   emoji?: Maybe<Scalars['String']>;
   names?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -261,40 +261,40 @@ export type FilterCountCollectionsEmojiInput = {
   unified?: Maybe<Scalars['String']>;
 };
 
-export type FilterCountCollectionsFieldsInput = {
+export type FilterCountCollectionFieldsInput = {
   key?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['JSON']>;
-  kind?: Maybe<EnumCollectionsFieldsKind>;
+  kind?: Maybe<EnumCollectionFieldsKind>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
 
-export type FilterCountCollectionsInput = {
+export type FilterCountCollectionInput = {
   userId?: Maybe<Scalars['MongoID']>;
   workspaceId?: Maybe<Scalars['MongoID']>;
-  type?: Maybe<EnumCollectionsType>;
+  type?: Maybe<EnumCollectionType>;
   slug?: Maybe<Scalars['String']>;
   isDeleted?: Maybe<Scalars['Boolean']>;
   title?: Maybe<Scalars['String']>;
-  emoji?: Maybe<FilterCountCollectionsEmojiInput>;
+  emoji?: Maybe<FilterCountCollectionEmojiInput>;
   description?: Maybe<Scalars['String']>;
-  fields?: Maybe<Array<Maybe<FilterCountCollectionsFieldsInput>>>;
+  fields?: Maybe<Array<Maybe<FilterCountCollectionFieldsInput>>>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
   /** List of *indexed* fields that can be filtered via operators. */
-  _operators?: Maybe<FilterCountCollectionsOperatorsInput>;
-  OR?: Maybe<Array<FilterCountCollectionsInput>>;
-  AND?: Maybe<Array<FilterCountCollectionsInput>>;
+  _operators?: Maybe<FilterCountCollectionOperatorsInput>;
+  OR?: Maybe<Array<FilterCountCollectionInput>>;
+  AND?: Maybe<Array<FilterCountCollectionInput>>;
 };
 
 /** For performance reason this type contains only *indexed* fields. */
-export type FilterCountCollectionsOperatorsInput = {
-  _id?: Maybe<FilterCountCollections_IdOperatorsInput>;
+export type FilterCountCollectionOperatorsInput = {
+  _id?: Maybe<FilterCountCollection_IdOperatorsInput>;
 };
 
-export type FilterCountCollections_IdOperatorsInput = {
+export type FilterCountCollection_IdOperatorsInput = {
   gt?: Maybe<Scalars['MongoID']>;
   gte?: Maybe<Scalars['MongoID']>;
   lt?: Maybe<Scalars['MongoID']>;
@@ -305,7 +305,7 @@ export type FilterCountCollections_IdOperatorsInput = {
   exists?: Maybe<Scalars['Boolean']>;
 };
 
-export type FilterCountEntriesEmojiInput = {
+export type FilterCountEntryEmojiInput = {
   activeSkinTone?: Maybe<Scalars['String']>;
   emoji?: Maybe<Scalars['String']>;
   names?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -313,41 +313,41 @@ export type FilterCountEntriesEmojiInput = {
   unified?: Maybe<Scalars['String']>;
 };
 
-export type FilterCountEntriesFieldsInput = {
+export type FilterCountEntryFieldsInput = {
   key?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['JSON']>;
-  kind?: Maybe<EnumEntriesFieldsKind>;
+  kind?: Maybe<EnumEntryFieldsKind>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
 
-export type FilterCountEntriesInput = {
+export type FilterCountEntryInput = {
   userId?: Maybe<Scalars['MongoID']>;
   workspaceId?: Maybe<Scalars['MongoID']>;
   collectionId?: Maybe<Scalars['MongoID']>;
   slug?: Maybe<Scalars['String']>;
   isDeleted?: Maybe<Scalars['Boolean']>;
   title?: Maybe<Scalars['String']>;
-  emoji?: Maybe<FilterCountEntriesEmojiInput>;
+  emoji?: Maybe<FilterCountEntryEmojiInput>;
   description?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
-  fields?: Maybe<Array<Maybe<FilterCountEntriesFieldsInput>>>;
+  fields?: Maybe<Array<Maybe<FilterCountEntryFieldsInput>>>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
   /** List of *indexed* fields that can be filtered via operators. */
-  _operators?: Maybe<FilterCountEntriesOperatorsInput>;
-  OR?: Maybe<Array<FilterCountEntriesInput>>;
-  AND?: Maybe<Array<FilterCountEntriesInput>>;
+  _operators?: Maybe<FilterCountEntryOperatorsInput>;
+  OR?: Maybe<Array<FilterCountEntryInput>>;
+  AND?: Maybe<Array<FilterCountEntryInput>>;
 };
 
 /** For performance reason this type contains only *indexed* fields. */
-export type FilterCountEntriesOperatorsInput = {
-  _id?: Maybe<FilterCountEntries_IdOperatorsInput>;
+export type FilterCountEntryOperatorsInput = {
+  _id?: Maybe<FilterCountEntry_IdOperatorsInput>;
 };
 
-export type FilterCountEntries_IdOperatorsInput = {
+export type FilterCountEntry_IdOperatorsInput = {
   gt?: Maybe<Scalars['MongoID']>;
   gte?: Maybe<Scalars['MongoID']>;
   lt?: Maybe<Scalars['MongoID']>;
@@ -358,7 +358,7 @@ export type FilterCountEntries_IdOperatorsInput = {
   exists?: Maybe<Scalars['Boolean']>;
 };
 
-export type FilterCountTagsInput = {
+export type FilterCountTagInput = {
   userId?: Maybe<Scalars['MongoID']>;
   workspaceId?: Maybe<Scalars['MongoID']>;
   collectionId?: Maybe<Scalars['MongoID']>;
@@ -368,17 +368,17 @@ export type FilterCountTagsInput = {
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
   /** List of *indexed* fields that can be filtered via operators. */
-  _operators?: Maybe<FilterCountTagsOperatorsInput>;
-  OR?: Maybe<Array<FilterCountTagsInput>>;
-  AND?: Maybe<Array<FilterCountTagsInput>>;
+  _operators?: Maybe<FilterCountTagOperatorsInput>;
+  OR?: Maybe<Array<FilterCountTagInput>>;
+  AND?: Maybe<Array<FilterCountTagInput>>;
 };
 
 /** For performance reason this type contains only *indexed* fields. */
-export type FilterCountTagsOperatorsInput = {
-  _id?: Maybe<FilterCountTags_IdOperatorsInput>;
+export type FilterCountTagOperatorsInput = {
+  _id?: Maybe<FilterCountTag_IdOperatorsInput>;
 };
 
-export type FilterCountTags_IdOperatorsInput = {
+export type FilterCountTag_IdOperatorsInput = {
   gt?: Maybe<Scalars['MongoID']>;
   gte?: Maybe<Scalars['MongoID']>;
   lt?: Maybe<Scalars['MongoID']>;
@@ -452,51 +452,51 @@ export type FilterCountWorkspace_IdOperatorsInput = {
   exists?: Maybe<Scalars['Boolean']>;
 };
 
-export type FilterFindManyCollectionsFieldsInput = {
+export type FilterFindManyCollectionFieldsInput = {
   key?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['JSON']>;
-  kind?: Maybe<EnumCollectionsFieldsKind>;
+  kind?: Maybe<EnumCollectionFieldsKind>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
 
-export type FilterFindManyCollectionsInput = {
+export type FilterFindManyCollectionInput = {
   workspaceId?: Maybe<Scalars['MongoID']>;
-  type?: Maybe<EnumCollectionsType>;
+  type?: Maybe<EnumCollectionType>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  fields?: Maybe<Array<Maybe<FilterFindManyCollectionsFieldsInput>>>;
-  OR?: Maybe<Array<FilterFindManyCollectionsInput>>;
-  AND?: Maybe<Array<FilterFindManyCollectionsInput>>;
+  fields?: Maybe<Array<Maybe<FilterFindManyCollectionFieldsInput>>>;
+  OR?: Maybe<Array<FilterFindManyCollectionInput>>;
+  AND?: Maybe<Array<FilterFindManyCollectionInput>>;
 };
 
-export type FilterFindManyEntriesFieldsInput = {
+export type FilterFindManyEntryFieldsInput = {
   key?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['JSON']>;
-  kind?: Maybe<EnumEntriesFieldsKind>;
+  kind?: Maybe<EnumEntryFieldsKind>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
 
-export type FilterFindManyEntriesInput = {
+export type FilterFindManyEntryInput = {
   workspaceId?: Maybe<Scalars['MongoID']>;
   collectionId?: Maybe<Scalars['MongoID']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
-  fields?: Maybe<Array<Maybe<FilterFindManyEntriesFieldsInput>>>;
-  OR?: Maybe<Array<FilterFindManyEntriesInput>>;
-  AND?: Maybe<Array<FilterFindManyEntriesInput>>;
+  fields?: Maybe<Array<Maybe<FilterFindManyEntryFieldsInput>>>;
+  OR?: Maybe<Array<FilterFindManyEntryInput>>;
+  AND?: Maybe<Array<FilterFindManyEntryInput>>;
 };
 
-export type FilterFindManyTagsInput = {
+export type FilterFindManyTagInput = {
   workspaceId?: Maybe<Scalars['MongoID']>;
   collectionId?: Maybe<Scalars['MongoID']>;
   title?: Maybe<Scalars['String']>;
-  OR?: Maybe<Array<FilterFindManyTagsInput>>;
-  AND?: Maybe<Array<FilterFindManyTagsInput>>;
+  OR?: Maybe<Array<FilterFindManyTagInput>>;
+  AND?: Maybe<Array<FilterFindManyTagInput>>;
 };
 
 export type FilterFindManyWorkspaceFieldsInput = {
@@ -666,17 +666,17 @@ export type Mutation = {
   /** Update one document: 1) Retrieve one document via findOne. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it. */
   workspaceUpdate?: Maybe<UpdateOneWorkspacePayload>;
   /** Create one document with mongoose defaults, setters, hooks and validation */
-  collectionCreateOne?: Maybe<CreateOneCollectionsPayload>;
+  collectionCreateOne?: Maybe<CreateOneCollectionPayload>;
   /** Update one document: 1) Retrieve one document by findById. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it. */
-  collectionUpdateById?: Maybe<UpdateByIdCollectionsPayload>;
+  collectionUpdateById?: Maybe<UpdateByIdCollectionPayload>;
   /** Create one document with mongoose defaults, setters, hooks and validation */
-  EntryCreateOne?: Maybe<CreateOneEntriesPayload>;
+  EntryCreateOne?: Maybe<CreateOneEntryPayload>;
   /** Update one document: 1) Retrieve one document by findById. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it. */
-  EntryUpdateById?: Maybe<UpdateByIdEntriesPayload>;
+  EntryUpdateById?: Maybe<UpdateByIdEntryPayload>;
   /** Create one document with mongoose defaults, setters, hooks and validation */
-  TagCreateOne?: Maybe<CreateOneTagsPayload>;
+  TagCreateOne?: Maybe<CreateOneTagPayload>;
   /** Update one document: 1) Retrieve one document by findById. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it. */
-  TagUpdateById?: Maybe<UpdateByIdTagsPayload>;
+  TagUpdateById?: Maybe<UpdateByIdTagPayload>;
 };
 
 
@@ -694,35 +694,35 @@ export type MutationWorkspaceUpdateArgs = {
 
 
 export type MutationCollectionCreateOneArgs = {
-  record: CreateOneCollectionsInput;
+  record: CreateOneCollectionInput;
 };
 
 
 export type MutationCollectionUpdateByIdArgs = {
   _id: Scalars['MongoID'];
-  record: UpdateByIdCollectionsInput;
+  record: UpdateByIdCollectionInput;
 };
 
 
 export type MutationEntryCreateOneArgs = {
-  record: CreateOneEntriesInput;
+  record: CreateOneEntryInput;
 };
 
 
 export type MutationEntryUpdateByIdArgs = {
   _id: Scalars['MongoID'];
-  record: UpdateByIdEntriesInput;
+  record: UpdateByIdEntryInput;
 };
 
 
 export type MutationTagCreateOneArgs = {
-  record: CreateOneTagsInput;
+  record: CreateOneTagInput;
 };
 
 
 export type MutationTagUpdateByIdArgs = {
   _id: Scalars['MongoID'];
-  record: UpdateByIdTagsInput;
+  record: UpdateByIdTagInput;
 };
 
 export type PaginationInfo = {
@@ -742,17 +742,17 @@ export type Query = {
   workspaceOne?: Maybe<Workspace>;
   workspacePaginate?: Maybe<WorkspacePagination>;
   workspaceCount?: Maybe<Scalars['Int']>;
-  collectionFind: Array<Collections>;
-  collectionById?: Maybe<Collections>;
-  collectionPaginate?: Maybe<CollectionsPagination>;
+  collectionFind: Array<Collection>;
+  collectionById?: Maybe<Collection>;
+  collectionPaginate?: Maybe<CollectionPagination>;
   collectionCount?: Maybe<Scalars['Int']>;
-  EntryFind: Array<Entries>;
-  EntryById?: Maybe<Entries>;
-  EntryPaginate?: Maybe<EntriesPagination>;
+  EntryFind: Array<Entry>;
+  EntryById?: Maybe<Entry>;
+  EntryPaginate?: Maybe<EntryPagination>;
   EntryCount?: Maybe<Scalars['Int']>;
-  TagFind: Array<Tags>;
-  TagById?: Maybe<Tags>;
-  TagPaginate?: Maybe<TagsPagination>;
+  TagFind: Array<Tag>;
+  TagById?: Maybe<Tag>;
+  TagPaginate?: Maybe<TagPagination>;
   TagCount?: Maybe<Scalars['Int']>;
 };
 
@@ -791,10 +791,10 @@ export type QueryWorkspaceCountArgs = {
 
 
 export type QueryCollectionFindArgs = {
-  filter?: Maybe<FilterFindManyCollectionsInput>;
+  filter?: Maybe<FilterFindManyCollectionInput>;
   skip?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
-  sort?: Maybe<SortFindManyCollectionsInput>;
+  sort?: Maybe<SortFindManyCollectionInput>;
 };
 
 
@@ -806,21 +806,21 @@ export type QueryCollectionByIdArgs = {
 export type QueryCollectionPaginateArgs = {
   page?: Maybe<Scalars['Int']>;
   perPage?: Maybe<Scalars['Int']>;
-  filter?: Maybe<FilterFindManyCollectionsInput>;
-  sort?: Maybe<SortFindManyCollectionsInput>;
+  filter?: Maybe<FilterFindManyCollectionInput>;
+  sort?: Maybe<SortFindManyCollectionInput>;
 };
 
 
 export type QueryCollectionCountArgs = {
-  filter?: Maybe<FilterCountCollectionsInput>;
+  filter?: Maybe<FilterCountCollectionInput>;
 };
 
 
 export type QueryEntryFindArgs = {
-  filter?: Maybe<FilterFindManyEntriesInput>;
+  filter?: Maybe<FilterFindManyEntryInput>;
   skip?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
-  sort?: Maybe<SortFindManyEntriesInput>;
+  sort?: Maybe<SortFindManyEntryInput>;
 };
 
 
@@ -832,21 +832,21 @@ export type QueryEntryByIdArgs = {
 export type QueryEntryPaginateArgs = {
   page?: Maybe<Scalars['Int']>;
   perPage?: Maybe<Scalars['Int']>;
-  filter?: Maybe<FilterFindManyEntriesInput>;
-  sort?: Maybe<SortFindManyEntriesInput>;
+  filter?: Maybe<FilterFindManyEntryInput>;
+  sort?: Maybe<SortFindManyEntryInput>;
 };
 
 
 export type QueryEntryCountArgs = {
-  filter?: Maybe<FilterCountEntriesInput>;
+  filter?: Maybe<FilterCountEntryInput>;
 };
 
 
 export type QueryTagFindArgs = {
-  filter?: Maybe<FilterFindManyTagsInput>;
+  filter?: Maybe<FilterFindManyTagInput>;
   skip?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
-  sort?: Maybe<SortFindManyTagsInput>;
+  sort?: Maybe<SortFindManyTagInput>;
 };
 
 
@@ -858,13 +858,13 @@ export type QueryTagByIdArgs = {
 export type QueryTagPaginateArgs = {
   page?: Maybe<Scalars['Int']>;
   perPage?: Maybe<Scalars['Int']>;
-  filter?: Maybe<FilterFindManyTagsInput>;
-  sort?: Maybe<SortFindManyTagsInput>;
+  filter?: Maybe<FilterFindManyTagInput>;
+  sort?: Maybe<SortFindManyTagInput>;
 };
 
 
 export type QueryTagCountArgs = {
-  filter?: Maybe<FilterCountTagsInput>;
+  filter?: Maybe<FilterCountTagInput>;
 };
 
 
@@ -874,17 +874,17 @@ export type RuntimeError = ErrorInterface & {
   message?: Maybe<Scalars['String']>;
 };
 
-export enum SortFindManyCollectionsInput {
+export enum SortFindManyCollectionInput {
   IdAsc = '_ID_ASC',
   IdDesc = '_ID_DESC'
 }
 
-export enum SortFindManyEntriesInput {
+export enum SortFindManyEntryInput {
   IdAsc = '_ID_ASC',
   IdDesc = '_ID_DESC'
 }
 
-export enum SortFindManyTagsInput {
+export enum SortFindManyTagInput {
   IdAsc = '_ID_ASC',
   IdDesc = '_ID_DESC'
 }
@@ -910,8 +910,8 @@ export enum SortUpdateOneWorkspaceInput {
   SlugDesc = 'SLUG_DESC'
 }
 
-export type Tags = {
-  __typename?: 'Tags';
+export type Tag = {
+  __typename?: 'Tag';
   userId: Scalars['MongoID'];
   workspaceId?: Maybe<Scalars['MongoID']>;
   collectionId?: Maybe<Scalars['MongoID']>;
@@ -923,17 +923,17 @@ export type Tags = {
 };
 
 /** List of items with pagination. */
-export type TagsPagination = {
-  __typename?: 'TagsPagination';
+export type TagPagination = {
+  __typename?: 'TagPagination';
   /** Total object count. */
   count?: Maybe<Scalars['Int']>;
   /** Array of objects. */
-  items?: Maybe<Array<Tags>>;
+  items?: Maybe<Array<Tag>>;
   /** Information to aid in pagination. */
   pageInfo: PaginationInfo;
 };
 
-export type UpdateByIdCollectionsEmojiInput = {
+export type UpdateByIdCollectionEmojiInput = {
   activeSkinTone?: Maybe<Scalars['String']>;
   emoji?: Maybe<Scalars['String']>;
   names?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -941,35 +941,35 @@ export type UpdateByIdCollectionsEmojiInput = {
   unified?: Maybe<Scalars['String']>;
 };
 
-export type UpdateByIdCollectionsFieldsInput = {
+export type UpdateByIdCollectionFieldsInput = {
   key?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['JSON']>;
-  kind?: Maybe<EnumCollectionsFieldsKind>;
+  kind?: Maybe<EnumCollectionFieldsKind>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
 
-export type UpdateByIdCollectionsInput = {
+export type UpdateByIdCollectionInput = {
   workspaceId?: Maybe<Scalars['MongoID']>;
-  type?: Maybe<EnumCollectionsType>;
+  type?: Maybe<EnumCollectionType>;
   title?: Maybe<Scalars['String']>;
-  emoji?: Maybe<UpdateByIdCollectionsEmojiInput>;
+  emoji?: Maybe<UpdateByIdCollectionEmojiInput>;
   description?: Maybe<Scalars['String']>;
-  fields?: Maybe<Array<Maybe<UpdateByIdCollectionsFieldsInput>>>;
+  fields?: Maybe<Array<Maybe<UpdateByIdCollectionFieldsInput>>>;
 };
 
-export type UpdateByIdCollectionsPayload = {
-  __typename?: 'UpdateByIdCollectionsPayload';
+export type UpdateByIdCollectionPayload = {
+  __typename?: 'UpdateByIdCollectionPayload';
   /** Document ID */
   recordId?: Maybe<Scalars['MongoID']>;
   /** Updated document */
-  record?: Maybe<Collections>;
+  record?: Maybe<Collection>;
   /** Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response. */
   error?: Maybe<ErrorInterface>;
 };
 
-export type UpdateByIdEntriesEmojiInput = {
+export type UpdateByIdEntryEmojiInput = {
   activeSkinTone?: Maybe<Scalars['String']>;
   emoji?: Maybe<Scalars['String']>;
   names?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -977,47 +977,47 @@ export type UpdateByIdEntriesEmojiInput = {
   unified?: Maybe<Scalars['String']>;
 };
 
-export type UpdateByIdEntriesFieldsInput = {
+export type UpdateByIdEntryFieldsInput = {
   key?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['JSON']>;
-  kind?: Maybe<EnumEntriesFieldsKind>;
+  kind?: Maybe<EnumEntryFieldsKind>;
   _id?: Maybe<Scalars['MongoID']>;
   updatedAt?: Maybe<Scalars['Date']>;
   createdAt?: Maybe<Scalars['Date']>;
 };
 
-export type UpdateByIdEntriesInput = {
+export type UpdateByIdEntryInput = {
   workspaceId?: Maybe<Scalars['MongoID']>;
   collectionId?: Maybe<Scalars['MongoID']>;
   title?: Maybe<Scalars['String']>;
-  emoji?: Maybe<UpdateByIdEntriesEmojiInput>;
+  emoji?: Maybe<UpdateByIdEntryEmojiInput>;
   description?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Scalars['MongoID']>>>;
-  fields?: Maybe<Array<Maybe<UpdateByIdEntriesFieldsInput>>>;
+  fields?: Maybe<Array<Maybe<UpdateByIdEntryFieldsInput>>>;
 };
 
-export type UpdateByIdEntriesPayload = {
-  __typename?: 'UpdateByIdEntriesPayload';
+export type UpdateByIdEntryPayload = {
+  __typename?: 'UpdateByIdEntryPayload';
   /** Document ID */
   recordId?: Maybe<Scalars['MongoID']>;
   /** Updated document */
-  record?: Maybe<Entries>;
+  record?: Maybe<Entry>;
   /** Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response. */
   error?: Maybe<ErrorInterface>;
 };
 
-export type UpdateByIdTagsInput = {
+export type UpdateByIdTagInput = {
   workspaceId?: Maybe<Scalars['MongoID']>;
   collectionId?: Maybe<Scalars['MongoID']>;
   title?: Maybe<Scalars['String']>;
 };
 
-export type UpdateByIdTagsPayload = {
-  __typename?: 'UpdateByIdTagsPayload';
+export type UpdateByIdTagPayload = {
+  __typename?: 'UpdateByIdTagPayload';
   /** Document ID */
   recordId?: Maybe<Scalars['MongoID']>;
   /** Updated document */
-  record?: Maybe<Tags>;
+  record?: Maybe<Tag>;
   /** Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response. */
   error?: Maybe<ErrorInterface>;
 };
@@ -1137,6 +1137,73 @@ export type WorkspacePagination = {
   pageInfo: PaginationInfo;
 };
 
+export type NewCollectionMutationVariables = Exact<{
+  record: CreateOneCollectionInput;
+}>;
+
+
+export type NewCollectionMutation = { __typename?: 'Mutation', collectionCreateOne?: Maybe<{ __typename?: 'CreateOneCollectionPayload', recordId?: Maybe<any>, record?: Maybe<{ __typename?: 'Collection', _id: any, userId: any, workspaceId: any, type?: Maybe<EnumCollectionType>, slug?: Maybe<string>, isDeleted: boolean, title: string, description?: Maybe<string>, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'CollectionEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string> }>, fields?: Maybe<Array<Maybe<{ __typename?: 'CollectionFields', key: string, value: any, kind?: Maybe<EnumCollectionFieldsKind> }>>> }>, error?: Maybe<{ __typename?: 'MongoError', message?: Maybe<string> } | { __typename?: 'RuntimeError', message?: Maybe<string> } | { __typename?: 'ValidationError', message?: Maybe<string> }> }> };
+
+export type CollectionPaginateQueryVariables = Exact<{
+  page?: Maybe<Scalars['Int']>;
+  perPage?: Maybe<Scalars['Int']>;
+  filter?: Maybe<FilterFindManyCollectionInput>;
+  sort?: Maybe<SortFindManyCollectionInput>;
+}>;
+
+
+export type CollectionPaginateQuery = { __typename?: 'Query', collectionPaginate?: Maybe<{ __typename?: 'CollectionPagination', count?: Maybe<number>, items?: Maybe<Array<{ __typename?: 'Collection', _id: any, userId: any, workspaceId: any, type?: Maybe<EnumCollectionType>, slug?: Maybe<string>, isDeleted: boolean, title: string, description?: Maybe<string>, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'CollectionEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string> }>, fields?: Maybe<Array<Maybe<{ __typename?: 'CollectionFields', key: string, value: any, kind?: Maybe<EnumCollectionFieldsKind> }>>> }>>, pageInfo: { __typename?: 'PaginationInfo', currentPage: number, perPage: number, pageCount?: Maybe<number>, itemCount?: Maybe<number>, hasNextPage?: Maybe<boolean>, hasPreviousPage?: Maybe<boolean> } }> };
+
+export type CollectionDataFragment = { __typename?: 'Collection', _id: any, userId: any, workspaceId: any, type?: Maybe<EnumCollectionType>, slug?: Maybe<string>, isDeleted: boolean, title: string, description?: Maybe<string>, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'CollectionEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string> }>, fields?: Maybe<Array<Maybe<{ __typename?: 'CollectionFields', key: string, value: any, kind?: Maybe<EnumCollectionFieldsKind> }>>> };
+
+export type CollectionEmojiDataFragment = { __typename?: 'CollectionEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string> };
+
+export type CollectionFieldsDataFragment = { __typename?: 'CollectionFields', key: string, value: any, kind?: Maybe<EnumCollectionFieldsKind> };
+
+export type PaginationInfoDataFragment = { __typename?: 'PaginationInfo', currentPage: number, perPage: number, pageCount?: Maybe<number>, itemCount?: Maybe<number>, hasNextPage?: Maybe<boolean>, hasPreviousPage?: Maybe<boolean> };
+
+export type NewEntryMutationVariables = Exact<{
+  record: CreateOneEntryInput;
+}>;
+
+
+export type NewEntryMutation = { __typename?: 'Mutation', EntryCreateOne?: Maybe<{ __typename?: 'CreateOneEntryPayload', recordId?: Maybe<any>, record?: Maybe<{ __typename?: 'Entry', userId: any, workspaceId: any, collectionId: any, slug?: Maybe<string>, isDeleted: boolean, title: string, description?: Maybe<string>, tags?: Maybe<Array<Maybe<any>>>, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'EntryEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string> }>, fields?: Maybe<Array<Maybe<{ __typename?: 'EntryFields', key: string, value: any, kind?: Maybe<EnumEntryFieldsKind> }>>> }>, error?: Maybe<{ __typename?: 'MongoError', message?: Maybe<string> } | { __typename?: 'RuntimeError', message?: Maybe<string> } | { __typename?: 'ValidationError', message?: Maybe<string> }> }> };
+
+export type EntryPaginateQueryVariables = Exact<{
+  page?: Maybe<Scalars['Int']>;
+  perPage?: Maybe<Scalars['Int']>;
+  filter?: Maybe<FilterFindManyEntryInput>;
+  sort?: Maybe<SortFindManyEntryInput>;
+}>;
+
+
+export type EntryPaginateQuery = { __typename?: 'Query', EntryPaginate?: Maybe<{ __typename?: 'EntryPagination', count?: Maybe<number>, items?: Maybe<Array<{ __typename?: 'Entry', userId: any, workspaceId: any, collectionId: any, slug?: Maybe<string>, isDeleted: boolean, title: string, description?: Maybe<string>, tags?: Maybe<Array<Maybe<any>>>, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'EntryEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string> }>, fields?: Maybe<Array<Maybe<{ __typename?: 'EntryFields', key: string, value: any, kind?: Maybe<EnumEntryFieldsKind> }>>> }>>, pageInfo: { __typename?: 'PaginationInfo', currentPage: number, perPage: number, pageCount?: Maybe<number>, itemCount?: Maybe<number>, hasNextPage?: Maybe<boolean>, hasPreviousPage?: Maybe<boolean> } }> };
+
+export type EntryDataFragment = { __typename?: 'Entry', userId: any, workspaceId: any, collectionId: any, slug?: Maybe<string>, isDeleted: boolean, title: string, description?: Maybe<string>, tags?: Maybe<Array<Maybe<any>>>, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any>, emoji?: Maybe<{ __typename?: 'EntryEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string> }>, fields?: Maybe<Array<Maybe<{ __typename?: 'EntryFields', key: string, value: any, kind?: Maybe<EnumEntryFieldsKind> }>>> };
+
+export type EntryEmojiDataFragment = { __typename?: 'EntryEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string> };
+
+export type EntryFieldsDataFragment = { __typename?: 'EntryFields', key: string, value: any, kind?: Maybe<EnumEntryFieldsKind> };
+
+export type NewTagMutationVariables = Exact<{
+  record: CreateOneTagInput;
+}>;
+
+
+export type NewTagMutation = { __typename?: 'Mutation', TagCreateOne?: Maybe<{ __typename?: 'CreateOneTagPayload', recordId?: Maybe<any>, record?: Maybe<{ __typename?: 'Tag', userId: any, workspaceId?: Maybe<any>, collectionId?: Maybe<any>, slug?: Maybe<string>, title?: Maybe<string>, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any> }>, error?: Maybe<{ __typename?: 'MongoError', message?: Maybe<string> } | { __typename?: 'RuntimeError', message?: Maybe<string> } | { __typename?: 'ValidationError', message?: Maybe<string> }> }> };
+
+export type TagPaginateQueryVariables = Exact<{
+  page?: Maybe<Scalars['Int']>;
+  perPage?: Maybe<Scalars['Int']>;
+  filter?: Maybe<FilterFindManyTagInput>;
+  sort?: Maybe<SortFindManyTagInput>;
+}>;
+
+
+export type TagPaginateQuery = { __typename?: 'Query', TagPaginate?: Maybe<{ __typename?: 'TagPagination', count?: Maybe<number>, items?: Maybe<Array<{ __typename?: 'Tag', userId: any, workspaceId?: Maybe<any>, collectionId?: Maybe<any>, slug?: Maybe<string>, title?: Maybe<string>, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any> }>>, pageInfo: { __typename?: 'PaginationInfo', currentPage: number, perPage: number, pageCount?: Maybe<number>, itemCount?: Maybe<number>, hasNextPage?: Maybe<boolean>, hasPreviousPage?: Maybe<boolean> } }> };
+
+export type TagDataFragment = { __typename?: 'Tag', userId: any, workspaceId?: Maybe<any>, collectionId?: Maybe<any>, slug?: Maybe<string>, title?: Maybe<string>, _id: any, updatedAt?: Maybe<any>, createdAt?: Maybe<any> };
+
 export type WorkspacesPaginationQueryVariables = Exact<{
   perPage?: Maybe<Scalars['Int']>;
   page?: Maybe<Scalars['Int']>;
@@ -1171,6 +1238,99 @@ export type WorkspaceDataFragment = { __typename?: 'Workspace', _id: any, userId
 
 export type EmojiDataFragment = { __typename?: 'WorkspaceEmoji', emoji?: Maybe<string>, names?: Maybe<Array<Maybe<string>>>, unified?: Maybe<string>, activeSkinTone?: Maybe<string>, originalUnified?: Maybe<string> };
 
+export const CollectionEmojiDataFragmentDoc = gql`
+    fragment CollectionEmojiData on CollectionEmoji {
+  emoji
+  names
+  unified
+}
+    `;
+export const CollectionFieldsDataFragmentDoc = gql`
+    fragment CollectionFieldsData on CollectionFields {
+  key
+  value
+  kind
+}
+    `;
+export const CollectionDataFragmentDoc = gql`
+    fragment CollectionData on Collection {
+  _id
+  userId
+  workspaceId
+  type
+  slug
+  isDeleted
+  title
+  emoji {
+    ...CollectionEmojiData
+  }
+  description
+  fields {
+    ...CollectionFieldsData
+  }
+  updatedAt
+  createdAt
+}
+    ${CollectionEmojiDataFragmentDoc}
+${CollectionFieldsDataFragmentDoc}`;
+export const PaginationInfoDataFragmentDoc = gql`
+    fragment PaginationInfoData on PaginationInfo {
+  currentPage
+  perPage
+  pageCount
+  itemCount
+  hasNextPage
+  hasPreviousPage
+}
+    `;
+export const EntryEmojiDataFragmentDoc = gql`
+    fragment EntryEmojiData on EntryEmoji {
+  emoji
+  names
+  unified
+}
+    `;
+export const EntryFieldsDataFragmentDoc = gql`
+    fragment EntryFieldsData on EntryFields {
+  key
+  value
+  kind
+}
+    `;
+export const EntryDataFragmentDoc = gql`
+    fragment EntryData on Entry {
+  userId
+  workspaceId
+  collectionId
+  slug
+  isDeleted
+  title
+  emoji {
+    ...EntryEmojiData
+  }
+  description
+  tags
+  fields {
+    ...EntryFieldsData
+  }
+  _id
+  updatedAt
+  createdAt
+}
+    ${EntryEmojiDataFragmentDoc}
+${EntryFieldsDataFragmentDoc}`;
+export const TagDataFragmentDoc = gql`
+    fragment TagData on Tag {
+  userId
+  workspaceId
+  collectionId
+  slug
+  title
+  _id
+  updatedAt
+  createdAt
+}
+    `;
 export const EmojiDataFragmentDoc = gql`
     fragment EmojiData on WorkspaceEmoji {
   emoji
@@ -1200,24 +1360,125 @@ export const WorkspaceDataFragmentDoc = gql`
   }
 }
     ${EmojiDataFragmentDoc}`;
+export const NewCollectionDocument = gql`
+    mutation NewCollection($record: CreateOneCollectionInput!) {
+  collectionCreateOne(record: $record) {
+    recordId
+    record {
+      ...CollectionData
+    }
+    error {
+      message
+    }
+  }
+}
+    ${CollectionDataFragmentDoc}`;
+
+export function useNewCollectionMutation() {
+  return Urql.useMutation<NewCollectionMutation, NewCollectionMutationVariables>(NewCollectionDocument);
+};
+export const CollectionPaginateDocument = gql`
+    query CollectionPaginate($page: Int, $perPage: Int, $filter: FilterFindManyCollectionInput, $sort: SortFindManyCollectionInput) {
+  collectionPaginate(perPage: $perPage, page: $page, filter: $filter) {
+    count
+    items {
+      ...CollectionData
+    }
+    pageInfo {
+      ...PaginationInfoData
+    }
+  }
+}
+    ${CollectionDataFragmentDoc}
+${PaginationInfoDataFragmentDoc}`;
+
+export function useCollectionPaginateQuery(options: Omit<Urql.UseQueryArgs<CollectionPaginateQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<CollectionPaginateQuery>({ query: CollectionPaginateDocument, ...options });
+};
+export const NewEntryDocument = gql`
+    mutation NewEntry($record: CreateOneEntryInput!) {
+  EntryCreateOne(record: $record) {
+    recordId
+    record {
+      ...EntryData
+    }
+    error {
+      message
+    }
+  }
+}
+    ${EntryDataFragmentDoc}`;
+
+export function useNewEntryMutation() {
+  return Urql.useMutation<NewEntryMutation, NewEntryMutationVariables>(NewEntryDocument);
+};
+export const EntryPaginateDocument = gql`
+    query EntryPaginate($page: Int, $perPage: Int, $filter: FilterFindManyEntryInput, $sort: SortFindManyEntryInput) {
+  EntryPaginate(perPage: $perPage, page: $page, filter: $filter) {
+    count
+    items {
+      ...EntryData
+    }
+    pageInfo {
+      ...PaginationInfoData
+    }
+  }
+}
+    ${EntryDataFragmentDoc}
+${PaginationInfoDataFragmentDoc}`;
+
+export function useEntryPaginateQuery(options: Omit<Urql.UseQueryArgs<EntryPaginateQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<EntryPaginateQuery>({ query: EntryPaginateDocument, ...options });
+};
+export const NewTagDocument = gql`
+    mutation NewTag($record: CreateOneTagInput!) {
+  TagCreateOne(record: $record) {
+    recordId
+    record {
+      ...TagData
+    }
+    error {
+      message
+    }
+  }
+}
+    ${TagDataFragmentDoc}`;
+
+export function useNewTagMutation() {
+  return Urql.useMutation<NewTagMutation, NewTagMutationVariables>(NewTagDocument);
+};
+export const TagPaginateDocument = gql`
+    query TagPaginate($page: Int, $perPage: Int, $filter: FilterFindManyTagInput, $sort: SortFindManyTagInput) {
+  TagPaginate(perPage: $perPage, page: $page, filter: $filter) {
+    count
+    items {
+      ...TagData
+    }
+    pageInfo {
+      ...PaginationInfoData
+    }
+  }
+}
+    ${TagDataFragmentDoc}
+${PaginationInfoDataFragmentDoc}`;
+
+export function useTagPaginateQuery(options: Omit<Urql.UseQueryArgs<TagPaginateQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<TagPaginateQuery>({ query: TagPaginateDocument, ...options });
+};
 export const WorkspacesPaginationDocument = gql`
     query WorkspacesPagination($perPage: Int, $page: Int) {
   workspacePaginate(perPage: $perPage, page: $page) {
     count
     pageInfo {
-      currentPage
-      perPage
-      pageCount
-      itemCount
-      hasNextPage
-      hasPreviousPage
+      ...PaginationInfoData
     }
     items {
       ...WorkspaceData
     }
   }
 }
-    ${WorkspaceDataFragmentDoc}`;
+    ${PaginationInfoDataFragmentDoc}
+${WorkspaceDataFragmentDoc}`;
 
 export function useWorkspacesPaginationQuery(options: Omit<Urql.UseQueryArgs<WorkspacesPaginationQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<WorkspacesPaginationQuery>({ query: WorkspacesPaginationDocument, ...options });

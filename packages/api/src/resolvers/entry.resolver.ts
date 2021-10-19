@@ -8,7 +8,7 @@ import { defaultFieldsGQL } from '../helpers/defaults/gqlComposeDefaults';
 import { EntryModel } from '../modules/entry/model/entry.model';
 
 const EntryTC = composeMongoose(EntryModel, {
-  name: 'Entries',
+  name: 'Entry',
 });
 
 schemaComposer.Query.addFields({

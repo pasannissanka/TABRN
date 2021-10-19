@@ -2,12 +2,7 @@ query WorkspacesPagination($perPage: Int, $page: Int) {
   workspacePaginate(perPage: $perPage, page: $page) {
     count
     pageInfo {
-      currentPage
-      perPage
-      pageCount
-      itemCount
-      hasNextPage
-      hasPreviousPage
+      ...PaginationInfoData
     }
     items {
       ...WorkspaceData

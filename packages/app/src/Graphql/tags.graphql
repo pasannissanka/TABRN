@@ -1,0 +1,39 @@
+mutation NewTag($record: CreateOneTagInput!) {
+  TagCreateOne(record: $record) {
+    recordId
+    record {
+      ...TagData
+    }
+    error {
+      message
+    }
+  }
+}
+
+query TagPaginate(
+  $page: Int
+  $perPage: Int
+  $filter: FilterFindManyTagInput
+  $sort: SortFindManyTagInput
+) {
+  TagPaginate(perPage: $perPage, page: $page, filter: $filter) {
+    count
+    items {
+      ...TagData
+    }
+    pageInfo {
+      ...PaginationInfoData
+    }
+  }
+}
+
+fragment TagData on Tag {
+  userId
+  workspaceId
+  collectionId
+  slug
+  title
+  _id
+  updatedAt
+  createdAt
+}

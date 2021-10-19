@@ -1,0 +1,60 @@
+mutation NewEntry($record: CreateOneEntryInput!) {
+  EntryCreateOne(record: $record) {
+    recordId
+    record {
+      ...EntryData
+    }
+    error {
+      message
+    }
+  }
+}
+
+query EntryPaginate(
+  $page: Int
+  $perPage: Int
+  $filter: FilterFindManyEntryInput
+  $sort: SortFindManyEntryInput
+) {
+  EntryPaginate(perPage: $perPage, page: $page, filter: $filter) {
+    count
+    items {
+      ...EntryData
+    }
+    pageInfo {
+      ...PaginationInfoData
+    }
+  }
+}
+
+fragment EntryData on Entry {
+  userId
+  workspaceId
+  collectionId
+  slug
+  isDeleted
+  title
+  emoji {
+    ...EntryEmojiData
+  }
+  description
+  tags
+  fields {
+    ...EntryFieldsData
+  }
+  _id
+  updatedAt
+  createdAt
+}
+
+fragment EntryEmojiData on EntryEmoji {
+  emoji
+  names
+  unified
+}
+
+fragment EntryFieldsData on EntryFields {
+  key
+  value
+  kind
+}

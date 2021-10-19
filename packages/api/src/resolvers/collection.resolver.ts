@@ -8,7 +8,7 @@ import { defaultFieldsGQL } from '../helpers/defaults/gqlComposeDefaults';
 import { CollectionModel } from '../modules/collection/model/collection.model';
 
 const CollectionTC = composeMongoose(CollectionModel, {
-  name: 'Collections',
+  name: 'Collection',
 });
 
 schemaComposer.Query.addFields({
