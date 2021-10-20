@@ -73,7 +73,7 @@ export interface IUser extends IMongoDocument {
 export interface WorkspaceBase {
   title: string;
   description: string;
-  emoji?: any;
+  icon?: string;
 }
 
 export interface WorkspaceData extends WorkspaceBase, IMongoDocument {}
@@ -115,3 +115,40 @@ export interface CollectionBase {
   description: string;
   kind: any | '';
 }
+
+// export enum COLLECTION_TYPE {
+//   CALENDER = 'calender',
+//   LIST = 'list',
+//   KANBAN = 'kanban',
+// }
+
+// export enum FIELD_TYPE {
+//   STRING = 'string',
+//   DATE = 'date',
+//   NUMBER = 'number',
+//   LINK = 'link',
+// }
+
+// export interface CollectionItem {
+//   _id: string;
+//   workspaceId: string;
+//   type: COLLECTION_TYPE;
+//   slug: string;
+//   isDeleted: boolean;
+//   title: string;
+//   emoji: {
+//     emoji: string;
+//     names: string;
+//     unified: string;
+//   };
+//   description: string;
+//   fields: Field[];
+//   updatedAt: Date;
+//   createdAt: Date;
+// }
+
+// export interface Field {
+//   key: string;
+//   value: string;
+//   kind: FIELD_TYPE;
+// }

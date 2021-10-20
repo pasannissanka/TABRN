@@ -16,7 +16,7 @@ query EntryPaginate(
   $filter: FilterFindManyEntryInput
   $sort: SortFindManyEntryInput
 ) {
-  EntryPaginate(perPage: $perPage, page: $page, filter: $filter) {
+  EntryPaginate(perPage: $perPage, page: $page, filter: $filter, sort: $sort) {
     count
     items {
       ...EntryData
@@ -34,9 +34,7 @@ fragment EntryData on Entry {
   slug
   isDeleted
   title
-  emoji {
-    ...EntryEmojiData
-  }
+  icon
   description
   tags
   fields {
@@ -45,12 +43,6 @@ fragment EntryData on Entry {
   _id
   updatedAt
   createdAt
-}
-
-fragment EntryEmojiData on EntryEmoji {
-  emoji
-  names
-  unified
 }
 
 fragment EntryFieldsData on EntryFields {

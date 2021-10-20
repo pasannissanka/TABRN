@@ -1,5 +1,4 @@
 import { Document } from 'mongoose';
-import { IEmojiData } from '../../workspace/types/workspace.type';
 import { COLLECTION_TYPE, FIELD_TYPE } from '../constants/collection.constants';
 
 export interface IField extends Document {
@@ -17,7 +16,7 @@ export interface ICollectionBase {
   // Fields
   /// Primary
   title: string;
-  emoji?: IEmojiData;
+  icon?: string;
   description: string;
   /// Dynamic fields
   fields: IField[];

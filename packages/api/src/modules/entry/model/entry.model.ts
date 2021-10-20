@@ -37,16 +37,9 @@ const EntrySchema = new Schema(
       type: String,
       required: true,
     },
-    emoji: new Schema(
-      {
-        activeSkinTone: String,
-        emoji: String,
-        names: [String],
-        originalUnified: String,
-        unified: String,
-      },
-      { _id: false }
-    ),
+    icon: {
+      type: String,
+    },
     description: {
       type: String,
     },

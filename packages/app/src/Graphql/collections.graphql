@@ -16,7 +16,12 @@ query CollectionPaginate(
   $filter: FilterFindManyCollectionInput
   $sort: SortFindManyCollectionInput
 ) {
-  collectionPaginate(perPage: $perPage, page: $page, filter: $filter) {
+  collectionPaginate(
+    perPage: $perPage
+    page: $page
+    filter: $filter
+    sort: $sort
+  ) {
     count
     items {
       ...CollectionData
@@ -35,21 +40,13 @@ fragment CollectionData on Collection {
   slug
   isDeleted
   title
-  emoji {
-    ...CollectionEmojiData
-  }
+  icon
   description
   fields {
     ...CollectionFieldsData
   }
   updatedAt
   createdAt
-}
-
-fragment CollectionEmojiData on CollectionEmoji {
-  emoji
-  names
-  unified
 }
 
 fragment CollectionFieldsData on CollectionFields {

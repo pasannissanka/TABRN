@@ -4,8 +4,12 @@ import { Breadcrumbs } from '../../Components/Breadcrumbs/Breadcrumbs';
 import { Modal } from '../../Components/Modal/Modal';
 import { AppContext } from '../../Context/AppContextProvider';
 import { BreadcrumbsContext } from '../../Context/BreadcrumbsContextProvider';
-import { useGetWorkspaceQuery } from '../../Types/generated-graphql-types';
+import {
+  useCollectionPaginateQuery,
+  useGetWorkspaceQuery,
+} from '../../Types/generated-graphql-types';
 import { CollectionBase, NavDataBC } from '../../Types/types';
+import { CollectionsDashboard } from '../Collection/CollectionsDashboard';
 import { NewCollection } from './Modals/NewCollection';
 
 export const WorkspaceItem = () => {
@@ -42,7 +46,7 @@ export const WorkspaceItem = () => {
           title: dataWorkspace.title,
           path: path.replace(':work_slug', dataWorkspace.slug as string),
           description: dataWorkspace.description as string,
-          icon: dataWorkspace.emoji?.emoji!,
+          icon: dataWorkspace.icon as string,
           actions: [
             {
               type: 'CREATE',
@@ -89,9 +93,9 @@ export const WorkspaceItem = () => {
               <div>
                 <Switch>
                   <Route exact path={path}>
-                    <div>Dashboard</div>
+                    <CollectionsDashboard workspaceId={dataWorkspace?._id} />
                   </Route>
-                  <Route exact path={`${path}/:view_slug`}>
+                  <Route exact path={`${path}/:collection_slug`}>
                     <div>Collection</div>
                   </Route>
                 </Switch>
@@ -102,8 +106,8 @@ export const WorkspaceItem = () => {
           <Modal
             show={newActionOpen}
             onClose={() => setNewActionOpen(false)}
-            title="New Workspace View"
-            description="Use Workspace Views to categorize your content"
+            title="New Collection"
+            description="Use Collections to categorize your content"
             size="full"
           >
             <NewCollection

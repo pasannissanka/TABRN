@@ -15,7 +15,7 @@ export const Breadcrumbs = (props: BreadcrumbsType) => {
         <h2 className="text-2xl font-semibold">
           {navData.map((nav, idx) => {
             return (
-              <span>
+              <span key={idx}>
                 {nav.icon && nav.icon}{' '}
                 <Link
                   to={nav.path}
@@ -41,6 +41,7 @@ export const Breadcrumbs = (props: BreadcrumbsType) => {
               varient="flat"
               size="sm"
               onClick={(e) => action.action(e, navData[navData.length - 1])}
+              key={idx}
             >
               {action.type === 'CREATE' ? (
                 <PlusSMSVG className="flex-1 mr-1 w-5 h-5" />

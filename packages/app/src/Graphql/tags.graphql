@@ -16,7 +16,7 @@ query TagPaginate(
   $filter: FilterFindManyTagInput
   $sort: SortFindManyTagInput
 ) {
-  TagPaginate(perPage: $perPage, page: $page, filter: $filter) {
+  TagPaginate(perPage: $perPage, page: $page, filter: $filter, sort: $sort) {
     count
     items {
       ...TagData

@@ -1,5 +1,5 @@
 import { Menu } from '@headlessui/react';
-import Picker, { IEmojiData } from 'emoji-picker-react';
+import Picker from 'emoji-picker-react';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import React, { useEffect, useState } from 'react';
 import Button from '../../../Components/Button/Button';
@@ -18,17 +18,15 @@ export const NewWorkspace = ({
   newWorkspaceValue,
   mode,
 }: NewWorkspaceProps) => {
-  const [chosenEmoji, setChosenEmoji] = useState<IEmojiData>({
-    activeSkinTone: 'neutral',
+  const [chosenEmoji, setChosenEmoji] = useState<any>({
     emoji: '💼',
-    names: ['briefcase'],
-    originalUnified: '1f4bc',
-    unified: '1f4bc',
   });
 
   useEffect(() => {
-    if (newWorkspaceValue.emoji) {
-      setChosenEmoji(newWorkspaceValue.emoji);
+    if (newWorkspaceValue.icon) {
+      setChosenEmoji({
+        emoji: newWorkspaceValue.icon,
+      });
     }
   }, [newWorkspaceValue]);
 
@@ -46,7 +44,7 @@ export const NewWorkspace = ({
               {
                 title,
                 description,
-                emoji: chosenEmoji,
+                icon: chosenEmoji.emoji,
               },
               mode
             );

@@ -4,7 +4,7 @@ import { IField } from '../../collection/types/collection.types';
 export interface IWorkspace extends Document {
   userId: string;
   slug?: string;
-  emoji?: IEmojiData;
+  icon?: string;
   isDeleted: boolean;
   // Fields
   /// Primary

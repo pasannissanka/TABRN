@@ -51,21 +51,11 @@ fragment WorkspaceData on Workspace {
   createdAt
   updatedAt
   title
-  emoji {
-    ...EmojiData
-  }
+  icon
   description
   fields {
     key
     value
     kind
   }
-}
-
-fragment EmojiData on WorkspaceEmoji {
-  emoji
-  names
-  unified
-  activeSkinTone
-  originalUnified
 }

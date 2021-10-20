@@ -64,7 +64,7 @@ export const Drawer = ({ isDrawerOpen }: DrawerProps) => {
                         <DrawerDisclosure
                           to={`/w/${workspace.slug}`}
                           title={workspace.title}
-                          icon={workspace.emoji?.emoji!}
+                          icon={workspace.icon!}
                         />
                       </li>
                     );

@@ -108,7 +108,7 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
           record: {
             title: value.title,
             description: value.description,
-            emoji: value.emoji,
+            icon: value.icon,
           },
         }).then((result) => reexecuteQuery());
       } else if (mode === 'edit') {
@@ -119,13 +119,7 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
           record: {
             description: value.description,
             title: value.title,
-            emoji: {
-              emoji: value.emoji?.emoji,
-              activeSkinTone: value.emoji?.activeSkinTone,
-              names: value.emoji?.names,
-              originalUnified: value.emoji?.originalUnified,
-              unified: value.emoji?.unified,
-            },
+            icon: value.icon,
           },
         }).then((result) => reexecuteQuery());
       }
@@ -181,7 +175,7 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
                     id={workspace._id}
                     title={workspace.title}
                     action="link"
-                    icon={workspace?.emoji?.emoji as string}
+                    icon={workspace?.icon as string}
                     to={`/w/${workspace.slug}`}
                     secondaryAction="menu"
                     secondaryItems={menuItems}
