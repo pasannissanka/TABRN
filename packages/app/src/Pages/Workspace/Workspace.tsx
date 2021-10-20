@@ -7,6 +7,7 @@ import { BreadcrumbsContext } from '../../Context/BreadcrumbsContextProvider';
 import {
   useCollectionPaginateQuery,
   useGetWorkspaceQuery,
+  useNewCollectionMutation,
 } from '../../Types/generated-graphql-types';
 import { CollectionBase, NavDataBC } from '../../Types/types';
 import { CollectionsDashboard } from '../Collection/CollectionsDashboard';
@@ -15,15 +16,13 @@ import { NewCollection } from './Modals/NewCollection';
 export const WorkspaceItem = () => {
   const { work_slug } = useParams<{ work_slug: string }>();
   const { path } = useRouteMatch();
-
   const { setWorkspaceData } = useContext(AppContext);
 
   const [newActionOpen, setNewActionOpen] = useState(false);
   const [navData, setNavData] = useState<NavDataBC[]>([]);
 
-  // const createNewListView = useCreateNewListViewMutation()[1];
-
-  const [result] = useGetWorkspaceQuery({
+  const createNewCollection = useNewCollectionMutation()[1];
+  const [resultW] = useGetWorkspaceQuery({
     variables: {
       slug: work_slug,
     },
@@ -31,8 +30,19 @@ export const WorkspaceItem = () => {
     pause: !work_slug,
   });
 
-  const { data } = result;
-  const dataWorkspace = data?.workspaceOne;
+  const dataWorkspace = resultW.data?.workspaceOne;
+
+  const [resultC, reexecuteQuery] = useCollectionPaginateQuery({
+    variables: {
+      filter: {
+        workspaceId: dataWorkspace?._id,
+      },
+    },
+    requestPolicy: 'network-only',
+    pause: !dataWorkspace?._id,
+  });
+
+  const dataCollections = resultC.data;
 
   useEffect(() => {
     if (dataWorkspace) {
@@ -65,16 +75,25 @@ export const WorkspaceItem = () => {
     // };
   }, [dataWorkspace]);
 
-  const handleNewViewSubmit = (data: CollectionBase, mode: 'edit' | 'new') => {
+  const handleNewCollectionSubmit = (
+    data: CollectionBase,
+    mode: 'edit' | 'new'
+  ) => {
     if (mode === 'new') {
       console.log(data);
-      // if (data.kind === EnumDKeyViewKind.ListView) {
-      //   createNewListView({
-      //     workspaceId: dataWorkspace?._id,
-      //     description: data.description,
-      //     title: data.title,
-      //   });
-      // }
+      if (data) {
+        createNewCollection({
+          record: {
+            title: data.title,
+            description: data.description,
+            icon: data.icon,
+            type: data.type,
+            workspaceId: dataWorkspace?._id,
+          },
+        }).then(() => {
+          reexecuteQuery();
+        });
+      }
     }
   };
 
@@ -93,7 +112,14 @@ export const WorkspaceItem = () => {
               <div>
                 <Switch>
                   <Route exact path={path}>
-                    <CollectionsDashboard workspaceId={dataWorkspace?._id} />
+                    {dataCollections ? (
+                      <CollectionsDashboard
+                        data={dataCollections}
+                        workspaceId={dataWorkspace?._id}
+                      />
+                    ) : (
+                      <div></div>
+                    )}
                   </Route>
                   <Route exact path={`${path}/:collection_slug`}>
                     <div>Collection</div>
@@ -113,11 +139,11 @@ export const WorkspaceItem = () => {
             <NewCollection
               mode={'new'}
               onClose={() => setNewActionOpen(false)}
-              onSubmit={handleNewViewSubmit}
+              onSubmit={handleNewCollectionSubmit}
               data={{
                 title: '',
                 description: '',
-                kind: '',
+                type: null,
               }}
             />
           </Modal>

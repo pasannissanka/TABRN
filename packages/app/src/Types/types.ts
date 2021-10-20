@@ -1,5 +1,8 @@
 import React from 'react';
-import { WorkspaceDataFragment } from './generated-graphql-types';
+import {
+  EnumCollectionType,
+  WorkspaceDataFragment,
+} from './generated-graphql-types';
 
 export interface AuthContextState {
   user: IUser | undefined;
@@ -113,14 +116,15 @@ export interface Bookmark extends BookmarkBase, IMongoDocument {}
 export interface CollectionBase {
   title: string;
   description: string;
-  kind: any | '';
+  type: EnumCollectionType | null;
+  icon?: string;
 }
 
-// export enum COLLECTION_TYPE {
-//   CALENDER = 'calender',
-//   LIST = 'list',
-//   KANBAN = 'kanban',
-// }
+export enum COLLECTION_TYPE {
+  CALENDER = 'calender',
+  LIST = 'list',
+  KANBAN = 'kanban',
+}
 
 // export enum FIELD_TYPE {
 //   STRING = 'string',
