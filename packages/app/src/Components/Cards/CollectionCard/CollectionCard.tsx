@@ -17,7 +17,7 @@ export const CollectionCard = ({ data, children }: CollectionCardProps) => {
             {data.icon} {data.title}
           </span>
           <span>
-            <Button varient="flat">
+            <Button varient="flat-white">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-5 h-5"
@@ -39,10 +39,7 @@ export const CollectionCard = ({ data, children }: CollectionCardProps) => {
         <div className="my-1 w-full text-gray-600 text-base truncate">
           {data.description}
         </div>
-        {/* Actions */}
-        <div></div>
-        <div className="my-1 w-full border-b"></div>
-
+        {/* Body and Actions */}
         <div className="my-2 w-full">{children}</div>
       </div>
     </>

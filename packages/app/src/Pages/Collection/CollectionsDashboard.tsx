@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Button from '../../Components/Button/Button';
 import { CollectionCard } from '../../Components/Cards/CollectionCard/CollectionCard';
 import { ListItem } from '../../Components/ListItem/ListItem';
 import {
@@ -8,6 +9,8 @@ import {
   EnumCollectionType,
   useEntryPaginateQuery,
 } from '../../Types/generated-graphql-types';
+import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
+import { Modal } from '../../Components/Modal/Modal';
 
 type CollectionsDashboardProps = {
   data: CollectionPaginateQuery;
@@ -53,6 +56,8 @@ export const ListCollectionView = ({
   data,
   workspaceId,
 }: ListCollectionViewProps) => {
+  const [newModal, setNewModal] = useState(false);
+
   const [result] = useEntryPaginateQuery({
     variables: {
       filter: {
@@ -64,11 +69,34 @@ export const ListCollectionView = ({
 
   return (
     <>
+      {/* Actions */}
+      <div className="my-1 w-full border-b">
+        <div className="flex justify-end my-1">
+          <Button
+            size="sm"
+            varient="flat-white"
+            onClick={() => setNewModal(!newModal)}
+          >
+            <PlusSMSVG className="flex-1 mr-1 w-5 h-5" />
+            New
+          </Button>
+        </div>
+      </div>
+      {/* Body */}
       <div className="h-72 overflow-auto">
         {result.data?.EntryPaginate?.items?.map((entry) => (
           <ListItem<Entry> data={entry} />
         ))}
       </div>
+      <Modal
+        show={newModal}
+        onClose={() => setNewModal(false)}
+        title="New Entry"
+        description="Use Collections to categorize your content"
+        size="full"
+      >
+        <button></button>
+      </Modal>
     </>
   );
 };

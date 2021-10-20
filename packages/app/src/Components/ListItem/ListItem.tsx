@@ -1,9 +1,11 @@
-import React from 'react';
+import { formatRelative } from 'date-fns';
+import React, { useState } from 'react';
 import {
   EntryFields,
   Maybe,
   Scalars,
 } from '../../Types/generated-graphql-types';
+import { Modal } from '../Modal/Modal';
 
 interface ItemBase {
   title: Scalars['String'];
@@ -22,10 +24,14 @@ type ListItemProps<T> = {
 };
 
 export const ListItem = <T extends ItemBase>({ data }: ListItemProps<T>) => {
+  const [expandModal, setExpandModal] = useState(false);
   return (
     <>
-      <div className="flex justify-between mx-2 my-2">
-        <div className="flex my-1 w-full">
+      <div className="flex justify-between mx-2 my-2 border-b">
+        <div
+          className="flex my-1 w-full cursor-pointer"
+          onClick={() => setExpandModal(!expandModal)}
+        >
           <span className="mr-2">{data.icon}</span>
           <div className="flex flex-col w-full">
             <span>{data.title}</span>
@@ -34,13 +40,22 @@ export const ListItem = <T extends ItemBase>({ data }: ListItemProps<T>) => {
             </div>
           </div>
         </div>
-        <div className="flex">
+        <div className="flex m-1">
           <span className=""></span>
           <div className="self-end my-1 text-gray-500 text-xs truncate">
-            {data.createdAt}
+            {formatRelative(new Date(data.updatedAt), new Date())}
           </div>
         </div>
       </div>
+      <Modal
+        show={expandModal}
+        onClose={() => setExpandModal(false)}
+        title={data.title}
+        description={data.description!}
+        size="full"
+      >
+        <button></button>
+      </Modal>
     </>
   );
 };

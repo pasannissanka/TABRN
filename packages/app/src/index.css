@@ -34,6 +34,10 @@
 .btn-flat {
   @apply text-black hover:bg-gray-200 bg-gray-50;
 }
+.btn-flat-white {
+  @apply text-black hover:bg-gray-200 bg-white;
+}
+
 @layer base {
   input[type='text'],
   input[type='password'],
@@ -52,6 +56,6 @@
   select,
   select[multiple],
   textarea {
-    @apply focus:border-primary-300 focus:ring-primary-200 block px-4 py-2 border-gray-300 rounded-md shadow-sm focus:ring-1 focus:ring-opacity-50;
+    @apply focus:border-primary-500 block px-4 py-2 border-0 border-b-2 border-gray-200 focus:ring-0;
   }
 }

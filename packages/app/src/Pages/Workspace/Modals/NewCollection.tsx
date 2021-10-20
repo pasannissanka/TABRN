@@ -3,6 +3,7 @@ import EmojiPicker from 'emoji-picker-react';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import React, { useContext, useState } from 'react';
 import Button from '../../../Components/Button/Button';
+import { InputField } from '../../../Components/FormField/Input';
 import { AppContext } from '../../../Context/AppContextProvider';
 import { EnumCollectionType } from '../../../Types/generated-graphql-types';
 import { CollectionBase } from '../../../Types/types';
@@ -71,34 +72,39 @@ export const NewCollection = ({
         >
           {(props: FormikProps<CollectionBase>) => (
             <Form className="my-3">
-              <div className="flex">
-                <Menu as="div" className="relative inline-block mr-2 my-1">
-                  <Menu.Button
-                    as={Button}
-                    varient="outline"
-                    type="button"
-                    className="h-full"
-                  >
-                    {choosenEmoji?.emoji}
-                  </Menu.Button>
-                  <Menu.Items className="ring-primary-700 absolute z-50 mt-2 bg-white rounded-md focus:outline-none shadow-lg ring-1 ring-opacity-5">
-                    <EmojiPicker
-                      onEmojiClick={onEmojiClick}
-                      native={true}
-                      pickerStyle={{ boxShadow: 'none' }}
-                    />
-                  </Menu.Items>
-                </Menu>
-                <Field
-                  className="my-1 w-full"
-                  type="text"
-                  name="title"
-                  placeholder="Title"
-                />
-              </div>
-              <Field
+              <Menu as="div" className="relative inline-block mx-2 w-full">
+                <Menu.Button
+                  as={Button}
+                  varient="flat-white"
+                  size="xs"
+                  type="button"
+                >
+                  <span className="flex flex-col">
+                    <span className="my-2 text-6xl">{choosenEmoji?.emoji}</span>
+                    {/* <span className="text-gray-600 text-sm">Select icon</span> */}
+                  </span>
+                </Menu.Button>
+                <Menu.Items className="ring-primary-700 absolute z-50 mt-2 bg-white rounded-md focus:outline-none shadow-lg ring-1 ring-opacity-5">
+                  <EmojiPicker
+                    onEmojiClick={onEmojiClick}
+                    native={true}
+                    pickerStyle={{ boxShadow: 'none' }}
+                  />
+                </Menu.Items>
+              </Menu>
+
+              <InputField
+                title="Title"
                 className="my-1 w-full"
-                as="textarea"
+                type="text"
+                name="title"
+                placeholder="Title"
+              />
+
+              <InputField
+                title="Description"
+                className="my-1 w-full"
+                type="text"
                 name="description"
                 placeholder="Describe Collection..."
               />

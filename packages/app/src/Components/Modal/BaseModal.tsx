@@ -68,7 +68,7 @@ export const BaseModal = ({
                 ${width}
               `}
               >
-                <Dialog.Title
+                {/* <Dialog.Title
                   as="h3"
                   className="text-gray-900 text-lg font-medium leading-6"
                 >
@@ -79,7 +79,7 @@ export const BaseModal = ({
                   className="mt-1 text-gray-500 text-sm font-normal"
                 >
                   {description}
-                </Dialog.Description>
+                </Dialog.Description> */}
                 <div className="mt-2">{children}</div>
                 {action ? <div className="mt-4">{action}</div> : <></>}
               </div>
