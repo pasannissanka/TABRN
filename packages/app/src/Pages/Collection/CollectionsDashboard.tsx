@@ -1,7 +1,12 @@
+import { Form, Formik, FormikProps } from 'formik';
 import React, { useState } from 'react';
 import Button from '../../Components/Button/Button';
 import { CollectionCard } from '../../Components/Cards/CollectionCard/CollectionCard';
 import { ListItem } from '../../Components/ListItem/ListItem';
+import ContentModal, {
+  ContentModalFormikType,
+} from '../../Components/Modal/ContentModal/ContentModal';
+import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
 import {
   Collection,
   CollectionPaginateQuery,
@@ -9,13 +14,6 @@ import {
   EnumCollectionType,
   useEntryPaginateQuery,
 } from '../../Types/generated-graphql-types';
-import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
-import { Modal } from '../../Components/Modal/Modal';
-import {
-  ContentModal,
-  ContentModalFormikType,
-} from '../../Components/Modal/ContentModal';
-import { Form, Formik, FormikProps } from 'formik';
 
 type CollectionsDashboardProps = {
   data: CollectionPaginateQuery;
@@ -97,7 +95,19 @@ export const ListCollectionView = ({
         initialValues={{
           title: '',
           description: '',
-          emoji: '',
+          emoji: '👾',
+          fields: [
+            {
+              key: 'test',
+              kind: 'Date',
+              value: new Date().toDateString(),
+            },
+            {
+              key: 'test',
+              kind: 'Date',
+              value: new Date().toDateString(),
+            },
+          ],
         }}
         onSubmit={(values) => {
           console.log(values);
@@ -105,7 +115,7 @@ export const ListCollectionView = ({
       >
         {({ resetForm }: FormikProps<ContentModalFormikType>) => (
           <Form>
-            <ContentModal
+            <ContentModal<ContentModalFormikType>
               show={newModal}
               onClose={() => {
                 setNewModal(false);
