@@ -4,26 +4,16 @@ import React, { Fragment } from 'react';
 export interface BaseModalProps {
   show: boolean;
   onClose: () => void;
-  onSubmit?: () => void;
-  title: string;
-  description: string;
-  children?: React.ReactNode;
-  action?: React.ReactNode;
-}
-
-export interface ModalProps extends BaseModalProps {
+  children: React.ReactNode;
   size: 'md' | 'lg' | 'xl' | 'full';
 }
 
 export const BaseModal = ({
   show,
   onClose,
-  title,
-  description,
   children,
-  action,
   size,
-}: ModalProps) => {
+}: BaseModalProps) => {
   const width = size === 'full' ? 'max-w-4xl' : `max-w-${size}`;
 
   return (
@@ -46,14 +36,10 @@ export const BaseModal = ({
             >
               <Dialog.Overlay className="fixed inset-0 bg-black opacity-40" />
             </Transition.Child>
-
-            {/* This element is to trick the browser into centering the modal contents. */}
             <span
               className="inline-block align-middle h-screen"
               aria-hidden="true"
-            >
-              &#8203;
-            </span>
+            ></span>
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -64,24 +50,11 @@ export const BaseModal = ({
               leaveTo="opacity-0 scale-95"
             >
               <div
-                className={`inline-block align-middle my-8 p-6 w-full text-left bg-white rounded-2xl shadow-xl transform transition-all
+                className={`inline-block align-middle p-2 w-full text-left bg-white rounded-2xl shadow-xl transform transition-all
                 ${width}
               `}
               >
-                {/* <Dialog.Title
-                  as="h3"
-                  className="text-gray-900 text-lg font-medium leading-6"
-                >
-                  {title}
-                </Dialog.Title>
-                <Dialog.Description
-                  as="p"
-                  className="mt-1 text-gray-500 text-sm font-normal"
-                >
-                  {description}
-                </Dialog.Description> */}
-                <div className="mt-2">{children}</div>
-                {action ? <div className="mt-4">{action}</div> : <></>}
+                {children}
               </div>
             </Transition.Child>
           </div>

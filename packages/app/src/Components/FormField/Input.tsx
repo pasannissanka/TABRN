@@ -11,7 +11,7 @@ export const InputField = ({ title, className, ...props }: InputFieldProps) => {
     <>
       <div className="flex my-2 w-full">
         <span className="mt-2 mx-2 w-1/4 text-base font-medium">{title}</span>
-        <Field className={`w-3/4 mx-2 ${className}`} {...props} />
+        <Field className={`w-3/4 mx-2 normal ${className}`} {...props} />
       </div>
     </>
   );

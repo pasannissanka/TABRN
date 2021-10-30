@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../Button/Button';
-import { BaseModal, BaseModalProps, ModalProps } from './BaseModal';
+import { BaseModal, BaseModalProps } from './BaseModal';
 
 const DefaultCloseButton = (props: { onClose: () => void }) => {
   return (
@@ -10,7 +10,7 @@ const DefaultCloseButton = (props: { onClose: () => void }) => {
   );
 };
 
-export const Modal = ({ children, ...props }: ModalProps) => {
+export const Modal = ({ children, ...props }: BaseModalProps) => {
   return (
     <>
       <BaseModal {...props}>{children}</BaseModal>
@@ -21,13 +21,13 @@ export const Modal = ({ children, ...props }: ModalProps) => {
 export const DialogModal = ({
   children,
   onClose,
-  action = <DefaultCloseButton onClose={onClose} />,
   ...props
 }: BaseModalProps) => {
   return (
     <>
-      <BaseModal size="md" onClose={onClose} {...props}>
+      <BaseModal onClose={onClose} {...props}>
         {children}
+        <DefaultCloseButton onClose={onClose} />
       </BaseModal>
     </>
   );
@@ -49,15 +49,20 @@ const DefaultConfirmationButtons = (props: {
   );
 };
 
+export interface ConfirmationDialogModal extends BaseModalProps {
+  onSubmit(): void;
+}
+
 export const ConfirmationDialog = ({
   onClose,
   children,
   onSubmit,
   ...props
-}: BaseModalProps) => {
+}: ConfirmationDialogModal) => {
   return (
     <>
-      <BaseModal size="md" onClose={onClose} {...props}>
+      <BaseModal onClose={onClose} {...props}>
+        {children}
         <DefaultConfirmationButtons onClose={onClose} onSubmit={onSubmit!} />
       </BaseModal>
     </>

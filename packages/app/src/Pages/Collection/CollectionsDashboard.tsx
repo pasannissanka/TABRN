@@ -11,6 +11,11 @@ import {
 } from '../../Types/generated-graphql-types';
 import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
 import { Modal } from '../../Components/Modal/Modal';
+import {
+  ContentModal,
+  ContentModalFormikType,
+} from '../../Components/Modal/ContentModal';
+import { Form, Formik, FormikProps } from 'formik';
 
 type CollectionsDashboardProps = {
   data: CollectionPaginateQuery;
@@ -85,18 +90,34 @@ export const ListCollectionView = ({
       {/* Body */}
       <div className="h-72 overflow-auto">
         {result.data?.EntryPaginate?.items?.map((entry) => (
-          <ListItem<Entry> data={entry} />
+          <ListItem<Entry> data={entry} key={entry._id} />
         ))}
       </div>
-      <Modal
-        show={newModal}
-        onClose={() => setNewModal(false)}
-        title="New Entry"
-        description="Use Collections to categorize your content"
-        size="full"
+      <Formik<ContentModalFormikType>
+        initialValues={{
+          title: '',
+          description: '',
+          emoji: '',
+        }}
+        onSubmit={(values) => {
+          console.log(values);
+        }}
       >
-        <button></button>
-      </Modal>
+        {({ resetForm }: FormikProps<ContentModalFormikType>) => (
+          <Form>
+            <ContentModal
+              show={newModal}
+              onClose={() => {
+                setNewModal(false);
+                resetForm();
+              }}
+              size="full"
+            >
+              <button>Test</button>
+            </ContentModal>
+          </Form>
+        )}
+      </Formik>
     </>
   );
 };

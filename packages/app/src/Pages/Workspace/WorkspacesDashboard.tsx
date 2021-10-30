@@ -196,8 +196,6 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
         <Modal
           show={isNewModalOpen.open}
           onClose={() => closeModal()}
-          title="New Workspace"
-          description="Use Workspaces to Organize your bookmarks"
           size="lg"
         >
           <NewWorkspace
@@ -211,8 +209,6 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
         <Modal
           show={isNewModalOpen.open}
           onClose={() => closeModal()}
-          title="Edit Workspace"
-          description="Use Workspaces to Organize your bookmarks"
           size="lg"
         >
           <NewWorkspace
@@ -234,10 +230,11 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
             open: false,
           })
         }
+        size="md"
         onSubmit={onWorkspaceDelete}
-        title="Are you sure?"
-        description="You will not be able to undo this action."
-      />
+      >
+        <div className="text-lg">Are you sure?</div>
+      </ConfirmationDialog>
     </>
   );
 };

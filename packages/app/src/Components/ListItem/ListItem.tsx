@@ -50,8 +50,6 @@ export const ListItem = <T extends ItemBase>({ data }: ListItemProps<T>) => {
       <Modal
         show={expandModal}
         onClose={() => setExpandModal(false)}
-        title={data.title}
-        description={data.description!}
         size="full"
       >
         <button></button>

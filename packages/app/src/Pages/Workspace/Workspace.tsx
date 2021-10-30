@@ -132,8 +132,6 @@ export const WorkspaceItem = () => {
           <Modal
             show={newActionOpen}
             onClose={() => setNewActionOpen(false)}
-            title="New Collection"
-            description="Use Collections to categorize your content"
             size="full"
           >
             <NewCollection
