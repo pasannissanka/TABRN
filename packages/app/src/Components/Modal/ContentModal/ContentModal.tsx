@@ -1,14 +1,16 @@
 import { FieldArray, useFormikContext } from 'formik';
 import React from 'react';
+import { FIELD_TYPE } from '../../../Types/types';
 import { BaseModal, BaseModalProps } from '../BaseModal';
 import { ContentField } from './ContentField';
+import { FieldButton } from './FieldButton';
 import { ContentHeading } from './Heading';
 import { PrimaryActionButtons } from './PrimaryActionButtons';
 
 export interface ContentModalProps extends BaseModalProps {}
 
 export interface IField {
-  kind: string;
+  kind: FIELD_TYPE;
   value: string;
   key: string;
 }
@@ -49,8 +51,8 @@ const ContentModal = <T extends ContentModalFormikType>({
                   <span className="mx-3 w-9"></span>
                   {/* Field */}
                   <FieldArray name="fields">
-                    {() => (
-                      <div className="flex-1 flex-col mx-2">
+                    {({ insert }) => (
+                      <div className="flex-1 flex-col">
                         {values &&
                           values.fields &&
                           values.fields.map((field, idx) => (
@@ -61,24 +63,33 @@ const ContentModal = <T extends ContentModalFormikType>({
                               key={idx}
                             />
                           ))}
-                        <div className="flex align-middle px-2 py-1 w-3/12 hover:bg-gray-200 rounded-md">
-                          <span className="mr-2 my-auto">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="w-5 h-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
-                          </span>
-                          <div>Add field</div>
+                        <div className="w-3/12">
+                          <FieldButton
+                            onClick={(e) => {
+                              insert(values.fields.length, {
+                                key: 'test',
+                                kind: FIELD_TYPE.STRING,
+                                value: new Date().toDateString(),
+                              });
+                            }}
+                            label="Add Field"
+                            svg={
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-5 h-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                />
+                              </svg>
+                            }
+                          />
                         </div>
                       </div>
                     )}

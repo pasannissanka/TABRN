@@ -14,6 +14,7 @@ import {
   EnumCollectionType,
   useEntryPaginateQuery,
 } from '../../Types/generated-graphql-types';
+import { FIELD_TYPE } from '../../Types/types';
 
 type CollectionsDashboardProps = {
   data: CollectionPaginateQuery;
@@ -95,16 +96,16 @@ export const ListCollectionView = ({
         initialValues={{
           title: '',
           description: '',
-          emoji: '👾',
+          emoji: '',
           fields: [
             {
               key: 'test',
-              kind: 'Date',
+              kind: FIELD_TYPE.DATE,
               value: new Date().toDateString(),
             },
             {
               key: 'test',
-              kind: 'Date',
+              kind: FIELD_TYPE.DATE,
               value: new Date().toDateString(),
             },
           ],

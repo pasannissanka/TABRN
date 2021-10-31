@@ -126,12 +126,12 @@ export enum COLLECTION_TYPE {
   KANBAN = 'kanban',
 }
 
-// export enum FIELD_TYPE {
-//   STRING = 'string',
-//   DATE = 'date',
-//   NUMBER = 'number',
-//   LINK = 'link',
-// }
+export enum FIELD_TYPE {
+  STRING = 'string',
+  DATE = 'date',
+  NUMBER = 'number',
+  LINK = 'link',
+}
 
 // export interface CollectionItem {
 //   _id: string;
