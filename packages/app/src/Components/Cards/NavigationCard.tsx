@@ -49,7 +49,7 @@ export const NavigationCard = ({
       return (
         <Dropdown
           buttonProps={{
-            varient: 'flat',
+            varient: 'flat-white',
             size: 'sm',
             children: <DotsVerticalSVG />,
           }}
@@ -73,7 +73,7 @@ export const NavigationCard = ({
     <>
       <div className="mx-3 my-2 max-w-full">
         <div
-          className={`px-5 py-3 w-full bg-gray-50 border rounded-md shadow-sm 
+          className={`px-5 py-3 w-full bg-white border rounded-md shadow-sm 
           ${loading ? 'animate-pulse' : ''}
         `}
         >

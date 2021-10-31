@@ -1,3 +1,4 @@
+import { Form, Formik, FormikProps } from 'formik';
 import React, { useState } from 'react';
 import Button from '../../Components/Button/Button';
 import { NavigationCard } from '../../Components/Cards/NavigationCard';
@@ -5,15 +6,21 @@ import {
   DropdownButonElement,
   DropdownLinkElement,
 } from '../../Components/Dropdown/Dropdown';
-import { ConfirmationDialog, Modal } from '../../Components/Modal/Modal';
+import ContentModal, {
+  ContentModalFormikType,
+} from '../../Components/Modal/ContentModal/ContentModal';
+import { ConfirmationDialog } from '../../Components/Modal/Modal';
 import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
 import {
+  EnumCollectionFieldsKind,
   useNewWorkspaceMutation,
   useUpdateWorkspaceMutation,
   useWorkspacesPaginationQuery,
 } from '../../Types/generated-graphql-types';
-import { WorkspaceBase } from '../../Types/types';
+import { IField, WorkspaceBase } from '../../Types/types';
 import { NewWorkspace } from './Modals/NewWorkspace';
+
+export interface NewWorkspaceFormikType extends ContentModalFormikType {}
 
 interface WorkspaceProps {}
 
@@ -47,11 +54,12 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
     _id?: string;
     description: string;
     title: string;
-    colorCode: string;
-  }>({
+    icon: string;
+    fields?: IField[];
+  } | null>({
     description: '',
     title: '',
-    colorCode: '',
+    icon: '',
   });
 
   const menuItems: (DropdownButonElement | DropdownLinkElement)[] = [
@@ -59,9 +67,7 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
       title: 'Edit',
       icon: <PlusSMSVG />,
       onClick: (e, key) => {
-        console.log(e, key);
         const ele = data?.workspacePaginate?.items?.find((v) => v._id === key);
-        console.log(ele);
         if (ele) {
           setNewWorkspaceValue(ele! as any);
           openModal('edit');
@@ -72,9 +78,7 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
       title: 'Delete',
       icon: <PlusSMSVG />,
       onClick: (e, key) => {
-        console.log(e, key);
         const ele = data?.workspacePaginate?.items?.find((v) => v._id === key);
-        console.log(ele);
         if (ele) {
           setdeleteConfModal({
             _id: ele._id,
@@ -99,19 +103,21 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
     });
   };
 
-  const onWorkspaceSubmit = (value: WorkspaceBase, mode: 'edit' | 'new') => {
-    closeModal();
+  const handleNewWorkspaceSubmit = (
+    value: WorkspaceBase,
+    mode: 'edit' | 'new'
+  ) => {
     if (value.title.length > 0 && value.description!.length > 0) {
       if (mode === 'new') {
-        setNewWorkspaceValue(value as any);
         addNewWorkspace({
           record: {
             title: value.title,
             description: value.description,
             icon: value.icon,
+            fields: value.fields as any,
           },
         }).then((result) => reexecuteQuery());
-      } else if (mode === 'edit') {
+      } else if (mode === 'edit' && newWorkspaceValue !== null) {
         editWorkspace({
           filter: {
             _id: newWorkspaceValue._id,
@@ -120,15 +126,20 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
             description: value.description,
             title: value.title,
             icon: value.icon,
+            fields: value.fields.map((field) => {
+              return {
+                value: field.value,
+                key: field.key,
+                kind: field.kind,
+              };
+            }) as any,
           },
-        }).then((result) => reexecuteQuery());
+        }).then((result) => {
+          reexecuteQuery();
+          setNewWorkspaceValue(null);
+        });
       }
     }
-    setNewWorkspaceValue({
-      description: '',
-      title: '',
-      colorCode: '',
-    });
   };
 
   const onWorkspaceDelete = () => {
@@ -140,8 +151,6 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
       open: false,
     });
   };
-
-  console.log(newWorkspaceValue);
 
   return (
     <>
@@ -192,34 +201,64 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
         </div>
       </div>
 
-      {isNewModalOpen.type === 'new' ? (
-        <Modal
-          show={isNewModalOpen.open}
-          onClose={() => closeModal()}
-          size="lg"
+      {isNewModalOpen.open && (
+        <Formik<ContentModalFormikType>
+          initialValues={
+            isNewModalOpen.type === 'edit' && newWorkspaceValue !== null
+              ? {
+                  title: newWorkspaceValue.title,
+                  description: newWorkspaceValue.description,
+                  emoji: newWorkspaceValue.icon,
+                  fields: newWorkspaceValue.fields!,
+                }
+              : {
+                  title: '',
+                  description: '',
+                  emoji: '',
+                  fields: [
+                    {
+                      key: 'Created on',
+                      kind: EnumCollectionFieldsKind.Date,
+                      value: new Date().toString(),
+                    },
+                  ],
+                }
+          }
+          onSubmit={(values) => {
+            console.log(values);
+            handleNewWorkspaceSubmit(
+              {
+                title: values.title,
+                description: values.description,
+                icon: values.emoji,
+                fields: values.fields,
+              },
+              isNewModalOpen.type
+            );
+          }}
         >
-          <NewWorkspace
-            mode={isNewModalOpen.type}
-            newWorkspaceValue={newWorkspaceValue}
-            onSubmit={onWorkspaceSubmit}
-            onClose={() => closeModal()}
-          />
-        </Modal>
-      ) : isNewModalOpen.type === 'edit' ? (
-        <Modal
-          show={isNewModalOpen.open}
-          onClose={() => closeModal()}
-          size="lg"
-        >
-          <NewWorkspace
-            mode={isNewModalOpen.type}
-            newWorkspaceValue={newWorkspaceValue}
-            onSubmit={onWorkspaceSubmit}
-            onClose={() => closeModal()}
-          />
-        </Modal>
-      ) : (
-        <></>
+          {({ submitForm }: FormikProps<ContentModalFormikType>) => (
+            <Form>
+              <ContentModal<ContentModalFormikType>
+                show={isNewModalOpen.open}
+                onClose={closeModal}
+                size="full"
+                placeholder={{
+                  title: 'Untitled Collection',
+                  description: 'Describe Collection...',
+                }}
+              >
+                <NewWorkspace
+                  mode={isNewModalOpen.type}
+                  onSubmit={(mode) => {
+                    submitForm();
+                  }}
+                  onClose={() => closeModal()}
+                />
+              </ContentModal>
+            </Form>
+          )}
+        </Formik>
       )}
 
       <ConfirmationDialog

@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../../../Components/Button/Button';
 import { EnumCollectionType } from '../../../Types/generated-graphql-types';
-import { NewWorkspaceFormikType } from '../Workspace';
+import { NewCollectionFormikType } from '../Workspace';
 
 type NewCollectionProps = {
   onClose(): void;
@@ -12,7 +12,7 @@ type NewCollectionProps = {
     shouldValidate?: boolean | undefined
   ) => void;
   submitForm: (() => Promise<void>) & (() => Promise<any>);
-  values: NewWorkspaceFormikType;
+  values: NewCollectionFormikType;
 };
 
 export const NewCollection = ({

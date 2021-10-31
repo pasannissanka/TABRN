@@ -1,6 +1,6 @@
 import { FieldArray, useFormikContext } from 'formik';
 import React from 'react';
-import { IField } from '../../../Types/types';
+import { EnumGenericFieldsKind, IField } from '../../../Types/types';
 import { BaseModal, BaseModalProps } from '../BaseModal';
 import { ContentField } from './ContentField';
 import { FieldButton } from './FieldButton';
@@ -70,7 +70,7 @@ const ContentModal = <T extends ContentModalFormikType>({
                             onClick={(e) => {
                               insert(values.fields.length, {
                                 key: 'Field',
-                                kind: 'String',
+                                kind: EnumGenericFieldsKind.String,
                                 value: '',
                               });
                             }}

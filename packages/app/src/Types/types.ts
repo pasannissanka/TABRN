@@ -80,6 +80,7 @@ export interface WorkspaceBase {
   title: string;
   description: string;
   icon?: string;
+  fields: IField[];
 }
 
 export interface WorkspaceData extends WorkspaceBase, IMongoDocument {}

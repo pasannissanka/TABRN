@@ -18,7 +18,7 @@ import { CollectionBase, NavDataBC } from '../../Types/types';
 import { CollectionsDashboard } from '../Collection/CollectionsDashboard';
 import { NewCollection } from './Modals/NewCollection';
 
-export interface NewWorkspaceFormikType extends ContentModalFormikType {
+export interface NewCollectionFormikType extends ContentModalFormikType {
   collectionType: EnumCollectionType | '';
 }
 
@@ -89,7 +89,6 @@ export const WorkspaceItem = () => {
     mode: 'edit' | 'new'
   ) => {
     if (mode === 'new') {
-      console.log(data);
       if (data) {
         createNewCollection({
           record: {
@@ -98,6 +97,7 @@ export const WorkspaceItem = () => {
             icon: data.icon,
             type: data.type as EnumCollectionType,
             workspaceId: dataWorkspace?._id,
+            fields: data.fields as any,
           },
         }).then(() => {
           reexecuteQuery();
@@ -140,7 +140,7 @@ export const WorkspaceItem = () => {
           </div>
 
           {newActionOpen && (
-            <Formik<NewWorkspaceFormikType>
+            <Formik<NewCollectionFormikType>
               initialValues={{
                 title: '',
                 description: '',
@@ -173,9 +173,9 @@ export const WorkspaceItem = () => {
                 setFieldValue,
                 submitForm,
                 values,
-              }: FormikProps<NewWorkspaceFormikType>) => (
+              }: FormikProps<NewCollectionFormikType>) => (
                 <Form>
-                  <ContentModal<NewWorkspaceFormikType>
+                  <ContentModal<NewCollectionFormikType>
                     show={newActionOpen}
                     onClose={() => {
                       setNewActionOpen(false);
