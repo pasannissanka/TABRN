@@ -1,17 +1,25 @@
+import { Form, Formik, FormikProps } from 'formik';
 import React, { useContext, useEffect, useState } from 'react';
 import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 import { Breadcrumbs } from '../../Components/Breadcrumbs/Breadcrumbs';
-import { Modal } from '../../Components/Modal/Modal';
+import ContentModal, {
+  ContentModalFormikType,
+} from '../../Components/Modal/ContentModal/ContentModal';
 import { AppContext } from '../../Context/AppContextProvider';
 import { BreadcrumbsContext } from '../../Context/BreadcrumbsContextProvider';
 import {
+  EnumCollectionType,
   useCollectionPaginateQuery,
   useGetWorkspaceQuery,
   useNewCollectionMutation,
 } from '../../Types/generated-graphql-types';
-import { CollectionBase, NavDataBC } from '../../Types/types';
+import { CollectionBase, FIELD_TYPE, NavDataBC } from '../../Types/types';
 import { CollectionsDashboard } from '../Collection/CollectionsDashboard';
 import { NewCollection } from './Modals/NewCollection';
+
+export interface NewWorkspaceFormikType extends ContentModalFormikType {
+  collectionType: EnumCollectionType | '';
+}
 
 export const WorkspaceItem = () => {
   const { work_slug } = useParams<{ work_slug: string }>();
@@ -129,22 +137,55 @@ export const WorkspaceItem = () => {
             </div>
           </div>
 
-          <Modal
-            show={newActionOpen}
-            onClose={() => setNewActionOpen(false)}
-            size="full"
-          >
-            <NewCollection
-              mode={'new'}
-              onClose={() => setNewActionOpen(false)}
-              onSubmit={handleNewCollectionSubmit}
-              data={{
+          {newActionOpen && (
+            <Formik<NewWorkspaceFormikType>
+              initialValues={{
                 title: '',
                 description: '',
-                type: null,
+                emoji: '',
+                fields: [
+                  {
+                    key: 'Created on',
+                    kind: FIELD_TYPE.DATE,
+                    value: new Date().toString(),
+                  },
+                ],
+                collectionType: '',
               }}
-            />
-          </Modal>
+              onSubmit={(values) => {
+                console.log(values);
+              }}
+            >
+              {({
+                resetForm,
+                setFieldValue,
+                submitForm,
+                values,
+              }: FormikProps<NewWorkspaceFormikType>) => (
+                <Form>
+                  <ContentModal<NewWorkspaceFormikType>
+                    show={newActionOpen}
+                    onClose={() => {
+                      setNewActionOpen(false);
+                      resetForm();
+                    }}
+                    size="full"
+                  >
+                    <NewCollection
+                      mode="new"
+                      setFieldValue={setFieldValue}
+                      onClose={() => {
+                        setNewActionOpen(false);
+                        resetForm();
+                      }}
+                      submitForm={submitForm}
+                      values={values}
+                    />
+                  </ContentModal>
+                </Form>
+              )}
+            </Formik>
+          )}
         </BreadcrumbsContext.Provider>
       </div>
     </>

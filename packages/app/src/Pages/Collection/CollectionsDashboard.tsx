@@ -25,8 +25,6 @@ export const CollectionsDashboard = ({
   data,
   workspaceId,
 }: CollectionsDashboardProps) => {
-  console.log(data);
-
   return (
     <>
       <div>
