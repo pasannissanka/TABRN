@@ -1,5 +1,6 @@
 import { Menu, Popover } from '@headlessui/react';
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import useOnClickOutside from '../../../Hooks/useOnClickOutSide';
 import { ReactComponent as DateSVG } from '../../../svg/heroicons/clock.svg';
 import { ReactComponent as TextSVG } from '../../../svg/heroicons/document_text.svg';
 import { ReactComponent as NumberSVG } from '../../../svg/heroicons/hashtag.svg';
@@ -8,6 +9,8 @@ import { FIELD_TYPE } from '../../../Types/types';
 import { InputField } from '../../FormField/Input';
 import { ContentModalFormikType } from './ContentModal';
 import { FieldButton } from './FieldButton';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 type ContentFieldProps<T> = {
   values: T;
@@ -47,7 +50,17 @@ export const ContentField = <T extends ContentModalFormikType>({
   index,
   setFieldValue,
 }: ContentFieldProps<T>) => {
+  const ref = useRef(null);
   const field = values.fields[index];
+
+  const [editView, setEditView] = useState(false);
+  const toggelEditView = () => {
+    if (editView) {
+      setEditView(false);
+    }
+  };
+
+  useOnClickOutside(ref, toggelEditView);
 
   const svg =
     field.kind === FIELD_TYPE.DATE ? (
@@ -76,7 +89,7 @@ export const ContentField = <T extends ContentModalFormikType>({
         <Popover.Panel className="ring-primary-700 absolute z-50 mt-1 p-3 w-full bg-white border rounded-md focus:outline-none shadow-lg ring-1 ring-opacity-5">
           {({ close }) => (
             <div>
-              <div className="flex flex-col mb-2">
+              <div className="mb-2">
                 <InputField
                   id="key-field"
                   title="Field name"
@@ -112,8 +125,42 @@ export const ContentField = <T extends ContentModalFormikType>({
           )}
         </Popover.Panel>
       </Popover>
-      <div className="flex-1 mx-2 my-1 px-2">
-        <FieldButton label={field.value} />
+      <div className="flex-1 mx-2 px-2" ref={ref}>
+        {editView ? (
+          <div className="rounded-md">
+            {field.kind === FIELD_TYPE.DATE ? (
+              <DatePicker
+                autoFocus
+                selected={new Date(field.value)}
+                onChange={(date) =>
+                  setFieldValue(`fields.${index}.value`, date?.toString())
+                }
+              />
+            ) : (
+              <InputField
+                autoFocus
+                id="key-field"
+                type={
+                  field.kind === FIELD_TYPE.NUMBER
+                    ? 'number'
+                    : field.kind === FIELD_TYPE.LINK
+                    ? 'url'
+                    : 'text'
+                }
+                name={`fields.${index}.value`}
+                placeholder="Field name"
+                className="content text-base"
+              />
+            )}
+          </div>
+        ) : (
+          <FieldButton
+            label={field.value}
+            onClick={() => {
+              setEditView(!editView);
+            }}
+          />
+        )}
       </div>
     </div>
   );

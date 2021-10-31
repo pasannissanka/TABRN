@@ -15,12 +15,14 @@ export const InputField = ({
   return (
     <>
       <div className="flex flex-col w-full">
-        <label
-          className="mt-2 mx-2 text-gray-500 text-xs"
-          htmlFor={`${name}-field`}
-        >
-          {title}
-        </label>
+        {title && (
+          <label
+            className="mt-2 mx-2 text-gray-500 text-xs"
+            htmlFor={`${name}-field`}
+          >
+            {title}
+          </label>
+        )}
         <Field
           id={`${name}-field`}
           className={`normal ${className}`}
