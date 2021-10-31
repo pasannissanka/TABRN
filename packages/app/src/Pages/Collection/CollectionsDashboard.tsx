@@ -14,7 +14,7 @@ import {
   EnumCollectionType,
   useEntryPaginateQuery,
 } from '../../Types/generated-graphql-types';
-import { FIELD_TYPE } from '../../Types/types';
+import { EnumGenericFieldsKind } from '../../Types/types';
 
 type CollectionsDashboardProps = {
   data: CollectionPaginateQuery;
@@ -98,12 +98,12 @@ export const ListCollectionView = ({
           fields: [
             {
               key: 'test',
-              kind: FIELD_TYPE.DATE,
+              kind: EnumGenericFieldsKind.Date,
               value: new Date().toDateString(),
             },
             {
               key: 'test',
-              kind: FIELD_TYPE.DATE,
+              kind: EnumGenericFieldsKind.Date,
               value: new Date().toDateString(),
             },
           ],
@@ -121,6 +121,10 @@ export const ListCollectionView = ({
                 resetForm();
               }}
               size="full"
+              placeholder={{
+                title: 'Untitled',
+                description: 'Describe...',
+              }}
             >
               <button>Test</button>
             </ContentModal>

@@ -3,7 +3,7 @@ import EmojiPicker, { IEmojiData } from 'emoji-picker-react';
 import { Field } from 'formik';
 import React from 'react';
 import Button from '../../Button/Button';
-import { ContentModalFormikType } from './ContentModal';
+import { ContentModalFormikType, HeadingPlaceholder } from './ContentModal';
 
 type ContentHeadingProps<T> = {
   values: T;
@@ -12,11 +12,13 @@ type ContentHeadingProps<T> = {
     value: any,
     shouldValidate?: boolean | undefined
   ) => void;
+  placeholder: HeadingPlaceholder;
 };
 
 export const ContentHeading = <T extends ContentModalFormikType>({
   values,
   setFieldValue,
+  placeholder,
 }: ContentHeadingProps<T>) => {
   const onEmojiClick = (_: any, emojiObject: IEmojiData) => {
     setFieldValue('emoji', emojiObject.emoji);
@@ -68,14 +70,14 @@ export const ContentHeading = <T extends ContentModalFormikType>({
             title="title"
             type="text"
             name="title"
-            placeholder="Untitled Collection"
+            placeholder={placeholder.title}
           />
           <Field
             className="content w-full text-base"
             title="description"
             type="text"
             name="description"
-            placeholder="Describe Collection..."
+            placeholder={placeholder.description}
           />
         </div>
       </div>

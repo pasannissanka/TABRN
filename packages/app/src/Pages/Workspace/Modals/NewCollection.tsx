@@ -4,7 +4,6 @@ import { EnumCollectionType } from '../../../Types/generated-graphql-types';
 import { NewWorkspaceFormikType } from '../Workspace';
 
 type NewCollectionProps = {
-  // onSubmit(data: CollectionBase, mode: 'edit' | 'new'): void;
   onClose(): void;
   mode: 'edit' | 'new';
   setFieldValue: (
@@ -28,7 +27,6 @@ export const NewCollection = ({
       <div className="grid gap-2 grid-cols-2 m-auto my-4 w-1/2">
         <GridButton
           size="lg"
-          setFieldValue={setFieldValue}
           description="Use list to organize entries"
           title="List"
           icon={
@@ -47,14 +45,15 @@ export const NewCollection = ({
               />
             </svg>
           }
-          name="collectionType"
           value={EnumCollectionType.List}
-          onClick={() => submitForm()}
+          onClick={() => {
+            setFieldValue('collectionType', EnumCollectionType.List);
+            submitForm();
+          }}
           selected={values.collectionType === EnumCollectionType.List}
         />
         <GridButton
           size="md"
-          setFieldValue={setFieldValue}
           description="Use list to organize entries"
           title="Calender"
           icon={
@@ -73,14 +72,15 @@ export const NewCollection = ({
               />
             </svg>
           }
-          name="collectionType"
           value={EnumCollectionType.Calender}
-          onClick={() => submitForm()}
+          onClick={() => {
+            setFieldValue('collectionType', EnumCollectionType.Calender);
+            submitForm();
+          }}
           selected={values.collectionType === EnumCollectionType.Calender}
         />
         <GridButton
           size="md"
-          setFieldValue={setFieldValue}
           description="Use list to organize entries"
           title="Kanban"
           icon={
@@ -99,9 +99,11 @@ export const NewCollection = ({
               />
             </svg>
           }
-          name="collectionType"
           value={EnumCollectionType.Kanban}
-          onClick={() => submitForm()}
+          onClick={() => {
+            setFieldValue('collectionType', EnumCollectionType.Kanban);
+            submitForm();
+          }}
           selected={values.collectionType === EnumCollectionType.Kanban}
         />
       </div>
@@ -120,15 +122,9 @@ export const NewCollection = ({
 };
 
 type GridButtonProps = {
-  setFieldValue: (
-    field: string,
-    value: any,
-    shouldValidate?: boolean | undefined
-  ) => void;
   title: string;
   description: string;
   size: 'lg' | 'md';
-  name: string;
   value: any;
   icon: React.ReactNode;
   onClick: (e?: any) => void;
@@ -138,9 +134,7 @@ type GridButtonProps = {
 export const GridButton = ({
   title,
   description,
-  setFieldValue,
   size,
-  name,
   value,
   icon,
   onClick,
@@ -152,10 +146,7 @@ export const GridButton = ({
       type="button"
       varient="outline"
       className={`${style} mx-auto my-1 w-full ${selected && 'bg-gray-100'}`}
-      onClick={() => {
-        setFieldValue(name, value);
-        onClick();
-      }}
+      onClick={onClick}
     >
       <div className="flex flex-col">
         <div className="flex justify-center my-1 text-lg">

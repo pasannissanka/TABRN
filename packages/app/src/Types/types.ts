@@ -1,6 +1,9 @@
 import React from 'react';
 import {
+  EnumCollectionFieldsKind,
   EnumCollectionType,
+  EnumEntryFieldsKind,
+  EnumWorkspaceFieldsKind,
   WorkspaceDataFragment,
 } from './generated-graphql-types';
 
@@ -113,11 +116,18 @@ export interface BookmarkBase {
 
 export interface Bookmark extends BookmarkBase, IMongoDocument {}
 
+export interface IField {
+  kind: FIELD_TYPE;
+  value: string;
+  key: string;
+}
+
 export interface CollectionBase {
   title: string;
   description: string;
-  type: EnumCollectionType | null;
+  type: EnumCollectionType | '';
   icon?: string;
+  fields: IField[];
 }
 
 export enum COLLECTION_TYPE {
@@ -126,33 +136,21 @@ export enum COLLECTION_TYPE {
   KANBAN = 'kanban',
 }
 
-export enum FIELD_TYPE {
-  STRING = 'string',
-  DATE = 'date',
-  NUMBER = 'number',
-  LINK = 'link',
+export enum EnumGenericFieldsKind {
+  String = 'string',
+  Date = 'date',
+  Number = 'number',
+  Link = 'link',
 }
 
-// export interface CollectionItem {
-//   _id: string;
-//   workspaceId: string;
-//   type: COLLECTION_TYPE;
-//   slug: string;
-//   isDeleted: boolean;
-//   title: string;
-//   emoji: {
-//     emoji: string;
-//     names: string;
-//     unified: string;
-//   };
-//   description: string;
-//   fields: Field[];
-//   updatedAt: Date;
-//   createdAt: Date;
-// }
+export type FIELD_TYPE =
+  | EnumGenericFieldsKind
+  | EnumCollectionFieldsKind
+  | EnumWorkspaceFieldsKind
+  | EnumEntryFieldsKind;
 
-// export interface Field {
-//   key: string;
-//   value: string;
-//   kind: FIELD_TYPE;
-// }
+export interface IField {
+  kind: FIELD_TYPE;
+  value: string;
+  key: string;
+}

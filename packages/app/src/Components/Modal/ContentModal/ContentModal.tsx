@@ -1,20 +1,20 @@
 import { FieldArray, useFormikContext } from 'formik';
 import React from 'react';
-import { FIELD_TYPE } from '../../../Types/types';
+import { IField } from '../../../Types/types';
 import { BaseModal, BaseModalProps } from '../BaseModal';
 import { ContentField } from './ContentField';
 import { FieldButton } from './FieldButton';
 import { ContentHeading } from './Heading';
 import { PrimaryActionButtons } from './PrimaryActionButtons';
 
-export interface ContentModalProps extends BaseModalProps {}
-
-export interface IField {
-  kind: FIELD_TYPE;
-  value: string;
-  key: string;
+export interface HeadingPlaceholder {
+  title: string;
+  description: string;
 }
 
+export interface ContentModalProps extends BaseModalProps {
+  placeholder: HeadingPlaceholder;
+}
 export interface ContentModalFormikType {
   title: string;
   description: string;
@@ -25,6 +25,7 @@ export interface ContentModalFormikType {
 const ContentModal = <T extends ContentModalFormikType>({
   children,
   onClose,
+  placeholder,
   ...props
 }: ContentModalProps) => {
   const formikContext = useFormikContext<T>();
@@ -44,6 +45,7 @@ const ContentModal = <T extends ContentModalFormikType>({
               <ContentHeading<T>
                 values={values}
                 setFieldValue={setFieldValue}
+                placeholder={placeholder}
               />
               {/* Fields */}
               <div className="flex my-2 py-2 text-gray-500 border-b-2">
@@ -68,7 +70,7 @@ const ContentModal = <T extends ContentModalFormikType>({
                             onClick={(e) => {
                               insert(values.fields.length, {
                                 key: 'Field',
-                                kind: FIELD_TYPE.STRING,
+                                kind: 'String',
                                 value: '',
                               });
                             }}

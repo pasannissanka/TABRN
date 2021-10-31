@@ -9,11 +9,12 @@ import { AppContext } from '../../Context/AppContextProvider';
 import { BreadcrumbsContext } from '../../Context/BreadcrumbsContextProvider';
 import {
   EnumCollectionType,
+  EnumWorkspaceFieldsKind,
   useCollectionPaginateQuery,
   useGetWorkspaceQuery,
   useNewCollectionMutation,
 } from '../../Types/generated-graphql-types';
-import { CollectionBase, FIELD_TYPE, NavDataBC } from '../../Types/types';
+import { CollectionBase, NavDataBC } from '../../Types/types';
 import { CollectionsDashboard } from '../Collection/CollectionsDashboard';
 import { NewCollection } from './Modals/NewCollection';
 
@@ -95,11 +96,12 @@ export const WorkspaceItem = () => {
             title: data.title,
             description: data.description,
             icon: data.icon,
-            type: data.type,
+            type: data.type as EnumCollectionType,
             workspaceId: dataWorkspace?._id,
           },
         }).then(() => {
           reexecuteQuery();
+          setNewActionOpen(false);
         });
       }
     }
@@ -146,7 +148,7 @@ export const WorkspaceItem = () => {
                 fields: [
                   {
                     key: 'Created on',
-                    kind: FIELD_TYPE.DATE,
+                    kind: EnumWorkspaceFieldsKind.Date,
                     value: new Date().toString(),
                   },
                 ],
@@ -154,6 +156,16 @@ export const WorkspaceItem = () => {
               }}
               onSubmit={(values) => {
                 console.log(values);
+                handleNewCollectionSubmit(
+                  {
+                    title: values.title,
+                    description: values.description,
+                    type: values.collectionType,
+                    icon: values.emoji,
+                    fields: values.fields,
+                  },
+                  'new'
+                );
               }}
             >
               {({
@@ -170,6 +182,10 @@ export const WorkspaceItem = () => {
                       resetForm();
                     }}
                     size="full"
+                    placeholder={{
+                      title: 'Untitled Collection',
+                      description: 'Describe Collection...',
+                    }}
                   >
                     <NewCollection
                       mode="new"
