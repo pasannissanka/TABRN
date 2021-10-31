@@ -11,6 +11,7 @@ import { ContentModalFormikType } from './ContentModal';
 import { FieldButton } from './FieldButton';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import './datepicker.css';
 
 type ContentFieldProps<T> = {
   values: T;
@@ -110,6 +111,7 @@ export const ContentField = <T extends ContentModalFormikType>({
                           } group flex rounded-md items-center w-full px-2 text-black py-2 text-sm`}
                           onClick={() => {
                             setFieldValue(`fields.${index}.kind`, kind.kind);
+                            setFieldValue(`fields.${index}.value`, '');
                             close();
                           }}
                         >
@@ -131,7 +133,9 @@ export const ContentField = <T extends ContentModalFormikType>({
             {field.kind === FIELD_TYPE.DATE ? (
               <DatePicker
                 autoFocus
-                selected={new Date(field.value)}
+                selected={
+                  field.value === '' ? new Date() : new Date(field.value)
+                }
                 onChange={(date) =>
                   setFieldValue(`fields.${index}.value`, date?.toString())
                 }

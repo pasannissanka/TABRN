@@ -67,9 +67,9 @@ const ContentModal = <T extends ContentModalFormikType>({
                           <FieldButton
                             onClick={(e) => {
                               insert(values.fields.length, {
-                                key: 'test',
+                                key: 'Field',
                                 kind: FIELD_TYPE.STRING,
-                                value: new Date().toDateString(),
+                                value: '',
                               });
                             }}
                             label="Add Field"

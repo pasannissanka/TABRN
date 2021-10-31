@@ -1,0 +1,35 @@
+.react-datepicker {
+  @apply bg-white border-gray-200 rounded-md shadow-lg;
+}
+
+.react-datepicker__triangle {
+  display: none;
+}
+
+.react-datepicker-popper {
+  padding-top: 0.5rem !important;
+}
+
+.react-datepicker__header {
+  @apply py-3 text-gray-500 font-sans text-sm bg-white border-0 border-b border-gray-200;
+}
+
+.react-datepicker__navigation {
+  @apply my-2;
+}
+
+.react-datepicker__current-month {
+  @apply text-black text-base;
+}
+
+.react-datepicker__day {
+  @apply hover:bg-gray-200;
+}
+
+.react-datepicker__day--today {
+  @apply bg-gray-100 rounded;
+}
+
+.react-datepicker__day--selected {
+  @apply bg-primary-500 hover:bg-primary-600;
+}
