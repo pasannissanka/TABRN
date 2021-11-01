@@ -15,13 +15,13 @@ type ContentHeadingProps<T> = {
   placeholder: HeadingPlaceholder;
 };
 
-export const ContentHeading = <T extends ContentModalFormikType>({
+export const ContentHeading = <T extends ContentModalFormikType<any>>({
   values,
   setFieldValue,
   placeholder,
 }: ContentHeadingProps<T>) => {
   const onEmojiClick = (_: any, emojiObject: IEmojiData) => {
-    setFieldValue('emoji', emojiObject.emoji);
+    setFieldValue('icon', emojiObject.emoji);
   };
 
   return (
@@ -36,8 +36,8 @@ export const ContentHeading = <T extends ContentModalFormikType>({
             className="max-h-14"
           >
             <span className="flex flex-col">
-              {values && values?.emoji ? (
-                <span className="m-auto text-4xl">{values.emoji}</span>
+              {values && values?.icon ? (
+                <span className="m-auto text-4xl">{values.icon}</span>
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -3,18 +3,18 @@ import React, { useState } from 'react';
 import Button from '../../Components/Button/Button';
 import { CollectionCard } from '../../Components/Cards/CollectionCard/CollectionCard';
 import { ListItem } from '../../Components/ListItem/ListItem';
-import ContentModal, {
-  ContentModalFormikType,
-} from '../../Components/Modal/ContentModal/ContentModal';
+import ContentModal from '../../Components/Modal/ContentModal/ContentModal';
 import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
 import {
   Collection,
   CollectionPaginateQuery,
   Entry,
+  EnumCollectionFieldsKind,
   EnumCollectionType,
+  Maybe,
   useEntryPaginateQuery,
 } from '../../Types/generated-graphql-types';
-import { EnumGenericFieldsKind } from '../../Types/types';
+import { NewCollectionFormikType } from '../Workspace/Workspace';
 
 type CollectionsDashboardProps = {
   data: CollectionPaginateQuery;
@@ -90,31 +90,35 @@ export const ListCollectionView = ({
           <ListItem<Entry> data={entry} key={entry._id} />
         ))}
       </div>
-      <Formik<ContentModalFormikType>
+      <Formik<NewCollectionFormikType>
         initialValues={{
           title: '',
           description: '',
-          emoji: '',
+          icon: '',
           fields: [
             {
               key: 'test',
-              kind: EnumGenericFieldsKind.Date,
+              kind: EnumCollectionFieldsKind.Date,
               value: new Date().toDateString(),
             },
             {
               key: 'test',
-              kind: EnumGenericFieldsKind.Date,
+              kind: EnumCollectionFieldsKind.Date,
               value: new Date().toDateString(),
             },
           ],
+          collectionType: EnumCollectionType.List,
         }}
         onSubmit={(values) => {
           console.log(values);
         }}
       >
-        {({ resetForm }: FormikProps<ContentModalFormikType>) => (
+        {({ resetForm }: FormikProps<NewCollectionFormikType>) => (
           <Form>
-            <ContentModal<ContentModalFormikType>
+            <ContentModal<
+              Maybe<EnumCollectionFieldsKind>,
+              NewCollectionFormikType
+            >
               show={newModal}
               onClose={() => {
                 setNewModal(false);

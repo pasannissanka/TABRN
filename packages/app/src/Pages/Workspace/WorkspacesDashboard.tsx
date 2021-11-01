@@ -13,14 +13,19 @@ import { ConfirmationDialog } from '../../Components/Modal/Modal';
 import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
 import {
   EnumCollectionFieldsKind,
+  EnumWorkspaceFieldsKind,
+  Maybe,
   useNewWorkspaceMutation,
   useUpdateWorkspaceMutation,
   useWorkspacesPaginationQuery,
 } from '../../Types/generated-graphql-types';
-import { IField, WorkspaceBase } from '../../Types/types';
+import { WorkspaceBase } from '../../Types/types';
 import { NewWorkspace } from './Modals/NewWorkspace';
 
-export interface NewWorkspaceFormikType extends ContentModalFormikType {}
+export interface NewWorkspaceFormikType
+  extends ContentModalFormikType<Maybe<EnumWorkspaceFieldsKind>> {
+  _id?: string;
+}
 
 interface WorkspaceProps {}
 
@@ -28,7 +33,6 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
   const [result, reexecuteQuery] = useWorkspacesPaginationQuery({
     requestPolicy: 'network-only',
   });
-
   const { data, fetching } = result;
 
   const addNewWorkspace = useNewWorkspaceMutation()[1];
@@ -50,17 +54,7 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
     open: false,
   });
 
-  const [newWorkspaceValue, setNewWorkspaceValue] = useState<{
-    _id?: string;
-    description: string;
-    title: string;
-    icon: string;
-    fields?: IField[];
-  } | null>({
-    description: '',
-    title: '',
-    icon: '',
-  });
+  const [newWorkspaceValue, setNewWorkspaceValue] = useState<any | null>(null);
 
   const menuItems: (DropdownButonElement | DropdownLinkElement)[] = [
     {
@@ -69,7 +63,19 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
       onClick: (e, key) => {
         const ele = data?.workspacePaginate?.items?.find((v) => v._id === key);
         if (ele) {
-          setNewWorkspaceValue(ele! as any);
+          setNewWorkspaceValue({
+            title: ele.title,
+            description: ele.description as string,
+            icon: ele?.icon as string,
+            fields: ele.fields?.map((field) => {
+              return {
+                key: field?.key,
+                kind: field?.kind,
+                value: field?.value,
+              };
+            }),
+            _id: ele._id,
+          });
           openModal('edit');
         }
       },
@@ -104,7 +110,7 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
   };
 
   const handleNewWorkspaceSubmit = (
-    value: WorkspaceBase,
+    value: WorkspaceBase<Maybe<EnumWorkspaceFieldsKind>>,
     mode: 'edit' | 'new'
   ) => {
     if (value.title.length > 0 && value.description!.length > 0) {
@@ -114,7 +120,7 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
             title: value.title,
             description: value.description,
             icon: value.icon,
-            fields: value.fields as any,
+            fields: value.fields,
           },
         }).then((result) => reexecuteQuery());
       } else if (mode === 'edit' && newWorkspaceValue !== null) {
@@ -202,19 +208,19 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
       </div>
 
       {isNewModalOpen.open && (
-        <Formik<ContentModalFormikType>
+        <Formik<NewWorkspaceFormikType>
           initialValues={
             isNewModalOpen.type === 'edit' && newWorkspaceValue !== null
               ? {
                   title: newWorkspaceValue.title,
                   description: newWorkspaceValue.description,
-                  emoji: newWorkspaceValue.icon,
+                  icon: newWorkspaceValue.icon,
                   fields: newWorkspaceValue.fields!,
                 }
               : {
                   title: '',
                   description: '',
-                  emoji: '',
+                  icon: '',
                   fields: [
                     {
                       key: 'Created on',
@@ -230,16 +236,19 @@ export const WorkspacesDashboard = (props: WorkspaceProps) => {
               {
                 title: values.title,
                 description: values.description,
-                icon: values.emoji,
+                icon: values.icon,
                 fields: values.fields,
               },
               isNewModalOpen.type
             );
           }}
         >
-          {({ submitForm }: FormikProps<ContentModalFormikType>) => (
+          {({ submitForm }: FormikProps<NewWorkspaceFormikType>) => (
             <Form>
-              <ContentModal<ContentModalFormikType>
+              <ContentModal<
+                Maybe<EnumWorkspaceFieldsKind>,
+                NewWorkspaceFormikType
+              >
                 show={isNewModalOpen.open}
                 onClose={closeModal}
                 size="full"

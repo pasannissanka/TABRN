@@ -1,11 +1,15 @@
 import { formatRelative } from 'date-fns';
+import { Form, Formik, FormikProps } from 'formik';
 import React, { useState } from 'react';
 import {
   EntryFields,
+  EnumEntryFieldsKind,
   Maybe,
   Scalars,
 } from '../../Types/generated-graphql-types';
-import { Modal } from '../Modal/Modal';
+import ContentModal, {
+  ContentModalFormikType,
+} from '../Modal/ContentModal/ContentModal';
 
 interface ItemBase {
   title: Scalars['String'];
@@ -22,6 +26,9 @@ interface ItemBase {
 type ListItemProps<T> = {
   data: T;
 };
+
+export interface EntryFormikType
+  extends ContentModalFormikType<Maybe<EnumEntryFieldsKind>> {}
 
 export const ListItem = <T extends ItemBase>({ data }: ListItemProps<T>) => {
   const [expandModal, setExpandModal] = useState(false);
@@ -47,13 +54,37 @@ export const ListItem = <T extends ItemBase>({ data }: ListItemProps<T>) => {
           </div>
         </div>
       </div>
-      <Modal
-        show={expandModal}
-        onClose={() => setExpandModal(false)}
-        size="full"
+
+      <Formik<EntryFormikType>
+        initialValues={{
+          title: data.title,
+          description: data.description!,
+          icon: data.icon!,
+          fields: data.fields as any,
+        }}
+        onSubmit={(values) => {
+          console.log(values);
+        }}
       >
-        <button></button>
-      </Modal>
+        {({ resetForm }: FormikProps<EntryFormikType>) => (
+          <Form>
+            <ContentModal<Maybe<EnumEntryFieldsKind>, EntryFormikType>
+              show={expandModal}
+              onClose={() => {
+                setExpandModal(false);
+                resetForm();
+              }}
+              size="full"
+              placeholder={{
+                title: 'Untitled',
+                description: 'Describe...',
+              }}
+            >
+              <button>Test</button>
+            </ContentModal>
+          </Form>
+        )}
+      </Formik>
     </>
   );
 };

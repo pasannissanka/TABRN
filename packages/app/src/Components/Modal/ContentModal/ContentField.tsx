@@ -7,7 +7,6 @@ import { ReactComponent as DateSVG } from '../../../svg/heroicons/clock.svg';
 import { ReactComponent as TextSVG } from '../../../svg/heroicons/document_text.svg';
 import { ReactComponent as NumberSVG } from '../../../svg/heroicons/hashtag.svg';
 import { ReactComponent as LinkSVG } from '../../../svg/heroicons/link.svg';
-import { EnumGenericFieldsKind } from '../../../Types/types';
 import { InputField } from '../../FormField/Input';
 import { ContentModalFormikType } from './ContentModal';
 import './datepicker.css';
@@ -27,26 +26,26 @@ const fieldsKind = [
   {
     label: 'Text',
     svg: <TextSVG className="w-5 h-5 text-gray-500" />,
-    kind: EnumGenericFieldsKind.String,
+    kind: 'string',
   },
   {
     label: 'Number',
     svg: <NumberSVG className="w-5 h-5 text-gray-500" />,
-    kind: EnumGenericFieldsKind.Number,
+    kind: 'number',
   },
   {
     label: 'Date',
     svg: <DateSVG className="w-5 h-5 text-gray-500" />,
-    kind: EnumGenericFieldsKind.Date,
+    kind: 'date',
   },
   {
     label: 'Link',
     svg: <LinkSVG className="w-5 h-5 text-gray-500" />,
-    kind: EnumGenericFieldsKind.Link,
+    kind: 'link',
   },
 ];
 
-export const ContentField = <T extends ContentModalFormikType>({
+export const ContentField = <T extends ContentModalFormikType<any>>({
   values,
   index,
   setFieldValue,
@@ -64,22 +63,22 @@ export const ContentField = <T extends ContentModalFormikType>({
   useOnClickOutside(ref, toggelEditView);
 
   const svg =
-    field.kind === EnumGenericFieldsKind.Date ? (
+    field.kind === 'date' ? (
       <DateSVG className="w-5 h-5 text-gray-500" />
-    ) : field.kind === EnumGenericFieldsKind.Link ? (
+    ) : field.kind === 'link' ? (
       <LinkSVG className="w-5 h-5 text-gray-500" />
-    ) : field.kind === EnumGenericFieldsKind.Number ? (
+    ) : field.kind === 'number' ? (
       <NumberSVG className="w-5 h-5 text-gray-500" />
     ) : (
       <TextSVG className="w-5 h-5 text-gray-500" />
     );
 
   const fieldKind =
-    field.kind === EnumGenericFieldsKind.Date
+    field.kind === 'date'
       ? 'Date'
-      : field.kind === EnumGenericFieldsKind.Link
+      : field.kind === 'link'
       ? 'Link'
-      : field.kind === EnumGenericFieldsKind.Number
+      : field.kind === 'number'
       ? 'Number'
       : 'Text';
 
@@ -131,7 +130,7 @@ export const ContentField = <T extends ContentModalFormikType>({
       <div className="flex-1 mx-2 px-2" ref={ref}>
         {editView ? (
           <div className="rounded-md">
-            {field.kind === EnumGenericFieldsKind.Date ? (
+            {field.kind === 'date' ? (
               <DatePicker
                 className="content w-full"
                 autoFocus
@@ -147,9 +146,9 @@ export const ContentField = <T extends ContentModalFormikType>({
                 autoFocus
                 id="key-field"
                 type={
-                  field.kind === EnumGenericFieldsKind.Number
+                  field.kind === 'number'
                     ? 'number'
-                    : field.kind === EnumGenericFieldsKind.Link
+                    : field.kind === 'link'
                     ? 'url'
                     : 'text'
                 }

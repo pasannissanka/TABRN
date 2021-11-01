@@ -8,8 +8,9 @@ import ContentModal, {
 import { AppContext } from '../../Context/AppContextProvider';
 import { BreadcrumbsContext } from '../../Context/BreadcrumbsContextProvider';
 import {
+  EnumCollectionFieldsKind,
   EnumCollectionType,
-  EnumWorkspaceFieldsKind,
+  Maybe,
   useCollectionPaginateQuery,
   useGetWorkspaceQuery,
   useNewCollectionMutation,
@@ -18,7 +19,8 @@ import { CollectionBase, NavDataBC } from '../../Types/types';
 import { CollectionsDashboard } from '../Collection/CollectionsDashboard';
 import { NewCollection } from './Modals/NewCollection';
 
-export interface NewCollectionFormikType extends ContentModalFormikType {
+export interface NewCollectionFormikType
+  extends ContentModalFormikType<Maybe<EnumCollectionFieldsKind>> {
   collectionType: EnumCollectionType | '';
 }
 
@@ -85,7 +87,7 @@ export const WorkspaceItem = () => {
   }, [dataWorkspace]);
 
   const handleNewCollectionSubmit = (
-    data: CollectionBase,
+    data: CollectionBase<Maybe<EnumCollectionFieldsKind>>,
     mode: 'edit' | 'new'
   ) => {
     if (mode === 'new') {
@@ -144,11 +146,11 @@ export const WorkspaceItem = () => {
               initialValues={{
                 title: '',
                 description: '',
-                emoji: '',
+                icon: '',
                 fields: [
                   {
                     key: 'Created on',
-                    kind: EnumWorkspaceFieldsKind.Date,
+                    kind: EnumCollectionFieldsKind.Date,
                     value: new Date().toString(),
                   },
                 ],
@@ -161,7 +163,7 @@ export const WorkspaceItem = () => {
                     title: values.title,
                     description: values.description,
                     type: values.collectionType,
-                    icon: values.emoji,
+                    icon: values.icon,
                     fields: values.fields,
                   },
                   'new'
@@ -175,7 +177,10 @@ export const WorkspaceItem = () => {
                 values,
               }: FormikProps<NewCollectionFormikType>) => (
                 <Form>
-                  <ContentModal<NewCollectionFormikType>
+                  <ContentModal<
+                    Maybe<EnumCollectionFieldsKind>,
+                    NewCollectionFormikType
+                  >
                     show={newActionOpen}
                     onClose={() => {
                       setNewActionOpen(false);

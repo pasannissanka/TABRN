@@ -1,6 +1,6 @@
 import { FieldArray, useFormikContext } from 'formik';
 import React from 'react';
-import { EnumGenericFieldsKind, IField } from '../../../Types/types';
+import { IField } from '../../../Types/types';
 import { BaseModal, BaseModalProps } from '../BaseModal';
 import { ContentField } from './ContentField';
 import { FieldButton } from './FieldButton';
@@ -15,14 +15,14 @@ export interface HeadingPlaceholder {
 export interface ContentModalProps extends BaseModalProps {
   placeholder: HeadingPlaceholder;
 }
-export interface ContentModalFormikType {
+export interface ContentModalFormikType<T extends any> {
   title: string;
   description: string;
-  emoji: string;
-  fields: IField[];
+  icon: string;
+  fields: IField<T>[];
 }
 
-const ContentModal = <T extends ContentModalFormikType>({
+const ContentModal = <J extends any, T extends ContentModalFormikType<J>>({
   children,
   onClose,
   placeholder,
@@ -70,7 +70,7 @@ const ContentModal = <T extends ContentModalFormikType>({
                             onClick={(e) => {
                               insert(values.fields.length, {
                                 key: 'Field',
-                                kind: EnumGenericFieldsKind.String,
+                                kind: 'string',
                                 value: '',
                               });
                             }}

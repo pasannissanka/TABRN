@@ -2,8 +2,8 @@ import React from 'react';
 import {
   EnumCollectionFieldsKind,
   EnumCollectionType,
-  EnumEntryFieldsKind,
   EnumWorkspaceFieldsKind,
+  Maybe,
   WorkspaceDataFragment,
 } from './generated-graphql-types';
 
@@ -76,20 +76,13 @@ export interface IUser extends IMongoDocument {
   photos: any[];
 }
 
-export interface WorkspaceBase {
-  title: string;
-  description: string;
-  icon?: string;
-  fields: IField[];
-}
+// export interface WorkspaceData extends WorkspaceBase, IMongoDocument {}
 
-export interface WorkspaceData extends WorkspaceBase, IMongoDocument {}
-
-export interface IWorkspace extends IMongoDocument, WorkspaceBase {
-  userId: string;
-  slug: string;
-  isDeleted: boolean;
-}
+// export interface IWorkspace extends IMongoDocument, WorkspaceBase {
+//   userId: string;
+//   slug: string;
+//   isDeleted: boolean;
+// }
 
 export interface TagBase {
   title: string;
@@ -117,41 +110,28 @@ export interface BookmarkBase {
 
 export interface Bookmark extends BookmarkBase, IMongoDocument {}
 
-export interface IField {
-  kind: FIELD_TYPE;
+export interface IField<T> {
+  kind: T;
   value: string;
   key: string;
 }
+export interface WorkspaceBase<T extends Maybe<EnumWorkspaceFieldsKind>> {
+  title: string;
+  description: string;
+  icon?: string;
+  fields: IField<T>[];
+}
 
-export interface CollectionBase {
+export interface CollectionBase<T extends Maybe<EnumCollectionFieldsKind>> {
   title: string;
   description: string;
   type: EnumCollectionType | '';
   icon?: string;
-  fields: IField[];
+  fields: IField<T>[];
 }
 
 export enum COLLECTION_TYPE {
   CALENDER = 'calender',
   LIST = 'list',
   KANBAN = 'kanban',
-}
-
-export enum EnumGenericFieldsKind {
-  String = 'string',
-  Date = 'date',
-  Number = 'number',
-  Link = 'link',
-}
-
-export type FIELD_TYPE =
-  | EnumGenericFieldsKind
-  | EnumCollectionFieldsKind
-  | EnumWorkspaceFieldsKind
-  | EnumEntryFieldsKind;
-
-export interface IField {
-  kind: FIELD_TYPE;
-  value: string;
-  key: string;
 }
