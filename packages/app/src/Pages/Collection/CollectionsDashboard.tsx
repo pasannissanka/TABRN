@@ -2,6 +2,7 @@ import { Form, Formik, FormikProps } from 'formik';
 import React, { useState } from 'react';
 import Button from '../../Components/Button/Button';
 import { CollectionCard } from '../../Components/Cards/CollectionCard/CollectionCard';
+import { EditableContent } from '../../Components/Editable/EditableContent';
 import { ListItem } from '../../Components/ListItem/ListItem';
 import ContentModal from '../../Components/Modal/ContentModal/ContentModal';
 import { ReactComponent as PlusSMSVG } from '../../svg/plus-sm.svg';
@@ -130,7 +131,7 @@ export const ListCollectionView = ({
                 description: 'Describe...',
               }}
             >
-              <button>Test</button>
+              <EditableContent></EditableContent>
             </ContentModal>
           </Form>
         )}

@@ -21,9 +21,9 @@ export const Home = () => {
       <AppContext.Provider value={appStateInit}>
         <div className="h-screen bg-gray-50 overflow-y-hidden">
           <AppBar isDrawerOpen={isDrawerOpen} handleDrawerOpen={handelDrawer} />
-          <div className="content-container flex flex-1 overflow-hidden">
+          <div className="content-container flex overflow-hidden overflow-y-scroll">
             <Drawer isDrawerOpen={isDrawerOpen} />
-            <main className="flex-1 p-5 max-h-full overflow-hidden overflow-y-scroll">
+            <main className="flex-1 p-5 max-h-full">
               <Switch>
                 <Route exact path="/">
                   <div>Dashboard</div>

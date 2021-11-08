@@ -31,9 +31,9 @@ export const AppBar = ({ handleDrawerOpen }: AppBarProps) => {
       <header className="flex-shrink-0 max-h-14 bg-gray-100 border-b">
         <div className="flex items-center justify-between p-2">
           <div className="flex items-center space-x-3">
-            <span className="p-2 text-xl font-semibold tracking-wider uppercase lg:hidden">
+            {/* <span className="p-2 text-xl font-semibold tracking-wider uppercase lg:hidden">
               TL;RL
-            </span>
+            </span> */}
             <button
               onClick={handleDrawerOpen}
               className="p-2 rounded-md focus:outline-none focus:ring"
