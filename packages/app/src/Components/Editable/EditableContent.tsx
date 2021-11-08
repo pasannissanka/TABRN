@@ -22,9 +22,17 @@ const setCaretToEnd = (element: HTMLElement) => {
   element.focus();
 };
 
+type EditableContentProps = {
+  placeholderText: string;
+};
+
 export const EditableContent = () => {
   const [blocks, setBlocks] = useState<IEditableBlock[]>([initialBlock]);
   const [currentBlockId, setCurrentBlockId] = useState<string | null>(null);
+  const [caretMoved, setCaretMoved] = useState<{
+    direction: 'up' | 'down';
+    id: string;
+  } | null>(null);
 
   const prevBlocks = usePrevious<IEditableBlock[]>(blocks);
 
@@ -60,7 +68,20 @@ export const EditableContent = () => {
         setCaretToEnd(lastBlock);
       }
     }
-  }, [blocks, currentBlockId, prevBlocks]);
+    // Handle move between blocks (pageUp/ pageDown) TODO: arrow keys
+    if (caretMoved !== null) {
+      const index = blocks.map((b) => b.id).indexOf(caretMoved.id) + 1;
+      const nextBlock = document.querySelector(
+        `[data-position="${
+          caretMoved.direction === 'up' ? index - 1 : index + 1
+        }"]`
+      ) as HTMLElement;
+      if (nextBlock) {
+        nextBlock.focus();
+      }
+      setCaretMoved(null);
+    }
+  }, [blocks, currentBlockId, prevBlocks, caretMoved]);
 
   const updateBlockHandler = useCallback(
     (id: string, content: IBlockContent) => {
@@ -78,25 +99,43 @@ export const EditableContent = () => {
     [blocks]
   );
 
-  const addBlockHandler = (id: string) => {
-    setCurrentBlockId(id);
-    const newBlock: IEditableBlock = { id: nanoid(), html: '', tag: 'p' };
-    const index = blocks.map((b) => b.id).indexOf(id);
-    const updatedBlocks = [...blocks];
-    updatedBlocks.splice(index + 1, 0, newBlock);
-    setBlocks(updatedBlocks);
-  };
-
-  const deleteBlockHandler = (id: string) => {
-    if (blocks.length > 1) {
+  const addBlockHandler = useCallback(
+    (id: string) => {
       setCurrentBlockId(id);
+      const newBlock: IEditableBlock = { id: nanoid(), html: '', tag: 'p' };
       const index = blocks.map((b) => b.id).indexOf(id);
-      // const deletedBlock = blocks[index];
       const updatedBlocks = [...blocks];
-      updatedBlocks.splice(index, 1);
+      updatedBlocks.splice(index + 1, 0, newBlock);
       setBlocks(updatedBlocks);
-    }
-  };
+    },
+    [blocks]
+  );
+
+  const deleteBlockHandler = useCallback(
+    (id: string) => {
+      if (blocks.length > 1) {
+        setCurrentBlockId(id);
+        const index = blocks.map((b) => b.id).indexOf(id);
+        // const deletedBlock = blocks[index];
+        const updatedBlocks = [...blocks];
+        updatedBlocks.splice(index, 1);
+        setBlocks(updatedBlocks);
+      }
+    },
+    [blocks]
+  );
+
+  const moveBlockFocusHandler = useCallback(
+    (id: string, direction: 'up' | 'down') => {
+      if (blocks.length > 1) {
+        setCaretMoved({
+          direction,
+          id,
+        });
+      }
+    },
+    [blocks]
+  );
 
   console.log(blocks);
 
@@ -113,6 +152,8 @@ export const EditableContent = () => {
             onChange={updateBlockHandler}
             addBlock={addBlockHandler}
             deleteBlock={deleteBlockHandler}
+            moveBlockFocus={moveBlockFocusHandler}
+            placeholderText="Type page content"
           />
         );
       })}
@@ -125,7 +166,9 @@ type EditableBlockProps = {
   onChange: (key: string, content: IBlockContent) => void;
   addBlock: (key: string) => void;
   deleteBlock: (key: string) => void;
+  moveBlockFocus: (key: string, direction: 'up' | 'down') => void;
   position: number;
+  placeholderText?: string;
 };
 
 interface IBlockContent {
@@ -137,6 +180,7 @@ export const EditableBlock = ({
   block,
   onChange,
   position,
+  placeholderText = 'Type a page title...',
   ...props
 }: EditableBlockProps) => {
   const contentEditable = React.createRef<HTMLElement>();
@@ -148,17 +192,49 @@ export const EditableBlock = ({
 
   const [previousKey, setPreviousKey] = useState<string | null>();
   const [htmlBackup, setHtmlBackup] = useState<string | null>(null);
+  const [placeholder, setPlaceholder] = useState(false);
 
   const onChangeHandler = (e: ContentEditableEvent) => {
     setContent({ ...content, html: e.target.value });
   };
 
+  // Useeffect to update onChange event
   useEffect(() => {
     onChange(block.id, content);
   }, [content]);
 
+  // Set placeholder initially
+  useEffect(() => {
+    addPlaceholder(contentEditable.current!);
+  }, []);
+
+  const addPlaceholder = (elem: HTMLElement) => {
+    // Check whether block is the only block and not empty
+    const isFirstBlockWithoutHtml = position === 1 && !content.html;
+    const isFirstBlockWithoutSibling = !elem?.parentElement?.nextElementSibling;
+    if (isFirstBlockWithoutHtml && isFirstBlockWithoutSibling) {
+      setContent({
+        html: placeholderText,
+        tag: 'h1',
+      });
+      setPlaceholder(true);
+    }
+  };
+
+  const handleFocus = (e: any) => {
+    // If a placeholder is set, we remove it when the block gets focused
+    if (placeholder) {
+      setContent({
+        ...content,
+        html: '',
+      });
+      setPlaceholder(false);
+    }
+  };
+
   const onKeyDownHandler = (e: React.KeyboardEvent<HTMLElement>) => {
-    console.log(e.key);
+    // Handle special keys
+    console.log(e.key, e);
     if (e.key === '/') {
       setHtmlBackup(content.html);
     }
@@ -172,18 +248,32 @@ export const EditableBlock = ({
       e.preventDefault();
       props.deleteBlock(block.id);
     }
+    if (e.key === 'PageUp') {
+      e.preventDefault();
+      // console.log(e, contentEditable);
+      props.moveBlockFocus(block.id, 'up');
+    }
+    if (e.key === 'PageDown') {
+      e.preventDefault();
+      // console.log(e, contentEditable);
+      props.moveBlockFocus(block.id, 'down');
+    }
     setPreviousKey(e.key);
   };
+  // console.log(position);
 
   return (
-    <div>
+    <div className="prose-sm w-full">
       <ContentEditable
-        className="p-2 focus:outline-none"
+        className={`my-0 p-2 hover:bg-gray-100 focus:bg-gray-50 rounded-md focus:outline-none ${
+          placeholder ? 'text-gray-400' : 'text-black'
+        }`}
         innerRef={contentEditable}
         html={block.html}
         tagName={block.tag}
         onChange={onChangeHandler}
         onKeyDown={onKeyDownHandler}
+        onFocus={handleFocus}
         data-position={position}
       />
     </div>
